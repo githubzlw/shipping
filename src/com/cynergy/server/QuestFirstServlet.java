@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cynergy.main.DateUtil;
 import org.apache.commons.lang.StringUtils;
 
 import com.cynergy.main.DBHelper;
@@ -42,6 +44,9 @@ public class QuestFirstServlet extends HttpServlet {
 				Statement createStatement = connection.createStatement();
 				HttpSession session = request.getSession();
 				String adminName = (String)session.getAttribute("adminName");
+
+				String bf = DateUtil.getDate(-14)+" 00:00:00" + DateUtil.date2Str(new Date());
+				//BETWEEN '2017-08-01 07:30' AND '2017-08-30 20:30'
 	//			SELECT TOP 10 UserID FROM TB_User ORDER BY UserID DESC(最大前10)
 				String sql="select TOP 30 min(timeDate)timeDate,products.id,min(nonum)nonum,min(order_status)order_status,min(adminName)adminName,min(items.trueprice)trueprice,min(items.hscode)hscode,min(items.rate)rate from products "
                              +"left join items on products.id = items.proId GROUP BY products.id order by timeDate desc";

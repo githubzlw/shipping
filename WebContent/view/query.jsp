@@ -118,7 +118,7 @@ String adminName = (String)session.getAttribute("adminName");
     %>
   
   
-  查询结果：<br/>
+  查询结果：默认显示最近两周的出运联系单<br/>
   
    <table  border="1" id="table">
   <tr>
