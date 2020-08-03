@@ -20,8 +20,16 @@ public class ReadExcelVO implements Serializable {
 	private Double refundAmount;  //退税金额
 	private int quantity;         //数量
 	private int weight;           //重量
-	
-	
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public int getWeight() {
 		return weight;
 	}

@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="${ctx}/js/jquery-1.4.2.min.js"></script>	
 	<script type="text/javascript" src="${ctx}/js/jquery-form.js"></script>
 	<style type="text/css">
-	
+		.green-font {color: green;font-weight: bold;}
 	   #table1{
             border-collapse: collapse;
     		border-spacing: 0;
@@ -67,8 +67,7 @@
 
 	 var adminName =  "${adminName}";
     
-     $(function(){  
-    	 
+     $(function(){
  	         //页面加载时直接验证合同出运信息
  			//验证是否已经上传合同	
     	 if(adminName.toUpperCase() == 'FUN' || adminName.toUpperCase() == 'CANDY'){
@@ -85,7 +84,7 @@
 	 						return false;
 	 					}
 	 				}
-	 			})    	 
+	 			})
     	 }
     	 
 	    /**
@@ -102,18 +101,16 @@
 	   	    		$('#totalNW').val(Number(totalNW).toFixed(2));
 	   	    	}	   	    	
 	   	    })
-	   	    
 	    })
 	    
-	 }) 
+	 });
 	 
 	 
 	     
 	 
 	 	 //验算出口人民币和采购价是否一致
 	    function update_order(orderStatus){
-    	 
-         var exchangeFlag = true;                  
+         var exchangeFlag = true;
     	 if(adminName.toUpperCase() == 'FUN' || adminName.toUpperCase() == 'CANDY'){ 		 
   	    	$('.true-price').each(function(){
  	    		if(!($(this).val() == null || $(this).val() == '' || $(this).val() == undefined || $(this).val() == 0)){
@@ -173,15 +170,12 @@
  	    			
  	    		}
  	    	})
-    		 
  	    	//验证汇率是否在范围中
  	    	if(!exchangeFlag){
  	    		return false;
  	    	}
- 	 
-    		 $('#order_form').submit();
+    		 // $('#order_form').submit();
     	 }else{
-     	 
     		 //报关单需要客户公司名称
  	    	if(!$('#company_name').val()){
  	    		showNotice('请输入客户公司名称',2000); 
@@ -203,8 +197,7 @@
  	   	    		totalExportPrice +=Number(exportPrice);
  	   	    	}	
  	    	})
- 	    	
- 	    	
+
  	    	$('.export-cn1').each(function(){
  	    		var purchasePrice = $(this).val();
  	   	    	if(isNaN(purchasePrice) || purchasePrice == "" || purchasePrice == undefined){
@@ -288,8 +281,7 @@
 	 	    		   }
  	    		}
  	    	})
- 	    
- 	    	
+
      	//验算毛重是否大于净重
      	var totalGW = $('#totalGW').val();
      	var totalNW = $('#totalNW').val();
@@ -313,8 +305,7 @@
      		showNotice('净重不相等！',2000);
      		return false;
      	}
-     	
- 	    
+
  	    //验算清关总价是否等于数量*单价
  	    var flag = true;
  	    $('.unit-price-all').each(function(){	
@@ -335,8 +326,7 @@
  			    		return false;
  			    	}	 	    
  	    	  }    	  	  
- 	      })  
- 	    		    	
+ 	      })
  	        if(!(flag)){
  	        	return false;	
  	        }
@@ -374,9 +364,8 @@
  						
  					}
  				});
- 	    	}           
- 	    
- 	    		    	
+ 	    	}
+
  	    	//验证汇率是否在范围中
  	    	if(!exchangeFlag){
  	    		return false;
@@ -413,7 +402,6 @@
  		        			isShipingFlag = false;
  		        		 }		        		 		        		 
  		        	})
- 		        	
  		        	if(!isShipingFlag){
  		        		showNotice('请录入每个合同准予电子出货单号',4000);
  		        		return false;
@@ -467,10 +455,31 @@
  		        } 
  	    	}	    	
  	    	
- 	    	
- 	    	$('#order_form').submit();   	
+ 	    	// $('#order_form').submit();
     	 }
-    	  
+			var isMacth = true;
+    	 for(var i=0;i<13;i++){
+			 var count = 0;
+			 var itemCount = 0;
+			 var countStr = $(".item-tr-parent"+i).find(".export-cn1").val();
+			 if(countStr && countStr != ''){
+				 count = parseFloat(countStr).toFixed(3);
+			 }
+
+			 $(".item-tr-parent"+i).find(".table-contract-all").find(".tr-tb-c").each(function(){
+				 var temAmount = $(this).find(".in-amount").val();
+				 if(temAmount && temAmount != ''){
+					 itemCount += parseFloat(temAmount).toFixed(3);
+				 }
+			 })
+			 isMacth = isMacth & (itemCount == count);
+
+		 }
+			if(isMacth){
+				$('#order_form').submit();
+			}else{
+				alert('报关金额与合同金额不匹配');
+			}
 	    
      }
 	 
@@ -738,7 +747,7 @@
 	    	    var fileName = $('#fileName').val();
 		        if(!checkProduct() && !fileName){
 		        	$('#show').show();
-		        }   
+		        }
 	      })
 	      
 	      
@@ -773,8 +782,7 @@
 	       				showNotice('上传失败',2000);
 	       			    $(obj).val('');
 	       			}       	     	
-	       	 	}); 	 		    
-
+	       	 	});
 	        }
 	       
 	      
@@ -932,10 +940,12 @@
 	   			<td width="20px"  style="word-wrap:break-word;" >Item英文名</td>
 	   			<td width="20px"  style="word-wrap:break-word;" >Item中文名</td>
 			    <td width="10px"  style="word-wrap:break-word;" >Quantity(请只填数字)</td>
-			    <td width="50px"  style="word-wrap:break-word;" >数量单位</td>
+			    <td width="80px" >数量单位</td>
 			    <td width="50px"  style="word-wrap:break-word;" ><strong>采购价 总价(只填数字 单位:RMB)(格式：100000.00)</strong></td>
 			    <td width="40px"  style="word-wrap:break-word;" >Unit Price(对外销售单价)</td>
 			    <td width="50px"  style="word-wrap:break-word;" >(客户)清关总价(格式：100000.00)</td>
+			    <td width="50px"  style="word-wrap:break-word;" >客户订单的实际金额(项目级)</td>
+			    <td width="50px"  style="word-wrap:break-word;" >客户实际到账金额(项目级)</td>
 			    <td width="50px">Shipping Mark</td>
 			    <td width="50px"><p>N.W.(请只填数字 单位:kg)</p></td>
 			    <td width="50px"  style="word-wrap:break-word;" >境内货源地</td>
@@ -943,492 +953,93 @@
 			    <td width="50px">HS Code (物流填)</td>
 			    <td width="50px">退税率 (物流填 *%)</td>
 			    <td width="50px">合同号</td>
-			    <td width="50px">工厂名</td>
-			    <td width="50px">报关数量</td>
 			    <td width="50px">报关金额</td>
+			    <td width="50px">报关数量</td>
 	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid1")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng1" value="<%=request.getAttribute("itemeng1")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn1" value="<%=request.getAttribute("itemchn1")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity1" value="<%=request.getAttribute("quantity1")%>"/></td>
-	   			<td><select name="unit1" style="width: 99%;"><option <c:if test="${unit1 == '个'}">selected</c:if>>个</option><option <c:if test="${unit1 == '件'}">selected</c:if>>件</option><option <c:if test="${unit1 == '套'}">selected</c:if>>套</option><option <c:if test="${unit1 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice1")%>" type="text" name="purprice1" class="export-cn1" value="<%=request.getAttribute("purprice1")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice1" value="<%=request.getAttribute("unitprice1")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall1" class="unit-price-all" value="<%=request.getAttribute("unitpriceall1")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark1" value="<%=request.getAttribute("shopingmark1")%>"/></td>
-	   			<td><input size="10" type="text" name="nw1" class="n_weight" value="<%=request.getAttribute("nw1")%>"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination1" value="<%=request.getAttribute("sourceDestination1")==null?"":request.getAttribute("sourceDestination1")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice1" class="true-price" value="<%=request.getAttribute("trueprice1")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/><input type="hidden" value="<%=request.getAttribute("itemid1")%>"/></td>
-	   			<td><input size="20" type="text" name="hscode1" value="<%=request.getAttribute("hscode1")%>"/></td>
-	   			<td><input size="10" type="text" name="rate1" value="<%=request.getAttribute("rate1")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid1" value="<%=request.getAttribute("itemid1")%>"/></td>
-				<td><input name=""></td>
-				<td><input name=""></td>
-				<td><input name=""></td>
-				<td><input name=""></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng1"/></td>
-	   			<td><input size="10" type="text" name="itemchn1"/></td>
-	   			<td><input size="10" type="text" name="quantity1"/></td>
-	   			<td><select name="unit1" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice1" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall1" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark1" value="N/M"/></td>
-	   			<td><input size="10" type="text" class="n_weight" name="nw1"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination1" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice1" class="true-price" onkeyup="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode1"/></td>
-	   			<td><input size="10" type="text" name="rate1"/></td>
-
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid2")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng2" value="<%=request.getAttribute("itemeng2")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn2" value="<%=request.getAttribute("itemchn2")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity2" value="<%=request.getAttribute("quantity2")%>"/></td>
-	   			<td><select name="unit2" style="width: 99%;"><option <c:if test="${unit2 == '个'}">selected</c:if>>个</option><option <c:if test="${unit2 == '件'}">selected</c:if>>件</option><option <c:if test="${unit2 == '套'}">selected</c:if>>套</option><option <c:if test="${unit2 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice2")%>" type="text" name="purprice2" class="export-cn1" value="<%=request.getAttribute("purprice2")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice2" value="<%=request.getAttribute("unitprice2")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall2" class="unit-price-all" value="<%=request.getAttribute("unitpriceall2")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark2" value="<%=request.getAttribute("shopingmark2")%>"/></td>
-	   			<td><input size="10" type="text" name="nw2" class="n_weight" value="<%=request.getAttribute("nw2")%>"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination2" value="<%=request.getAttribute("sourceDestination2")==null?"":request.getAttribute("sourceDestination2")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice2" class="true-price" value="<%=request.getAttribute("trueprice2")%>" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid2")%>"/></td>
-	   			<td><input size="20" type="text" name="hscode2" value="<%=request.getAttribute("hscode2")%>"/></td>
-	   			<td><input size="10" type="text" name="rate2" value="<%=request.getAttribute("rate2")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid2" value="<%=request.getAttribute("itemid2")%>"/></td>
-
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng2"/></td>
-	   			<td><input size="10" type="text" name="itemchn2"/></td>
-	   			<td><input size="10" type="text" name="quantity2"/></td>
-	   			<td><select name="unit2" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice2" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice2" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall2" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark2" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw2" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination2" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice2" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode2"/></td>
-	   			<td><input size="10" type="text" name="rate2"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid3")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng3" value="<%=request.getAttribute("itemeng3")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn3" value="<%=request.getAttribute("itemchn3")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity3" value="<%=request.getAttribute("quantity3")%>"/></td>
-	   			<td><select name="unit3" style="width: 99%;"><option <c:if test="${unit3 == '个'}">selected</c:if>>个</option><option <c:if test="${unit3 == '件'}">selected</c:if>>件</option><option <c:if test="${unit3 == '套'}">selected</c:if>>套</option><option <c:if test="${unit3 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice3")%>" type="text" name="purprice3" class="export-cn1" value="<%=request.getAttribute("purprice3")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice3" value="<%=request.getAttribute("unitprice3")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall3" class="unit-price-all" value="<%=request.getAttribute("unitpriceall3")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark3" value="<%=request.getAttribute("shopingmark3")%>"/></td>
-	   			<td><input size="10" type="text" name="nw3" value="<%=request.getAttribute("nw3")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination3" value="<%=request.getAttribute("sourceDestination3")==null?"":request.getAttribute("sourceDestination3")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice3" class="true-price" value="<%=request.getAttribute("trueprice3")%>" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid3")%>"/></td>
-	   			<td><input size="20" type="text" name="hscode3" value="<%=request.getAttribute("hscode3")%>"/></td>
-	   			<td><input size="10" type="text" name="rate3" value="<%=request.getAttribute("rate3")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid3" value="<%=request.getAttribute("itemid3")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng3"/></td>
-	   			<td><input size="10" type="text" name="itemchn3"/></td>
-	   			<td><input size="10" type="text" name="quantity3"/></td>
-	   			<td><select name="unit3" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice3" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice3" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall3" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark3" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw3" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination3" class="sourceDestination"/></td>   			
-	   			<td><input size="10" type="text" name="trueprice3" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode3"/></td>
-	   			<td><input size="10" type="text" name="rate3"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid4")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng4" value="<%=request.getAttribute("itemeng4")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn4" value="<%=request.getAttribute("itemchn4")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity4" value="<%=request.getAttribute("quantity4")%>"/></td>
-	   			<td><select name="unit4" style="width: 99%;"><option <c:if test="${unit4 == '个'}">selected</c:if>>个</option><option <c:if test="${unit4 == '件'}">selected</c:if>>件</option><option <c:if test="${unit4 == '套'}">selected</c:if>>套</option><option <c:if test="${unit4 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice4")%>" type="text" name="purprice4" class="export-cn1" value="<%=request.getAttribute("purprice4")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice4" value="<%=request.getAttribute("unitprice4")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall4" class="unit-price-all" value="<%=request.getAttribute("unitpriceall4")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark4" value="<%=request.getAttribute("shopingmark4")%>"/></td>
-	   			<td><input size="10" type="text" name="nw4" class="n_weight" value="<%=request.getAttribute("nw4")%>"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination4" value="<%=request.getAttribute("sourceDestination4")==null?"":request.getAttribute("sourceDestination4")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice4" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice4")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid4")%>"/></td>
-	   			<td><input size="20" type="text" name="hscode4" value="<%=request.getAttribute("hscode4")%>"/></td>
-	   			<td><input size="10" type="text" name="rate4" value="<%=request.getAttribute("rate4")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid4" value="<%=request.getAttribute("itemid4")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng4"/></td>
-	   			<td><input size="10" type="text" name="itemchn4"/></td>
-	   			<td><input size="10" type="text" name="quantity4"/></td>
-	   			<td><select name="unit4" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice4" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice4" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall4" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark4" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw4" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination4" class="sourceDestination"/></td>	   		
-	   			<td><input size="10" type="text" name="trueprice4" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode4"/></td>
-	   			<td><input size="10" type="text" name="rate4"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid5")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng5" value="<%=request.getAttribute("itemeng5")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn5" value="<%=request.getAttribute("itemchn5")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity5" value="<%=request.getAttribute("quantity5")%>"/></td>
-	   			<td><select name="unit5" style="width: 99%;"><option <c:if test="${unit5 == '个'}">selected</c:if>>个</option><option <c:if test="${unit5 == '件'}">selected</c:if>>件</option><option <c:if test="${unit5 == '套'}">selected</c:if>>套</option><option <c:if test="${unit5 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice5")%>" type="text" name="purprice5" class="export-cn1" value="<%=request.getAttribute("purprice5")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice5" value="<%=request.getAttribute("unitprice5")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall5" class="unit-price-all" value="<%=request.getAttribute("unitpriceall5")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid5")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark5" value="<%=request.getAttribute("shopingmark5")%>"/></td>
-	   			<td><input size="10" type="text" name="nw5" value="<%=request.getAttribute("nw5")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination5" value="<%=request.getAttribute("sourceDestination5")==null?"":request.getAttribute("sourceDestination5")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice5" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice5")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode5" value="<%=request.getAttribute("hscode5")%>"/></td>
-	   			<td><input size="10" type="text" name="rate5" value="<%=request.getAttribute("rate5")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid5" value="<%=request.getAttribute("itemid5")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng5"/></td>
-	   			<td><input size="10" type="text" name="itemchn5"/></td>
-	   			<td><input size="10" type="text" name="quantity5"/></td>
-	   			<td><select name="unit5" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice5" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice5" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall5" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark5" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw5" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination5" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice5" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode5"/></td>
-	   			<td><input size="10" type="text" name="rate5"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid6")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng6" value="<%=request.getAttribute("itemeng6")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn6" value="<%=request.getAttribute("itemchn6")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity6" value="<%=request.getAttribute("quantity6")%>"/></td>
-	   			<td><select name="unit6" style="width: 99%;"><option <c:if test="${unit6 == '个'}">selected</c:if>>个</option><option <c:if test="${unit6 == '件'}">selected</c:if>>件</option><option <c:if test="${unit6 == '套'}">selected</c:if>>套</option><option <c:if test="${unit6 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice6")%>" type="text" name="purprice6" class="export-cn1" value="<%=request.getAttribute("purprice6")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice6" value="<%=request.getAttribute("unitprice6")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall6" class="unit-price-all" value="<%=request.getAttribute("unitpriceall6")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid6")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark6" value="<%=request.getAttribute("shopingmark6")%>"/></td>
-	   			<td><input size="10" type="text" name="nw6" class="n_weight" value="<%=request.getAttribute("nw6")%>"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination6" value="<%=request.getAttribute("sourceDestination6")==null?"":request.getAttribute("sourceDestination6")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice6" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice6")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode6" value="<%=request.getAttribute("hscode6")%>"/></td>
-	   			<td><input size="10" type="text" name="rate6" value="<%=request.getAttribute("rate6")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid6" value="<%=request.getAttribute("itemid6")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng6"/></td>
-	   			<td><input size="10" type="text" name="itemchn6"/></td>
-	   			<td><input size="10" type="text" name="quantity6"/></td>
-	   			<td><select name="unit6" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice6" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice6" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall6" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark6" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw6" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination6" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice6" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode6"/></td>
-	   			<td><input size="10" type="text" name="rate6"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid7")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng7" value="<%=request.getAttribute("itemeng7")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn7" value="<%=request.getAttribute("itemchn7")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity7" value="<%=request.getAttribute("quantity7")%>"/></td>
-	   			<td><select name="unit7" style="width: 99%;"><option <c:if test="${unit7 == '个'}">selected</c:if>>个</option><option <c:if test="${unit7 == '件'}">selected</c:if>>件</option><option <c:if test="${unit7 == '套'}">selected</c:if>>套</option><option <c:if test="${unit7 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice7")%>" type="text" name="purprice7" class="export-cn1" value="<%=request.getAttribute("purprice7")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice7" value="<%=request.getAttribute("unitprice7")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall7" class="unit-price-all" value="<%=request.getAttribute("unitpriceall7")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid7")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark7" value="<%=request.getAttribute("shopingmark7")%>"/></td>
-	   			<td><input size="10" type="text" name="nw7" value="<%=request.getAttribute("nw7")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination7" value="<%=request.getAttribute("sourceDestination7")==null?"":request.getAttribute("sourceDestination7")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice7" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice7")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode7" value="<%=request.getAttribute("hscode7")%>"/></td>
-	   			<td><input size="10" type="text" name="rate7" value="<%=request.getAttribute("rate7")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid7" value="<%=request.getAttribute("itemid7")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng7"/></td>
-	   			<td><input size="10" type="text" name="itemchn7"/></td>
-	   			<td><input size="10" type="text" name="quantity7"/></td>
-	   			<td><select name="unit7" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice7" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice7" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall7" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark7" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw7" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination7" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice7" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode7"/></td>
-	   			<td><input size="10" type="text" name="rate7"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid8")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng8" value="<%=request.getAttribute("itemeng8")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn8" value="<%=request.getAttribute("itemchn8")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity8" value="<%=request.getAttribute("quantity8")%>"/></td>
-	   			<td><select name="unit8" style="width: 99%;"><option <c:if test="${unit8 == '个'}">selected</c:if>>个</option><option <c:if test="${unit8 == '件'}">selected</c:if>>件</option><option <c:if test="${unit8 == '套'}">selected</c:if>>套</option><option <c:if test="${unit8 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice8")%>" type="text" name="purprice8"  class="export-cn1" value="<%=request.getAttribute("purprice8")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice8" value="<%=request.getAttribute("unitprice8")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall8" class="unit-price-all" value="<%=request.getAttribute("unitpriceall8")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid8")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark8" value="<%=request.getAttribute("shopingmark8")%>"/></td>
-	   			<td><input size="10" type="text" name="nw8" value="<%=request.getAttribute("nw8")%>" class="n_weight"/></td>
-                <td><input size="10" type="text" name="sourceDestination8" value="<%=request.getAttribute("sourceDestination8")==null?"":request.getAttribute("sourceDestination8")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice8" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice8")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode8" value="<%=request.getAttribute("hscode8")%>"/></td>
-	   			<td><input size="10" type="text" name="rate8" value="<%=request.getAttribute("rate8")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid8" value="<%=request.getAttribute("itemid8")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng8"/></td>
-	   			<td><input size="10" type="text" name="itemchn8"/></td>
-	   			<td><input size="10" type="text" name="quantity8"/></td>
-	   			<td><select name="unit8" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice8" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice8" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall8" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark8" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw8" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination8" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice8" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode8"/></td>
-	   			<td><input size="10" type="text" name="rate8"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid9")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng9" value="<%=request.getAttribute("itemeng9")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn9" value="<%=request.getAttribute("itemchn9")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity9" value="<%=request.getAttribute("quantity9")%>"/></td>
-	   			<td><select name="unit9" style="width: 99%;"><option <c:if test="${unit9 == '个'}">selected</c:if>>个</option><option <c:if test="${unit9 == '件'}">selected</c:if>>件</option><option <c:if test="${unit9 == '套'}">selected</c:if>>套</option><option <c:if test="${unit9 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice9")%>" type="text" name="purprice9" class="export-cn1" value="<%=request.getAttribute("purprice9")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice9" value="<%=request.getAttribute("unitprice9")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall9" class="unit-price-all" value="<%=request.getAttribute("unitpriceall9")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid9")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark9" value="<%=request.getAttribute("shopingmark9")%>"/></td>
-	   			<td><input size="10" type="text" name="nw9" value="<%=request.getAttribute("nw9")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination9" value="<%=request.getAttribute("sourceDestination9")==null?"":request.getAttribute("sourceDestination9")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice9" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice9")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode9" value="<%=request.getAttribute("hscode9")%>"/></td>
-	   			<td><input size="10" type="text" name="rate9" value="<%=request.getAttribute("rate9")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid9" value="<%=request.getAttribute("itemid9")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng9"/></td>
-	   			<td><input size="10" type="text" name="itemchn9"/></td>
-	   			<td><input size="10" type="text" name="quantity9"/></td>
-	   			<td><select name="unit9" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice9" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice9" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall9" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark9" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw9" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination9" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice9" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode9"/></td>
-	   			<td><input size="10" type="text" name="rate9"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid10")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng10" value="<%=request.getAttribute("itemeng10")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn10" value="<%=request.getAttribute("itemchn10")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity10" value="<%=request.getAttribute("quantity10")%>"/></td>
-	   			<td><select name="unit10" style="width: 99%;"><option <c:if test="${unit10 == '个'}">selected</c:if>>个</option><option <c:if test="${unit10 == '件'}">selected</c:if>>件</option><option <c:if test="${unit10 == '套'}">selected</c:if>>套</option><option <c:if test="${unit10 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice10")%>" type="text" name="purprice10" class="export-cn1" value="<%=request.getAttribute("purprice10")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice10" value="<%=request.getAttribute("unitprice10")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall10" class="unit-price-all" value="<%=request.getAttribute("unitpriceall10")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid10")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark10" value="<%=request.getAttribute("shopingmark10")%>"/></td>
-	   			<td><input size="10" type="text" name="nw10" value="<%=request.getAttribute("nw10")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination10" value="<%=request.getAttribute("sourceDestination10")==null?"":request.getAttribute("sourceDestination10")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice10" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice10")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode10" value="<%=request.getAttribute("hscode10")%>"/></td>
-	   			<td><input size="10" type="text" name="rate10" value="<%=request.getAttribute("rate10")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid10" value="<%=request.getAttribute("itemid10")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng10"/></td>
-	   			<td><input size="10" type="text" name="itemchn10"/></td>
-	   			<td><input size="10" type="text" name="quantity10"/></td>
-	   			<td><select name="unit10" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice10" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice10" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall10" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark10" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw10" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination10" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice10" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode10"/></td>
-	   			<td><input size="10" type="text" name="rate10"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid11")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng11" value="<%=request.getAttribute("itemeng11")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn11" value="<%=request.getAttribute("itemchn11")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity11" value="<%=request.getAttribute("quantity11")%>"/></td>
-	   			<td><select name="unit11" style="width: 99%;"><option <c:if test="${unit11 == '个'}">selected</c:if>>个</option><option <c:if test="${unit11 == '件'}">selected</c:if>>件</option><option <c:if test="${unit11 == '套'}">selected</c:if>>套</option><option <c:if test="${unit11 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice11")%>" type="text" name="purprice11" class="export-cn1" value="<%=request.getAttribute("purprice11")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice11" value="<%=request.getAttribute("unitprice11")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall11" class="unit-price-all" value="<%=request.getAttribute("unitpriceall11")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid11")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark11" value="<%=request.getAttribute("shopingmark11")%>"/></td>
-	   			<td><input size="10" type="text" name="nw11" value="<%=request.getAttribute("nw11")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination11" value="<%=request.getAttribute("sourceDestination11")==null?"":request.getAttribute("sourceDestination11")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice11" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice11")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode11" value="<%=request.getAttribute("hscode11")%>"/></td>
-	   			<td><input size="10" type="text" name="rate11" value="<%=request.getAttribute("rate11")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid11" value="<%=request.getAttribute("itemid11")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng11"/></td>
-	   			<td><input size="10" type="text" name="itemchn11"/></td>
-	   			<td><input size="10" type="text" name="quantity11"/></td>
-	   			<td><select name="unit11" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice11" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice11" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall11" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark11" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw11" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination11" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice11" class="true-price"  <c:if test="${sessionScope.auth != 1}">readonly</c:if> onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode11"/></td>
-	   			<td><input size="10" type="text" name="rate11"/></td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid12")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng12" value="<%=request.getAttribute("itemeng12")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn12" value="<%=request.getAttribute("itemchn12")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity12" value="<%=request.getAttribute("quantity12")%>"/></td>
-	   			<td><select name="unit12" style="width: 99%;"><option <c:if test="${unit12 == '个'}">selected</c:if>>个</option><option <c:if test="${unit12 == '件'}">selected</c:if>>件</option><option <c:if test="${unit12 == '套'}">selected</c:if>>套</option><option <c:if test="${unit12 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice12")%>" type="text" name="purprice12" class="export-cn1" value="<%=request.getAttribute("purprice12")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice12" value="<%=request.getAttribute("unitprice12")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall12" class="unit-price-all" value="<%=request.getAttribute("unitpriceall12")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid12")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark12" value="<%=request.getAttribute("shopingmark12")%>"/></td>
-	   			<td><input size="10" type="text" name="nw12" value="<%=request.getAttribute("nw12")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination12" value="<%=request.getAttribute("sourceDestination12")==null?"":request.getAttribute("sourceDestination12")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice12" class="true-price" <c:if test="${sessionScope.auth != 1}">readonly</c:if> value="<%=request.getAttribute("trueprice12")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode12" value="<%=request.getAttribute("hscode12")%>"/></td>
-	   			<td><input size="10" type="text" name="rate12" value="<%=request.getAttribute("rate12")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid12" value="<%=request.getAttribute("itemid12")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng12"/></td>
-	   			<td><input size="10" type="text" name="itemchn12"/></td>
-	   			<td><input size="10" type="text" name="quantity12"/></td>
-	   			<td><select name="unit12" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice12" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice12" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall12" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark12" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw12" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination12" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice12"  <c:if test="${sessionScope.auth != 1}">readonly</c:if> class="true-price" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode12"/></td>
-	   			<td><input size="10" type="text" name="rate12"/></td>
+			<c:forEach items="${items}" var="item" varStatus="sdex">
+				<tr class="item-tr-parent${sdex.index}">
+				<td><input size="10" type="text" name="itemeng${sdex.index+1}" value="${item.itemeng}"/></td>
+				<td><input size="10" type="text" name="itemchn${sdex.index+1}" value="${item.itemchn}"/></td>
+				<td><input size="10" type="text" name="quantity${sdex.index+1}" value="${item.quantity}"/></td>
+				<td><select name="unit${sdex.index+1}" style="width: 99%;"><option <c:if test="${item.unit == '个'}">selected</c:if>>个</option><option <c:if test="${item.unit == '件'}">selected</c:if>>件</option><option <c:if test="${item.unit == '套'}">selected</c:if>>套</option><option <c:if test="${item.unit == '台'}">selected</c:if>>台</option></select></td>
+				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitprice${sdex.index+1}" value="${item.unitprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitpriceall${sdex.index+1}" class="unit-price-all" value="${item.unitpriceall}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td>${item.orderActualMoney}</td>
+				<td>${item.orderAmountReceived}</td>
+				<td><input size="10" type="text" name="shopingmark${sdex.index+1}" value="${item.shopingmark}"/></td>
+				<td><input size="10" type="text" name="nw${sdex.index+1}" class="n_weight" value="${item.nw}"/></td>
+				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="sourceDestination"/></td>
+				<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
+					<input type="hidden" value="${item.itemid}"/>
+					<p>换汇比5：<span class="hb5 green-font" >${item.hbFive}</span></p>
+					<p>换汇比7：<span class="hb7 green-font" >${item.hbSenven}</span></p>
+				</td>
+				<td><input size="20" type="text" name="hscode${sdex.index+1}" value="${item.hscode}"/></td>
+				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}"/>
+					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}"/>
+				</td>
 				<td>
-					<tr>
-					<input type="text" name="concat[].no">
-				</tr>
-
-
+					<select name="contractno${sdex.index+1}" class="select-n">
+						<c:forEach items="${purnos}" var="pr">
+							<c:if test="${pr.purno==item.contractNo}">
+								<option selected>${pr.purno}</option>
+							</c:if>
+							<c:if test="${pr.purno!=item.contractNo}">
+								<option>${pr.purno}</option>
+							</c:if>
+						</c:forEach>
+					</select>
 
 				</td>
-		   		<%} %>
-	   		</tr>
-	   		<tr>
-	   			<%
-	   			if(request.getAttribute("itemid13")!=null){
-	   				%>
-	   			<td><input size="10" type="text" name="itemeng13" value="<%=request.getAttribute("itemeng13")%>"/></td>
-	   			<td><input size="10" type="text" name="itemchn13" value="<%=request.getAttribute("itemchn13")%>"/></td>
-	   			<td><input size="10" type="text" name="quantity13" value="<%=request.getAttribute("quantity13")%>"/></td>
-	   			<td><select name="unit13" style="width: 99%;"><option <c:if test="${unit13 == '个'}">selected</c:if>>个</option><option <c:if test="${unit13 == '件'}">selected</c:if>>件</option><option <c:if test="${unit13 == '套'}">selected</c:if>>套</option><option <c:if test="${unit13 == '台'}">selected</c:if>>台</option></select></td>
-	   			<td><input size="10" field="<%=request.getAttribute("purprice13")%>" type="text" name="purprice13" class="export-cn1" value="<%=request.getAttribute("purprice13")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice13" value="<%=request.getAttribute("unitprice13")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall13" class="unit-price-all" value="<%=request.getAttribute("unitpriceall13")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/><input type="hidden" value="<%=request.getAttribute("itemid13")%>"/></td>
-	   			<td><input size="10" type="text" name="shopingmark13" value="<%=request.getAttribute("shopingmark13")%>"/></td>
-	   			<td><input size="10" type="text" name="nw13" value="<%=request.getAttribute("nw13")%>" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination13" value="<%=request.getAttribute("sourceDestination13")==null?"":request.getAttribute("sourceDestination13")%>" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice13" <c:if test="${sessionScope.auth != 1}">readonly</c:if> class="true-price" value="<%=request.getAttribute("trueprice13")%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode13" value="<%=request.getAttribute("hscode13")%>"/></td>
-	   			<td><input size="10" type="text" name="rate13" value="<%=request.getAttribute("rate13")%>"/></td>
-	   			<td><input size="10" type="hidden" name="itemid13" value="<%=request.getAttribute("itemid13")%>"/></td>
-		   		<%
-		   			}else{
-		   		%>
-		   		<td><input size="10" type="text" name="itemeng13"/></td>
-	   			<td><input size="10" type="text" name="itemchn13"/></td>
-	   			<td><input size="10" type="text" name="quantity13"/></td>
-	   			<td><select name="unit13" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
-	   			<td><input size="10" type="text" name="purprice13" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitprice13" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="unitpriceall13" class="unit-price-all" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="10" type="text" name="shopingmark13" value="N/M"/></td>
-	   			<td><input size="10" type="text" name="nw13" class="n_weight"/></td>
-	   			<td><input size="10" type="text" name="sourceDestination13" class="sourceDestination"/></td>
-	   			<td><input size="10" type="text" name="trueprice13"  <c:if test="${sessionScope.auth != 1}">readonly</c:if> class="true-price" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-	   			<td><input size="20" type="text" name="hscode13"/></td>
-	   			<td><input size="10" type="text" name="rate13"/></td>
-		   		<%} %>
-	   		</tr>
+					<td><input size="10" type="text" name="contractamount${sdex.index+1}" value="${item.declareAmount}"/></td>
+					<td><input size="10" type="text" name="contractquantity${sdex.index+1}" value="${item.declareQuantity}"/>
+						<input value="${item.contractItemId}" name="contractitemid${sdex.index+1}" class="in-id" type="hidden">
+					</td>
+	   		   <tr>
+			</c:forEach>
+			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">
+			<tr class="item-tr-parent${itemsSize+sdex.index}">
+				<td><input size="10" type="text" name="itemeng${itemsSize+sdex.index}" value=""/></td>
+				<td><input size="10" type="text" name="itemchn${itemsSize+sdex.index}" value=""/></td>
+				<td><input size="10" type="text" name="quantity${itemsSize+sdex.index}" value=""/></td>
+				<td><select name="unit${itemsSize+sdex.index}" style="width: 99%;"><option>个</option><option>件</option><option >套</option><option>台</option></select></td>
+				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitprice${itemsSize+sdex.index}" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitpriceall${itemsSize+sdex.index}" class="unit-price-all" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+			<td></td>
+			<td></td>
+			<td><input size="10" type="text" name="shopingmark${itemsSize+sdex.index}" value=""/></td>
+				<td><input size="10" type="text" name="nw${itemsSize+sdex.index}" class="n_weight" value=""/></td>
+				<td><input size="10" type="text" name="sourceDestination${itemsSize+sdex.index}" value="" class="sourceDestination"/></td>
+				<td><input size="10" type="text" name="trueprice${itemsSize+sdex.index}" class="true-price" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
+					<input type="hidden" value=""/>
+					<p>换汇比5：<span class="hb5" ></span></p>
+					<p>换汇比7：<span class="hb7" ></span></p>
+				</td>
+				<td><input size="20" type="text" name="hscode${itemsSize+sdex.index}" value=""/></td>
+				<td><input size="10" type="text" name="rate${itemsSize+sdex.index}" value=""/>
+					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value=""/>
+				</td>
+
+			<td>
+				<select name="contractno${itemsSize+sdex.index}" class="select-n">
+					<c:forEach items="${purnos}" var="pr">
+						<option>${pr.purno}</option>
+					</c:forEach>
+				</select>
+
+			</td>
+			<td><input  type="text" name="contractamount${itemsSize+sdex.index}" value=""/></td>
+			<td><input  type="text" name="contractquantity${itemsSize+sdex.index}" value=""/>
+				<input value="" name="contractitemid${itemsSize+sdex.index}" class="in-id" type="hidden">
+			</td>
+			<tr>
+
+
+			</c:forEach>
+
+
 	   	</table>
 	   	<br/>
 	   	指定货代（如果有）(用&ltbr&gt换行)：<textarea name="frieght"  cols="45" rows="5"><%=request.getAttribute("frieght")%></textarea>
@@ -1567,7 +1178,8 @@
 	</div>
    
   
-   <c:choose>
+	   <input type="button" style="margin-top: 50px;" value="保存修改" onclick="update_order(1)"></input>
+  <%-- <c:choose>
 	   <c:when test="${sessionScope.auth == 1}">
 	       <input type="button" style="margin-top: 50px;" value="保存修改" onclick="update_order(1)"></input>
 	   </c:when>
@@ -1575,8 +1187,8 @@
 	       <p style="color:red;" style="margin-top: 50px;" >正式保存 多合同多品类请上传Excel</p>
 		   <input type="button" value="预保存修改" onclick="update_order(0)"></input>
 		   <input type="button" value="保存修改" onclick="update_order(1)"></input>
-	   </c:otherwise>   
-   </c:choose>
+	   </c:otherwise>
+   </c:choose>--%>
    <form action="DeleteServlet">
    <table>
    		<input type="hidden" name="id" value="<%=request.getAttribute("id")%>" id="proId"/>
@@ -1779,8 +1391,43 @@ function delInvoice(id,obj){
 	   		});		
 	}
 }
+/*
+function addContract(t){
+	var tb = $(t).parents(".tr-contract-al");
+
+	//已经录入合同数量
+	var itemCount = parseInt(tb.find(".contract-count").val());
+	var sdex = tb.find(".contract-sdex").val();
+	//项目合同数量
+	var contractCount = parseInt(tb.find(".contract-pu-count").val());
+
+	if((itemCount == 0 &&  contractCount == 1) || itemCount > contractCount - 1){
+		alert("合同已达到上限，不能新增合同");
+	}else{
+		itemCount = itemCount+1;
+		tb.find(".contract-count").val(itemCount);
+
+		var sel = $(".select-n").get(0).clone().attr('name','contract'+sdex+'no'+itemCount);
+
+		var nhml = '<tr class="tr-tb-c">' +
+				'<td>';
+
+		var tl ='</td>' +
+				'<td><input value="" name="contract'+sdex+'name'+itemCount+'" class="in-name"></td>' +
+				'<td><input value="" name="contract'+sdex+'amount'+itemCount+'" class="in-amount"></td>' +
+				'<td><input value="" name="contract'+sdex+'quantity'+itemCount+'" class="in-quantity">' +
+				'<input value="" name="contract'+sdex+'id'+itemCount+'" class="in-id" type="hidden">' +
+				'</td>' +
+				'<td>' +
+				'</td>' +
+				'</tr>';
 
 
+		tb.append(nhml).append(sel).append(tl);
+
+	}
+
+}*/
 
 </script> 
 </html>

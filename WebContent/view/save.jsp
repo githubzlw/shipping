@@ -664,7 +664,7 @@
         <input type="hidden" id="auth" value="${sessionScope.auth}">
         <input type="hidden" id="attr_source" name="attrSource">  <!-- 地址来源（1、NBMail获取到的地址） -->
         <input type="hidden" id="select_currency"  value="USD">
-   		客户ERP ID：<input id="erp_id" type="text"/>
+   		客户ERP ID：<input id="erp_id" type="text" placeholder="客户ERPID可以通过ERP系统查得" style="width:400px;"/>
    		           <input type="button" style="margin-bottom: 5px;" onclick="query_addr_from_NBMail()" value="查询地址"><br>
    		采购：<input name="purchase" type="text"/>
    		销售：<input name="sale" type="text"/>

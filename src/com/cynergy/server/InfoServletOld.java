@@ -2,13 +2,10 @@ package com.cynergy.server;
 /**
  * 修改项目时 先获取信息
  */
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import com.cynergy.main.DBHelper;
+import com.cynergy.main.WebCookie;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,22 +13,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import com.cynergy.mapper.InvoiceInfoMapper;
-import com.cynergy.mapper.InvoiceInfoMapperImpl;
-import com.cynergy.pojo.CaseFund;
-import com.cynergy.pojo.ContractItem;
-import com.cynergy.pojo.ContractItemOther;
-import com.cynergy.pojo.ContractWrap;
-import org.apache.commons.lang.StringUtils;
-
-import com.cynergy.main.DBHelper;
-import com.cynergy.main.WebCookie;
-
-public class InfoServlet extends HttpServlet {
+public class InfoServletOld extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private DecimalFormat df = new DecimalFormat("#0.00");
-	private InvoiceInfoMapper invoiceInfoMapper = new InvoiceInfoMapperImpl();
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -68,7 +58,7 @@ public class InfoServlet extends HttpServlet {
 			}else{
 			    sql1="select * from products where id ="+id+" and id in ("+pds+")";
 			}
-
+			
 			ResultSet res1 = createStatement.executeQuery(sql1);
 			while (res1.next()) {
 				request.setAttribute("purchase", res1.getString("purchase"));
@@ -113,55 +103,33 @@ public class InfoServlet extends HttpServlet {
 			}
 			String sql2;
 			if(Integer.parseInt(auth.toString()) == 1){
-				sql2="select  i.*,c.purno,c.amount as contract_amount,c.quantity as contract_quantity,c.id as cid " +
-						"from  items i left join contract_items c on i.id=c.item_id" +
-						" where i.proId ="+id;
+				sql2="select * from items where proId ="+id;
 			}else{
-				sql2="select  i.*,c.purno,c.amount as contract_amount,c.quantity as contract_quantity,c.id as cid " +
-						"from  items i left join contract_items c on i.id=c.item_id" +
-						" where i.proId ="+id +" and i.proId in ("+pds+")";
+				sql2="select * from items where proId ="+id +" and proId in ("+pds+")";
 			}
 			
 			ResultSet res2 = createStatement.executeQuery(sql2);
-			List<ContractItem> items = new ArrayList<>();
 			int totalpro2=0;
-			ContractItem item = null;
 			while (res2.next()) {
+//				res2.getString("");
 				totalpro2++;
-				item = new ContractItem();
-				item.setItemid(res2.getInt("id"));
-				item.setItemeng(res2.getString("itemeng"));
-				item.setItemchn( res2.getString("itemchn"));
-				item.setQuantity( res2.getString("quantity"));
-				item.setPurprice(res2.getString("purprice"));
-				item.setUnitprice(res2.getString("unitprice"));
-				item.setTrueprice(res2.getString("trueprice"));
-				item.setShopingmark(res2.getString("shopingmark"));
-				item.setHscode(res2.getString("hscode"));
-				item.setNw(res2.getString("nw"));
-				item.setRate(res2.getString("rate"));
-				item.setUnitpriceall(res2.getString("unitpriceall"));
-				item.setSourceDestination(res2.getString("source_destination") == null ? "" : res2.getString("source_destination"));
-				item.setUnit(res2.getString("unit") == null ? "PCS" : res2.getString("unit"));
-				if(StringUtils.isNotEmpty(item.getPurprice())){
-					Double truePrice = Double.parseDouble(item.getPurprice());
-					item.setHbFive(df.format(truePrice/1.13/5));
-					item.setHbSenven(df.format(truePrice/1.13/7));
-				}
-				item.setContractNo(res2.getString("purno"));
-				item.setDeclareAmount(res2.getString("contract_amount"));
-				item.setDeclareQuantity(res2.getString("contract_quantity"));
-				item.setContractItemId(res2.getInt("cid"));
-				items.add(item);
+				request.setAttribute("itemid"+totalpro2, res2.getString("id"));
+				request.setAttribute("itemeng"+totalpro2, res2.getString("itemeng"));
+				request.setAttribute("itemchn"+totalpro2, res2.getString("itemchn"));
+				request.setAttribute("quantity"+totalpro2, res2.getString("quantity"));
+				request.setAttribute("purprice"+totalpro2, res2.getString("purprice"));
+				request.setAttribute("unitprice"+totalpro2, res2.getString("unitprice"));
+				request.setAttribute("trueprice"+totalpro2, res2.getString("trueprice"));
+				request.setAttribute("shopingmark"+totalpro2, res2.getString("shopingmark"));
+				request.setAttribute("hscode"+totalpro2, res2.getString("hscode"));
+				request.setAttribute("nw"+totalpro2, res2.getString("nw"));
+//				request.setAttribute("gw"+totalpro2, res2.getString("gw"));
+//				request.setAttribute("pageNum"+totalpro2, res2.getString("pageNum"));
+				request.setAttribute("rate"+totalpro2, res2.getString("rate"));
+				request.setAttribute("unitpriceall"+totalpro2, res2.getString("unitpriceall"));
+				request.setAttribute("sourceDestination"+totalpro2, res2.getString("source_destination") == null ? "" : res2.getString("source_destination"));
+				request.setAttribute("unit"+totalpro2, res2.getString("unit") == null ? "PCS" : res2.getString("unit"));
 			}
-
-
-
-
-
-
-			List<String> lstCase = new ArrayList<>();
-			List<ContractWrap> purnos = new ArrayList<ContractWrap>();
 			String sql3;
 			if(Integer.parseInt(auth.toString()) == 1){
 				sql3="select * from contract where proId ="+id;
@@ -171,19 +139,8 @@ public class InfoServlet extends HttpServlet {
 			
 			ResultSet res3 = createStatement.executeQuery(sql3);
 			int totalpro3=0;
-			ContractWrap contract = null;
 			while (res3.next()) {
 				totalpro3++;
-				contract = new ContractWrap();
-				contract.setConid( res3.getString("id"));
-				contract.setFactory(res3.getString("factory"));
-				contract.setMoney(res3.getString("money"));
-				contract.setTotaltimes(res3.getString("totaltimes"));
-				contract.setTimes(res3.getString("times"));
-				contract.setRmb(res3.getString("rmb"));
-				contract.setPurno(res3.getString("purno"));
-				contract.setOrderId(res3.getString("order_id"));
-				contract.setIsExtraInvoice(res3.getString("is_extra_invoice"));
 				request.setAttribute("conid"+totalpro3, res3.getString("id"));
 				request.setAttribute("purno"+totalpro3, res3.getString("purno"));
 				request.setAttribute("factory"+totalpro3, res3.getString("factory"));
@@ -193,39 +150,13 @@ public class InfoServlet extends HttpServlet {
 				request.setAttribute("rmb"+totalpro3, res3.getString("rmb"));
 				request.setAttribute("orderId"+totalpro3, res3.getString("order_id"));
 				request.setAttribute("isExtraInvoice"+totalpro3, res3.getString("is_extra_invoice"));
-				purnos.add(contract);
-				String no = res3.getString("purno");
-				no = no.replace("合","SHS");
-				String[] split = no.split("-");
-				if(split.length > 1){
-					no = split[0]+"-"+ split[1].replaceAll("([a-zA-Z])+","");
-				}
-				if(!lstCase.contains(no)){
-					lstCase.add(no);
-				}
 			}
+			
 
-			Map<String, CaseFund> contractMoney = invoiceInfoMapper.getContractMoney(lstCase);
-			for(ContractItem i:items){
-				String no = i.getContractNo();
-				no = no.replace("合","SHS");
-				String[] split = no.split("-");
-				if(split.length > 1){
-					no = split[0]+"-"+ split[1].replaceAll("([a-zA-Z])+","");
-				}
-				CaseFund caseFund = contractMoney.get(no);
-				if(caseFund != null){
-					i.setOrderActualMoney(caseFund.getOrderActualMoney());
-					i.setOrderAmountReceived(caseFund.getOrderAmountReceived());
-				}
-			}
-
-			request.setAttribute("items",items);
-			request.setAttribute("itemsSize",items.size());
 			//获取当前出运合同数
 			request.setAttribute("totalSize",totalpro3);
-
-			request.setAttribute("purnos",purnos);
+			
+			
 			//查询电子出货单记录
 			String sql4;
 			if(Integer.parseInt(auth.toString()) == 1){
@@ -289,29 +220,6 @@ public class InfoServlet extends HttpServlet {
  		}
 		out.flush();
 		out.close();
-	}
-
-	private List<ContractItemOther> queryContractDeclare(int itemid,Connection connection) throws SQLException{
-		List<ContractItemOther> items = new ArrayList<>();
-
-		String sql = "select id,purno,amount,quantity,item_id from contract_items" +
-				" where item_id=?";
-		PreparedStatement statement3 = connection.prepareStatement(sql);
-		statement3.setInt(1, itemid);
-		ResultSet resultSet = statement3.executeQuery();
-		ContractItemOther item = null;
-		while(resultSet.next()){
-
-			item = new ContractItemOther()
-					.setId(resultSet.getInt("id"))
-					.setContractNo(resultSet.getString("purno"))
-					.setDeclareAmount(resultSet.getString("amount"))
-					.setDeclareQuantity(resultSet.getString("quantity"))
-					.setItemid(resultSet.getInt("item_id"));
-			items.add(item);
-		}
-		statement3.close();
-		return items;
 	}
 
 }

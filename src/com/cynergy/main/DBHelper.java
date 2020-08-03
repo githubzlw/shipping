@@ -65,8 +65,23 @@ public class DBHelper {
         }
         return null;
     }
-    
-    
+
+    public static void closeResource(Statement stm,ResultSet rs){
+        if(stm!=null){
+            try {
+                stm.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if(rs!=null){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
      
     public static void close(Connection con,Statement stm,ResultSet rs){
         if(con!=null){

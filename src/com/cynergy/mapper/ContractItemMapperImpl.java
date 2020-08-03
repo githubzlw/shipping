@@ -1,10 +1,7 @@
 package com.cynergy.mapper;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,69 +12,164 @@ import com.cynergy.main.ReadExcelVO;
 
 public class ContractItemMapperImpl implements ContractItemsMapper {
 
+	private void updateWeight(Connection connection,List<ReadExcelVO> items1) throws SQLException {
+		//获取主表id
+		int proId=0;
+		if(items1!=null&&items1.size()>0){
+			proId = items1.get(0).getProId();
+		}
+		Statement statement = connection.createStatement();
+		String sql1 = "select * from items where proId = "+ proId;
+		ResultSet res1 = statement.executeQuery(sql1);
+		while (res1.next()) {
+			int itemId = res1.getInt("id");
+			String itemchn = res1.getString("itemchn");
+			String rate = res1.getString("rate");
+			String totalWeight = res1.getString("nw");
+			String purchaseAmount = res1.getString("purprice");
+			for (ReadExcelVO readExcelVO : items1) {
+				if(readExcelVO.getItemchn().equals(itemchn)){
+					readExcelVO.setItemId(itemId);
+					if(StringUtils.isNotBlank(rate)){
+						rate= rate.replace("%", "");
+						Double purprice = readExcelVO.getAmount();
+						Double refundAmount = new BigDecimal(purprice).multiply(new BigDecimal(Double.parseDouble(rate))).divide(new BigDecimal(100), 2).doubleValue();
+						readExcelVO.setRefundAmount(refundAmount);
+					}
+					if(StringUtils.isNotBlank(totalWeight)){
+						int weight = new BigDecimal(readExcelVO.getAmount()).multiply(new BigDecimal(totalWeight)).divide(new BigDecimal(purchaseAmount), 4).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+						readExcelVO.setWeight(weight);
+					}
+					continue;
+				}
+			}
+		}
+		res1.close();
+		statement.close();
+	}
+
+	private void addBatch(Connection connection,List<ReadExcelVO> items1) throws SQLException{
+		//保存合同产品关联表
+		String sql2="INSERT INTO contract_items (purno, itemchn, amount, item_id, proId,refund_amount,quantity,weight) VALUES (?, ?, ?, ?, ?, ?, ?,?);";
+		PreparedStatement statement2 = connection.prepareStatement(sql2,Statement.RETURN_GENERATED_KEYS);
+		for (ReadExcelVO readExcelVO : items1) {
+			statement2.setString(1,readExcelVO.getPurno());
+			statement2.setString(2,readExcelVO.getItemchn());
+			statement2.setDouble(3,readExcelVO.getAmount());
+			statement2.setInt(4,readExcelVO.getItemId());
+			statement2.setInt(5,readExcelVO.getProId());
+			if(readExcelVO.getRefundAmount()!=null){
+				statement2.setDouble(6,readExcelVO.getRefundAmount());
+			}else{
+				statement2.setDouble(6,0.0);
+			}
+			statement2.setInt(7,readExcelVO.getQuantity());
+			statement2.setInt(8,readExcelVO.getWeight());
+			statement2.executeUpdate();
+		}
+		statement2.close();
+	}
+	private void update(Connection connection,List<ReadExcelVO> items2) throws SQLException{
+		//保存合同产品关联表
+		String sql2="update contract_items set purno=?, itemchn=?, amount=?, item_id=?, proId=?,refund_amount=?,quantity=? where id=?;";
+		for (ReadExcelVO readExcelVO : items2) {
+			PreparedStatement statement2 = connection.prepareStatement(sql2);
+			statement2.setString(1,readExcelVO.getPurno());
+			statement2.setString(2,readExcelVO.getItemchn());
+			statement2.setDouble(3,readExcelVO.getAmount());
+			statement2.setInt(4,readExcelVO.getItemId());
+			statement2.setInt(5,readExcelVO.getProId());
+			if(readExcelVO.getRefundAmount()!=null){
+				statement2.setDouble(6,readExcelVO.getRefundAmount());
+			}else{
+				statement2.setDouble(6,0.0);
+			}
+			statement2.setInt(7,readExcelVO.getQuantity());
+			statement2.setInt(8,readExcelVO.getId());
+			statement2.executeUpdate();
+			statement2.close();
+		}
+	}
+
+	@Override
+	public void addAndUpdate(List<ReadExcelVO> items1,List<ReadExcelVO> items2) {
+		Connection connection = DBHelper.getConnection();
+		try {
+			updateWeight(connection,items1);
+
+			addBatch(connection,items1);
+
+			update(connection,items2);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBHelper.returnConnection(connection);
+		}
+	}
 	@Override
 	public void insertBatch(List<ReadExcelVO> items) throws Exception {
 	    
 	        //获取主表id	
-			int proId=0;
-			if(items!=null&&items.size()>0){
-				proId = items.get(0).getProId();
-			}
-			
-			Connection connection = DBHelper.getConnection();	
-			try {
-				Statement statement = connection.createStatement();
-				String sql1 = "select * from items where proId = "+ proId;
-				ResultSet res1 = statement.executeQuery(sql1);
-				while (res1.next()) {
-					int itemId = res1.getInt("id");
-					String itemchn = res1.getString("itemchn");	
-					String rate = res1.getString("rate");	
-					String totalWeight = res1.getString("nw");
-					String purchaseAmount = res1.getString("purprice");
-					for (ReadExcelVO readExcelVO : items) {
-						if(readExcelVO.getItemchn().equals(itemchn)){
-							readExcelVO.setItemId(itemId);
-							if(StringUtils.isNotBlank(rate)){
-								rate= rate.replace("%", "");
-								Double purprice = readExcelVO.getAmount();
-								Double refundAmount = new BigDecimal(purprice).multiply(new BigDecimal(Double.parseDouble(rate))).divide(new BigDecimal(100), 2).doubleValue();
-								readExcelVO.setRefundAmount(refundAmount);								
-							}
-							if(StringUtils.isNotBlank(totalWeight)){
-								int weight = new BigDecimal(readExcelVO.getAmount()).multiply(new BigDecimal(totalWeight)).divide(new BigDecimal(purchaseAmount), 4).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-								readExcelVO.setWeight(weight);
-							}
-							continue;
-						}
+	int proId=0;
+	if(items!=null&&items.size()>0){
+		proId = items.get(0).getProId();
+	}
+
+	Connection connection = DBHelper.getConnection();
+	try {
+		Statement statement = connection.createStatement();
+		String sql1 = "select * from items where proId = "+ proId;
+		ResultSet res1 = statement.executeQuery(sql1);
+		while (res1.next()) {
+			int itemId = res1.getInt("id");
+			String itemchn = res1.getString("itemchn");
+			String rate = res1.getString("rate");
+			String totalWeight = res1.getString("nw");
+			String purchaseAmount = res1.getString("purprice");
+			for (ReadExcelVO readExcelVO : items) {
+				if(readExcelVO.getItemchn().equals(itemchn)){
+					readExcelVO.setItemId(itemId);
+					if(StringUtils.isNotBlank(rate)){
+						rate= rate.replace("%", "");
+						Double purprice = readExcelVO.getAmount();
+						Double refundAmount = new BigDecimal(purprice).multiply(new BigDecimal(Double.parseDouble(rate))).divide(new BigDecimal(100), 2).doubleValue();
+						readExcelVO.setRefundAmount(refundAmount);
 					}
+					if(StringUtils.isNotBlank(totalWeight)){
+						int weight = new BigDecimal(readExcelVO.getAmount()).multiply(new BigDecimal(totalWeight)).divide(new BigDecimal(purchaseAmount), 4).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+						readExcelVO.setWeight(weight);
+					}
+					continue;
 				}
-				res1.close();
-				statement.close();
-				
-				//删除合同产品关联表，重新插入
-				Statement createStatement = connection.createStatement();
-				String sqlDel="delete contract_items where proId="+proId;
-				createStatement.execute(sqlDel);
-				//保存合同产品关联表
-				String sql2="INSERT INTO contract_items (purno, itemchn, amount, item_id, proId,refund_amount,quantity,weight) VALUES (?, ?, ?, ?, ?, ?, ?,?);";
-				PreparedStatement statement2 = connection.prepareStatement(sql2,Statement.RETURN_GENERATED_KEYS);
-				for (ReadExcelVO readExcelVO : items) {			
-					statement2.setString(1,readExcelVO.getPurno());
-					statement2.setString(2,readExcelVO.getItemchn());
-					statement2.setDouble(3,readExcelVO.getAmount());
-					statement2.setInt(4,readExcelVO.getItemId());
-					statement2.setInt(5,readExcelVO.getProId());
-					if(readExcelVO.getRefundAmount()!=null){
-						statement2.setDouble(6,readExcelVO.getRefundAmount());
-					}else{
-						statement2.setDouble(6,0.0);
-					}	
-					statement2.setInt(7,readExcelVO.getQuantity());
-					statement2.setInt(8,readExcelVO.getWeight());
-					statement2.executeUpdate();
-				}		
-				statement2.close();
+			}
+		}
+		res1.close();
+		statement.close();
+
+		//删除合同产品关联表，重新插入
+		Statement createStatement = connection.createStatement();
+		String sqlDel="delete contract_items where proId="+proId;
+		createStatement.execute(sqlDel);
+		//保存合同产品关联表
+		String sql2="INSERT INTO contract_items (purno, itemchn, amount, item_id, proId,refund_amount,quantity,weight) VALUES (?, ?, ?, ?, ?, ?, ?,?);";
+		PreparedStatement statement2 = connection.prepareStatement(sql2,Statement.RETURN_GENERATED_KEYS);
+		for (ReadExcelVO readExcelVO : items) {
+			statement2.setString(1,readExcelVO.getPurno());
+			statement2.setString(2,readExcelVO.getItemchn());
+			statement2.setDouble(3,readExcelVO.getAmount());
+			statement2.setInt(4,readExcelVO.getItemId());
+			statement2.setInt(5,readExcelVO.getProId());
+			if(readExcelVO.getRefundAmount()!=null){
+				statement2.setDouble(6,readExcelVO.getRefundAmount());
+			}else{
+				statement2.setDouble(6,0.0);
+			}
+			statement2.setInt(7,readExcelVO.getQuantity());
+			statement2.setInt(8,readExcelVO.getWeight());
+			statement2.executeUpdate();
+		}
+		statement2.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception();
