@@ -29,6 +29,18 @@
     <servlet-class>com.cynergy.server.ToLogin</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>CheckProjectERPPrintServlet</servlet-name>
+    <servlet-class>com.cynergy.server.CheckProjectERPPrintServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckProductNameServlet</servlet-name>
+    <servlet-class>com.cynergy.server.CheckProductNameServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckProjectERPServlet</servlet-name>
+    <servlet-class>com.cynergy.server.CheckProjectERPServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>SaveServlet</servlet-name>
     <servlet-class>com.cynergy.server.SaveServlet</servlet-class>
   </servlet>
@@ -83,6 +95,10 @@
   <servlet>
     <servlet-name>DrawBackSummaryServlet</servlet-name>
     <servlet-class>com.cynergy.server.DrawBackSummaryServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>NewDrawBackSummaryServlet</servlet-name>
+    <servlet-class>com.cynergy.server.NewDrawBackSummaryServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>CheckServlet</servlet-name>
@@ -219,6 +235,16 @@
   <servlet-mapping>
     <servlet-name>InvoicePrintServlet</servlet-name>
     <url-pattern>/InvoicePrintServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckProductNameServlet</servlet-name>
+    <url-pattern>/CheckProductNameServlet</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet-mapping>
+    <servlet-name>CheckProjectERPPrintServlet</servlet-name>
+    <url-pattern>/CheckProjectERPPrintServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>DownloadDrawbackServlet</servlet-name>
@@ -360,6 +386,10 @@
     <url-pattern>/DrawBackSummaryServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>NewDrawBackSummaryServlet</servlet-name>
+    <url-pattern>/NewDrawBackSummaryServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>CheckServlet</servlet-name>
     <url-pattern>/CheckServlet</url-pattern>
   </servlet-mapping>
@@ -409,6 +439,10 @@
   <servlet-mapping>
     <servlet-name>GetProjectServlet</servlet-name>
     <url-pattern>/GetProjectServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckProjectERPServlet</servlet-name>
+    <url-pattern>/CheckProjectERPServlet</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>

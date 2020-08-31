@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,16 +49,6 @@ public class SaveServlet extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
-//		String sql1="create table products (id int identity (1,1) primary key,adminName varchar(50),nonum varchar(50)," +
-//				"date varchar(50),address varchar(200),transaction1 varchar(50),transaction2 varchar(50)," +
-//				"volume varchar(50),saildate varchar(50),fromwhere varchar(50),towhere varchar(50)," +
-//				"package varchar(50),packagenum varchar(10),currency varchar(5),timeDate datetime," +
-//				"purchase varchar(50),sale varchar(50),clientName varchar(50),hopeDate varchar(50)," +
-//				"estimateDate varchar(50),totalGW varchar(50),totalNW varchar(50),detailed varchar(200),frieght varchar(200),huodai varchar(50),yunfei varchar(10),yunfeifs varchar(10),premium varchar(10));";
-//		String sql2="create table items (id int identity (1,1) primary key,proId int," +
-//				"itemeng varchar(50),itemchn varchar(50),quantity varchar(50),purprice varchar(50),trueprice varchar(50),unitprice varchar(200),shopingmark varchar(50)," +
-//				"hscode varchar(50),nw varchar(10),gw varchar(10),pageNum varchar(10),rate varchar(10),unitpriceall varchar(10));";
-//		String sql3="create table contract (id int identity (1,1) primary key,proId int,purno varchar(50),factory varchar(50),money varchar(50),times varchar(5),totaltimes varchar(5),rmb varchar(15));";
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
 		Connection connection = DBHelper.getConnection();
@@ -65,192 +56,121 @@ public class SaveServlet extends HttpServlet {
 		if(adminIdInt==null){
 			return;
 		}
+		List<ReadExcelVO> lst1 = new ArrayList<>();
+		ReadExcelVO vo = null;
 		String adminName = (String) session.getAttribute("adminName");
 		int adminId = adminIdInt.intValue();
 		try {
-//			Statement createStatement = connection.createStatement();
-//			createStatement.execute("drop table products;");
-//			createStatement.execute("drop table items;");
-//			createStatement.execute("drop table contract;");
-//			boolean execute1 = createStatement.execute(sql1);
-//			boolean execute2 = createStatement.execute(sql2);
-//			boolean execute3 = createStatement.execute(sql3);
-//			System.out.println(execute1);
-//			System.out.println(execute2);
-//			System.out.println(execute3);
-			
 			String purchase=request.getParameter("purchase");
-			if(purchase!=null){
-				purchase=purchase.trim();
-				System.out.println("purchase="+purchase.length());
-			}
+			purchase = purchase!=null ? purchase.trim() : purchase;
+
 			String sale=request.getParameter("sale");
-			if(sale!=null){
-				sale=sale.trim();
-				System.out.println("sale="+sale.length());
-			}
+			sale = sale!=null ? sale.trim() : null;
+
 			String clientName=request.getParameter("clientName");
-			if(clientName!=null){
-				clientName=clientName.trim();
-				System.out.println("clientName="+clientName.length());
-			}
+			clientName = clientName!=null ? clientName.trim() : null;
+
 			String hopeDate=request.getParameter("hopeDate");
-			if(hopeDate!=null){
-				hopeDate=hopeDate.trim();
-				System.out.println("hopeDate="+hopeDate.length());
-			}
+			hopeDate = hopeDate!=null ? hopeDate.trim() : null;
+
 			String estimateDate=request.getParameter("estimateDate");
-			if(estimateDate!=null){
-				estimateDate=estimateDate.trim();
-				System.out.println("estimateDate="+estimateDate.length());
-			}
+			estimateDate = estimateDate!=null ? estimateDate.trim() : null;
+
 			String totalGW=request.getParameter("totalGW");
-			if(totalGW!=null){
-				totalGW=totalGW.trim();
-				System.out.println("totalGW="+totalGW.length());
-			}
+			totalGW = totalGW!=null ? totalGW.trim() : null;
+
 			String totalNW=request.getParameter("totalNW");
-			if(totalNW!=null){
-				totalNW=totalNW.trim();
-				System.out.println("totalNW="+totalNW.length());
-			}
+			totalNW = totalNW!=null ? totalNW.trim() : null;
+
 			String detailed=request.getParameter("detailed");
-			if(detailed!=null){
-				detailed=detailed.trim();
-				System.out.println("detailed="+detailed.length());
-			}
+			detailed = detailed!=null ? detailed.trim() : null;
+
 			String frieght=request.getParameter("frieght");
-			if(frieght!=null){
-				frieght=frieght.trim();
-				System.out.println("frieght="+frieght.length());
-			}
+			frieght = frieght!=null ? frieght.trim() : null;
+
 			String Nonum=request.getParameter("Nonum");
-			if(Nonum!=null){
-				Nonum=Nonum.trim();
-				System.out.println("Nonum="+Nonum.length());
-			}
+			Nonum = Nonum!=null ? Nonum.trim() : null;
+
 			String date=request.getParameter("date");
-			if(date!=null){
-				date=date.trim();
-				System.out.println("date="+date.length());
-			}
+			date = date!=null ? date.trim() : null;
+
 			String waixiaotime=request.getParameter("waixiaotime");
-			if(waixiaotime!=null){
-				waixiaotime=waixiaotime.trim();
-				System.out.println("waixiaotime="+waixiaotime.length());
-			}
+			waixiaotime = waixiaotime!=null ? waixiaotime.trim() : null;
+
 			String address=request.getParameter("address");
-			if(address!=null){
-				address=address.trim();
-				System.out.println("address="+address.length());
-			}
+			address = address!=null ? address.trim() : null;
+
 			String transaction1=request.getParameter("transaction1");
-			if(transaction1!=null){
-				transaction1=transaction1.trim();
-				System.out.println("transaction1="+transaction1.length());
-			}
+			transaction1 = transaction1!=null ? transaction1.trim() : null;
+
 			String transaction2=request.getParameter("transaction2");
-			if(transaction2!=null){
-				transaction2=transaction2.trim();
-				System.out.println("transaction2="+transaction2.length());
-			}
+			transaction2 = transaction2!=null ? transaction2.trim() : null;
+
 			String volume=request.getParameter("volume");
-			if(volume!=null){
-				volume=volume.trim();
-				System.out.println("volume="+volume.length());
-			}
+			volume = volume!=null ? volume.trim() : null;
+
 			String saildate=request.getParameter("saildate");
-			if(saildate!=null){
-				saildate=saildate.trim();
-				System.out.println("saildate="+saildate.length());
-			}
+			saildate = saildate!=null ? saildate.trim() : null;
+
 			String fromwhere=request.getParameter("fromwhere");
-			if(fromwhere!=null){
-				fromwhere=fromwhere.trim();
-				System.out.println("fromwhere="+fromwhere.length());
-			}
+			fromwhere = fromwhere!=null ? fromwhere.trim() : null;
+
 			String towhere=request.getParameter("towhere");
-			if(towhere!=null){
-				towhere=towhere.trim();
-				System.out.println("towhere="+towhere.length());
-			}
+			towhere = towhere!=null ? towhere.trim() : null;
+
 			String packagessss=request.getParameter("package");
-			if(packagessss!=null){
-				packagessss=packagessss.trim();
-				System.out.println("packagessss="+packagessss.length());
-			}
+			packagessss = packagessss!=null ? packagessss.trim() : null;
+
 			String packageNum=request.getParameter("packageNum");
-			if(packageNum!=null){
-				packageNum=packageNum.trim();
-				System.out.println("packageNum="+packageNum.length());
-			}
+			packageNum = packageNum!=null ? packageNum.trim() : null;
+
 			String huodai=request.getParameter("huodai");
-			if(huodai!=null){
-				huodai=huodai.trim();
-				System.out.println("huodai="+huodai.length());
-			}
+			huodai = huodai!=null ? huodai.trim() : null;
+
 			String yunfei=request.getParameter("yunfei");
-			if(yunfei!=null){
-				yunfei=yunfei.trim();
-				System.out.println("yunfei="+yunfei.length());
-			}
-			String yunfeifs=request.getParameter("yunfeifs");
-			if(yunfeifs!=null){
-				yunfeifs=yunfeifs.trim();
-				System.out.println("yunfeifs="+yunfeifs.length());
-			}
-			String premium=request.getParameter("premium");
-			if(premium!=null){
-				premium=premium.trim();
-				System.out.println("premium="+premium.length());
-			}
-			String currency=request.getParameter("currency");
-//			System.out.println("保存时currency的值："+currency);
-			if(currency!=null){
-				currency=currency.trim();
-				System.out.println("currency="+currency.length());
-			}
+			yunfei = yunfei!=null ? yunfei.trim() : null;
+
+			String yunfeifs = request.getParameter("yunfeifs");
+			yunfeifs = yunfeifs!=null ? yunfeifs.trim() : null;
+
+			String premium = request.getParameter("premium");
+			premium = premium!=null ? premium.trim() : null;
+
+			String currency = request.getParameter("currency");
+			currency = currency!=null ? currency.trim() : null;
+
 			Integer attrSource = 0;
 			if(!(request.getParameter("attrSource") == null || "".equals(request.getParameter("attrSource")))){
-				attrSource=Integer.parseInt(request.getParameter("attrSource"));
-				System.out.println("attrSource="+attrSource);
+				attrSource = Integer.parseInt(request.getParameter("attrSource"));
 			}
 			String palletDimension = request.getParameter("palletDimension");
-			if(palletDimension != null){
-				palletDimension = palletDimension.trim();
-			}
+			palletDimension = palletDimension!=null ? palletDimension.trim() : null;
+
 			String casketSize = request.getParameter("casketSize");
-			if(casketSize != null){
-				casketSize = casketSize.trim();
-			}
+			casketSize = casketSize!=null ? casketSize.trim() : null;
+
 			Integer casketQuantity = 0;
 			if(!(request.getParameter("casketQuantity") == null || "".equals(request.getParameter("casketQuantity")) || "null".equals(request.getParameter("casketQuantity")))){
-				System.out.println(request.getParameter("casketQuantity"));
 				casketQuantity = Integer.parseInt(request.getParameter("casketQuantity"));
 			}
 			String casketType = request.getParameter("casketType");
-			if(casketType != null){
-				casketType = casketType.trim();
-			}
+			casketType = casketType != null ? casketType.trim() : null;
+
 			String freightInfo = request.getParameter("freightInfo");
-			if(freightInfo != null){
-				freightInfo = freightInfo.trim();
-			}
+			freightInfo = freightInfo != null ? freightInfo.trim() : null;
+
 			//新增客户公司名称
 			String companyName = request.getParameter("companyName");
-			if(companyName == null){
-				companyName = "";
-			}
+			companyName = companyName == null? "" : companyName;
+
 			//发货地址
 			String exportPlace = request.getParameter("exportPlace");
-			if(exportPlace == null){
-				exportPlace = "";
-			}
+			exportPlace = exportPlace == null ? "" : exportPlace;
+
 			//新增客户公司名称
 			String excelPath = request.getParameter("fileName");
-			if(excelPath == null){
-				excelPath = "";
-			}
+			excelPath = excelPath == null ? "" : excelPath;
+
 			//报关状态（预保存 0：正式保存：1）
 			Integer orderStatus = 0;
 			if(StringUtils.isNotBlank(request.getParameter("orderStatus"))){
@@ -263,9 +183,6 @@ public class SaveServlet extends HttpServlet {
 			java.util.Date date2=new java.util.Date();
 			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String format2 = format.format(date2);
-//			String ss="insert into products(purchase,sale,clientName,hopeDate,estimateDate,totalGW,totalNW,detailed,frieght,nonum,date,address,transaction1,transaction2,volume,saildate,fromwhere,towhere,package,packagenum,currency,huodai,yunfei,yunfeifs,timeDate)" +
-//					"values('"+purchase+"','"+sale+"','"+clientName+"','"+hopeDate+"','"+estimateDate+"','"+totalGW+"','"+totalNW+"','"+detailed+"','"+frieght+"','"+Nonum+"','"+date+"','"+address
-//			+"','"+transaction1+"','"+transaction2+"','"+volume+"','"+saildate+"','"+fromwhere+"','"+towhere+"','"+packagessss+"','"+packageNum+"','"+currency+"','"+huodai+"','"+yunfei+"','"+yunfeifs+"','"+format2+"')";
 			String ss="insert into products(purchase,sale,clientName,hopeDate,estimateDate,totalGW," +
 					"totalNW,detailed,frieght,nonum,date,address,transaction1,transaction2,volume," +
 					"saildate,fromwhere,towhere,package,packagenum,currency,huodai,yunfei,yunfeifs,premium,timeDate,adminName,waixiaotime,attr_source,pallet_dimension,casket_size,casket_quantity,casket_type,freight_info,company_name,excel_path,export_place,order_status) " +
@@ -311,15 +228,8 @@ public class SaveServlet extends HttpServlet {
 			statement.setString(37, exportPlace);
 			statement.setInt(38, orderStatus);
 			System.out.println("插入商品语句："+ss);
-//			createStatement.execute(ss);
 			statement.executeUpdate();
-			/*Statement createStatement = connection.createStatement();
-			String getIdSql="select id from products where timeDate='"+format2+"' and nonum='"+Nonum+"'";
-			ResultSet resId = createStatement.executeQuery(getIdSql);
-			int proId=0;
-			while(resId.next()){
-				proId = resId.getInt("id");
-			}*/
+
 			int proId=0;
 			ResultSet res = statement.getGeneratedKeys();
 			if (res.next()){
@@ -328,45 +238,27 @@ public class SaveServlet extends HttpServlet {
 			statement.close();
 			request.setAttribute("id", proId);
 			System.out.println("iddddddddd="+proId);
-//			Statement createStatement = connection.createStatement();
 			int totalSize = 10;
 			if(StringUtils.isNotBlank(request.getParameter("totalSize"))){
 				 totalSize = Integer.parseInt(request.getParameter("totalSize"));
 			}
 			for(int j=1;j<=totalSize;j++){
-				String purno = request.getParameter("purno"+j);
+				String purno = StringUtils.trim(request.getParameter("purno"+j));
 				if(purno==null||purno.trim().equals("")){
 					continue;
 				}
-				purno=purno.trim();
-				String factory = request.getParameter("factory"+j);
-				if(factory!=null){
-					factory=factory.trim();
-				}
-				String money = request.getParameter("money"+j);
-				if(money!=null){
-					money=money.trim();
-				}
-				String times = request.getParameter("times"+j);
-				if(times!=null){
-					times=times.trim();
-				}
-				String totaltimes = request.getParameter("totaltimes"+j);
-				if(totaltimes!=null){
-					totaltimes=totaltimes.trim();
-				}
-				String rmb = request.getParameter("rmb"+j);
-				if(rmb!=null){
-					rmb=rmb.trim();
-				}
-				String orderId = request.getParameter("orderId"+j);
-				if(orderId!=null){
-					orderId=orderId.trim();
-				}
-//				String ss22="insert into contract(proId,purno,factory,money,times,totaltimes,rmb)values("+proId+",'"+purno
-//				+"','"+factory+"','"+money+"','"+times+"','"+totaltimes+"','"+rmb+"')";
-//				System.out.println("采购插入语句："+ss22);
-//				createStatement.execute(ss22);
+				String factory = StringUtils.trim(request.getParameter("factory"+j));
+
+				String money = StringUtils.trim(request.getParameter("money"+j));
+
+				String times = StringUtils.trim(request.getParameter("times"+j));
+
+				String totaltimes = StringUtils.trim(request.getParameter("totaltimes"+j));
+
+				String rmb = StringUtils.trim(request.getParameter("rmb"+j));
+
+				String orderId = StringUtils.trim(request.getParameter("orderId"+j));
+
 				String ss22="insert into contract(proId,purno,factory,money,times,totaltimes,rmb,order_id)values(?,?,?,?,?,?,?,?)";
 				PreparedStatement statement2 = connection.prepareStatement(ss22);
 				statement2.setInt(1, proId);
@@ -381,70 +273,29 @@ public class SaveServlet extends HttpServlet {
 				statement2.close();
 			}
 			for(int i=1;i<=13;i++){
-				String itemeng = request.getParameter("itemeng"+i);
+				String itemeng =  StringUtils.trim(request.getParameter("itemeng"+i));
 				if(itemeng==null||itemeng.trim().equals("")){
 					continue;
 				}
-				itemeng=itemeng.trim();
-				String itemchn = request.getParameter("itemchn"+i);
-				if(itemchn!=null){
-					itemchn=itemchn.trim();
-				}
-				String quantity = request.getParameter("quantity"+i);
-				if(quantity!=null){
-					quantity=quantity.trim();
-				}
-				String purprice = request.getParameter("purprice"+i);
-				if(purprice!=null){
-					purprice=purprice.trim();
-				}
-				String unitprice = request.getParameter("unitprice"+i);
-				if(unitprice!=null){
-					unitprice=unitprice.trim();
-				}
-				String trueprice = request.getParameter("trueprice"+i);
-				if(trueprice!=null){
-					trueprice=trueprice.trim();
-				}else{
-					trueprice = "";
-				}
-				
-				String shopingmark = request.getParameter("shopingmark"+i);
-				if(shopingmark!=null){
-					shopingmark=shopingmark.trim();
-				}
-				String hscode = request.getParameter("hscode"+i);
-				if(hscode!=null){
-					hscode=hscode.trim();
-				}
-				String nw = request.getParameter("nw"+i);
-				if(nw!=null){
-					nw=nw.trim();
-				}
+				String itemchn =  StringUtils.trim(request.getParameter("itemchn"+i));
+				String quantity =  StringUtils.trim(request.getParameter("quantity"+i));
+				String purprice =  StringUtils.trim(request.getParameter("purprice"+i));
+				String unitprice =  StringUtils.trim(request.getParameter("unitprice"+i));
+				String trueprice =  StringUtils.trim(request.getParameter("trueprice"+i));
+				trueprice = trueprice!=null ?trueprice : "";
+				String shopingmark =  StringUtils.trim(request.getParameter("shopingmark"+i));
+				String hscode =  StringUtils.trim(request.getParameter("hscode"+i));
+				String nw =  StringUtils.trim(request.getParameter("nw"+i));
 				//新增货源地
-				String sourceDestination = request.getParameter("sourceDestination"+i);
-				if(sourceDestination!=null){
-					sourceDestination=sourceDestination.trim();
-				}
-				String rate = request.getParameter("rate"+i);
-				if(rate!=null){
-					rate=rate.trim();
-				}
-				String unitpriceall = request.getParameter("unitpriceall"+i);
-				if(unitpriceall!=null){
-					unitpriceall=unitpriceall.trim();
-				}
-				String unit = request.getParameter("unit"+i);
-				if(unit!=null){
-					unit=unit.trim();
-				}
-//				String ss33="insert into items(proId,itemeng,itemchn,quantity,purprice,unitprice,trueprice,shopingmark,hscode,nw,rate,unitpriceall)values("+proId+",'"+itemeng+"','"+itemchn
-//				+"','"+quantity+"','"+purprice+"','"+unitprice+"','"+trueprice+"','"+shopingmark+"','"+hscode+"','"+nw+"','"+rate+"','"+unitpriceall+"')";
-//				createStatement.execute(ss33);
-//				System.out.println("插入物品语句："+ss33);
+				String sourceDestination =  StringUtils.trim(request.getParameter("sourceDestination"+i));
+				String rate =  StringUtils.trim(request.getParameter("rate"+i));
+				String unitpriceall =  StringUtils.trim(request.getParameter("unitpriceall"+i));
+				String unit =  StringUtils.trim(request.getParameter("unit"+i));
+
+
 				String ss33="insert into items(proId,itemeng,itemchn,quantity,purprice,unitprice,trueprice,shopingmark,hscode,nw,rate,unitpriceall,source_destination,unit)" +
 						"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-				PreparedStatement statement3 = connection.prepareStatement(ss33);
+				PreparedStatement statement3 = connection.prepareStatement(ss33,Statement.RETURN_GENERATED_KEYS);
 				statement3.setInt(1, proId);
 				statement3.setString(2, itemeng);
 				statement3.setString(3, itemchn);
@@ -460,14 +311,35 @@ public class SaveServlet extends HttpServlet {
 				statement3.setString(13, sourceDestination);
 				statement3.setString(14, unit);
 				statement3.executeUpdate();
+
+
+				int itemid = 0;
+				ResultSet rs = statement3.getGeneratedKeys();
+				if (rs.next()) {
+					itemid = rs.getInt(1);
+				}
+				rs.close();
 				statement3.close();
+
+				String no = StringUtils.trim(request.getParameter("contractno"+i));
+				String amount = StringUtils.trim(request.getParameter("contractamount"+i));
+				String contractQuantity = StringUtils.trim(request.getParameter("contractquantity"+i));
+				String declareid = StringUtils.trim(request.getParameter("contractid"+i));
+				if(StringUtils.isEmpty(amount) || StringUtils.isEmpty(contractQuantity)){
+					continue;
+				}
+				vo = new ReadExcelVO();
+				vo.setAmount(Double.parseDouble(amount));
+				vo.setItemchn(itemchn);
+				vo.setProId(proId);
+				vo.setPurno(no);
+				vo.setId(StringUtils.isNotEmpty(declareid) ? Integer.parseInt(declareid) : 0);
+				vo.setQuantity(Integer.parseInt(contractQuantity));
+				vo.setItemId(itemid);
+				lst1.add(vo);
 			}
-			
-		
-			
-			
-			
-			
+			contractItemsMapper.insertBatch(lst1);
+
 			Cookie[] cookies = request.getCookies();
 			
 			Set<Integer> cookieSet=new HashSet<Integer>();
@@ -511,14 +383,14 @@ public class SaveServlet extends HttpServlet {
 			
 			//增加合同对应产品数据
 			if(StringUtils.isNotBlank(excelPath)){
-				ReadExcelUtils readUtil = new ReadExcelUtils(PATH+File.separator+excelPath, proId);				
+				/*ReadExcelUtils readUtil = new ReadExcelUtils(PATH+File.separator+excelPath, proId);
 				try {
 					contents = readUtil.readExcelContent();
 					contractItemsMapper.insertBatch(contents);
 				} catch (Exception e) {
 					e.printStackTrace();
 					out.println("解析上传excel失败");
-				}
+				}*/
 			}else{
 				contractItemsMapper.insertBatchSingle(proId);
 			}

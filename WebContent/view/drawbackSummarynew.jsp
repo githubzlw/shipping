@@ -15,11 +15,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
+<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
   </head>
   
   <body>
   	<h1 align="center">退税汇总</h1>
-  	 <form action="DrawBackSummaryServlet" id="form1">
+  	 <form action="NewDrawBackSummaryServlet" id="form1">
   	   <select name="select1">
   	   <c:if test="${year==2013 }"><option  value ="2013">2013年</option></c:if>
   	   <c:if test="${year==2014 }"> <option   value ="2014" >2014年</option></c:if>
@@ -66,7 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  </select>
      <input type="submit" value="列表">
   </form>
-  <form action="DrawBackPrintServlet" id="form2">
+ <%-- <form action="DrawBackPrintServlet" id="form2">
      <input type="hidden" name="select1">
      <input type="hidden" name="select2">
      <input type="button" value="导出退税表" onclick="print(this)">
@@ -75,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <input type="hidden" name="select1">
      <input type="hidden" name="select2">
      <input type="button" value="导出开增值税发票信息表" onclick="print(this)">
-  </form>
+  </form>--%>
   
 结果：<br/>
 <p style="color: #14bd14;font-weight: 600;">报关金额统计：美元：${totalTruepriceUSD}  欧元：${totalTruepriceEUR}  英镑：${totalTruepriceGBP}  澳元：${totalTruepriceAUD}</p>

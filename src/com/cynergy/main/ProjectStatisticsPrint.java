@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.cynergy.pojo.ContractFundWrap;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -39,7 +40,6 @@ public class ProjectStatisticsPrint {
 	/**
 	 * pdf打印,使用excel编辑，生成pdf
 	 * 
-	 * @param path
 	 * @throws Exception
 	 */
 	public static String printExcel(HttpServletRequest request, List<ProjectStatisticsVO> list)throws Exception {
@@ -213,10 +213,154 @@ public class ProjectStatisticsPrint {
 
 		return temp_path + File.separator + "退税.xls";
 	}
-	
-	
-	
-	
+
+
+
+	/**
+	 * pdf打印,使用excel编辑，生成pdf
+	 *
+	 * @param list
+	 * @throws Exception
+	 */
+	public static String printContractExcel(HttpServletRequest request, List<ContractFundWrap> list)throws Exception {
+		String temp_path = 	propertisUtil.get("excel_temp");
+		//样品完结数量
+		int tl = 0;
+		if(list != null && list.size() >0){
+			tl = list.size();
+		}
+
+		//创建workbook
+		HSSFWorkbook wb = new HSSFWorkbook();
+		//创建sheet
+		HSSFSheet sheet = wb.createSheet("退税统计表");
+
+		HSSFFont font = wb.createFont();
+		font.setFontName("黑体");
+		font.setFontHeightInPoints((short) 14);//设置字体大小
+		font.setBold(true);
+
+
+		HSSFFont font2 = wb.createFont();
+		font2.setFontName("黑体");
+		font2.setFontHeightInPoints((short) 14);//设置字体大小
+		font2.setColor(HSSFColor.RED.index);
+
+		//创建行row:添加表头0行
+		HSSFRow row = sheet.createRow(0);
+		/*HSSFCellStyle style = wb.createCellStyle();
+		style.setFont(font2);*/
+		//表头样式
+		HSSFCellStyle cStyle = wb.createCellStyle();
+		cStyle.setAlignment(HorizontalAlignment.CENTER);
+		cStyle.setBorderBottom(BorderStyle.THIN);
+		cStyle.setBottomBorderColor(HSSFColor.BLACK.index);
+		cStyle.setBorderLeft(BorderStyle.THIN);
+		cStyle.setLeftBorderColor(HSSFColor.BLACK.index);
+		cStyle.setBorderRight(BorderStyle.THIN);
+		cStyle.setRightBorderColor(HSSFColor.BLACK.index);
+		cStyle.setBorderTop(BorderStyle.THIN);
+		cStyle.setTopBorderColor(HSSFColor.BLACK.index);
+		cStyle.setFillForegroundColor(HSSFColor.RED.index);// 设置背景色
+		cStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		cStyle.setFont(font);
+
+		//表头样式
+		HSSFCellStyle boderStyle2 = wb.createCellStyle();
+		boderStyle2.setAlignment(HorizontalAlignment.CENTER);
+		boderStyle2.setBorderBottom(BorderStyle.THIN);
+		boderStyle2.setBottomBorderColor(HSSFColor.BLACK.index);
+		boderStyle2.setBorderLeft(BorderStyle.THIN);
+		boderStyle2.setLeftBorderColor(HSSFColor.BLACK.index);
+		boderStyle2.setBorderRight(BorderStyle.THIN);
+		boderStyle2.setRightBorderColor(HSSFColor.BLACK.index);
+		boderStyle2.setBorderTop(BorderStyle.THIN);
+		boderStyle2.setTopBorderColor(HSSFColor.BLACK.index);
+		boderStyle2.setFillForegroundColor(HSSFColor.RED.index);// 设置背景色
+
+
+		//创建边框样式
+		HSSFCellStyle boderStyle = wb.createCellStyle();
+		boderStyle.setAlignment(HorizontalAlignment.CENTER);
+		boderStyle.setBorderBottom(BorderStyle.THIN);
+		boderStyle.setBottomBorderColor(HSSFColor.BLACK.index);
+		boderStyle.setBorderLeft(BorderStyle.THIN);
+		boderStyle.setLeftBorderColor(HSSFColor.BLACK.index);
+		boderStyle.setBorderRight(BorderStyle.THIN);
+		boderStyle.setRightBorderColor(HSSFColor.BLACK.index);
+		boderStyle.setBorderTop(BorderStyle.THIN);
+		boderStyle.setTopBorderColor(HSSFColor.BLACK.index);
+
+
+		//创建单元格
+		HSSFCell cell = row.createCell(0); //第一个单元格
+		//创建标题
+		cell = row.createCell(0); //获取单元格
+		cell.setCellValue("");
+		cell.setCellStyle(cStyle);
+		cell = row.createCell(1); //获取单元格
+		cell.setCellStyle(cStyle);
+		cell.setCellValue("合同号");
+		cell = row.createCell(2); //获取单元格
+		cell.setCellStyle(cStyle);
+		cell.setCellValue("合同金额");
+		cell = row.createCell(3); //获取单元格
+		cell.setCellStyle(cStyle);
+		cell.setCellValue("报关金额");
+		cell = row.createCell(4); //获取单元格
+		cell.setCellStyle(cStyle);
+		cell.setCellValue("货币");
+
+		/*row = sheet.createRow(1);
+		cell = row.createCell(0); //获取单元格
+		// 合并单元格
+		CellRangeAddress cra =new CellRangeAddress(1, 1, 0, 9); // 起始行, 终止行, 起始列, 终止列
+		sheet.addMergedRegion(cra);
+		cell.setCellStyle(style);
+		cell.setCellValue("");*/
+		//退税数据
+		for (int i=0;i<tl;i++){
+			boolean flag = list.get(i).getFlag() == 1;
+
+			row = sheet.createRow(i+1);
+			row.setHeight((short) (25 * 20));
+			cell = row.createCell(0);
+			cell.setCellStyle(flag?boderStyle2 : boderStyle);
+			cell.setCellValue("");
+			cell = row.createCell(1);
+			cell.setCellStyle(flag?boderStyle2 : boderStyle);
+			cell.setCellValue(list.get(i).getContractno());
+			cell = row.createCell(2);
+			cell.setCellStyle(flag?boderStyle2 : boderStyle);
+			cell.setCellValue(list.get(i).getFriMoney());
+			cell = row.createCell(3);
+			cell.setCellStyle(flag?boderStyle2 : boderStyle);
+			cell.setCellValue(list.get(i).getTotalPrice());
+			cell = row.createCell(4);
+			cell.setCellStyle(flag?boderStyle2 : boderStyle);
+			cell.setCellValue(list.get(i).getCurrency());
+		}
+
+		//自动调整列宽
+		sheet.autoSizeColumn((short)0);
+		sheet.autoSizeColumn((short)1);
+		sheet.autoSizeColumn((short)2);
+		sheet.autoSizeColumn((short)3);
+		sheet.autoSizeColumn((short)4);
+
+
+		String path = temp_path + File.separator + "汇总.xls";
+		File tempPath = new File(temp_path);
+		if (!tempPath.exists() || !tempPath.isDirectory()) {
+			boolean mkdir = tempPath.mkdirs();// 如果不存在，则创建该文件夹
+			System.out.println(mkdir);
+		}
+		FileOutputStream fs = new FileOutputStream(path,false);
+		wb.write(fs);
+		fs.close();
+
+		return path;
+	}
 	
 	
 	
@@ -224,7 +368,6 @@ public class ProjectStatisticsPrint {
 	/**
 	 * 
 	 * 生成拆分报关品名excel
-	 * @param path
 	 * @throws Exception
 	 */
 	public static String getProductExcel(List<ContractVO> list)throws Exception {

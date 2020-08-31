@@ -208,6 +208,9 @@ public class InfoServlet extends HttpServlet {
 			Map<String, CaseFund> contractMoney = invoiceInfoMapper.getContractMoney(lstCase);
 			for(ContractItem i:items){
 				String no = i.getContractNo();
+				if(StringUtils.isEmpty(no)){
+					continue;
+				}
 				no = no.replace("合","SHS");
 				String[] split = no.split("-");
 				if(split.length > 1){
@@ -226,6 +229,14 @@ public class InfoServlet extends HttpServlet {
 			request.setAttribute("totalSize",totalpro3);
 
 			request.setAttribute("purnos",purnos);
+
+			//统计出货批次
+			for(int z=0,l=purnos.size();z<l;z++){
+				List<String> ship = shipmentBatch(connection, purnos.get(z).getPurno());
+				request.setAttribute("shipBatch"+(z+1),ship);
+			}
+
+
 			//查询电子出货单记录
 			String sql4;
 			if(Integer.parseInt(auth.toString()) == 1){
@@ -311,6 +322,21 @@ public class InfoServlet extends HttpServlet {
 			items.add(item);
 		}
 		statement3.close();
+		return items;
+	}
+
+	private List<String> shipmentBatch(Connection connection,String contractNo) throws SQLException{
+		List<String> items = new ArrayList<>();
+
+		String sql = "select money from contract where purno=?";
+		PreparedStatement statement3 = connection.prepareStatement(sql);
+		statement3.setString(1, contractNo);
+		ResultSet resultSet = statement3.executeQuery();
+		ContractItemOther item = null;
+		while(resultSet.next()){
+			items.add(resultSet.getString("money"));
+		}
+		DBHelper.closeResource(statement3,resultSet);
 		return items;
 	}
 

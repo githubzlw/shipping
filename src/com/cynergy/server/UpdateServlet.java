@@ -329,7 +329,7 @@ public class UpdateServlet extends HttpServlet {
 //
 				String ss33="insert into items(proId,itemeng,itemchn,quantity,purprice,unitprice,trueprice,shopingmark,hscode,nw,rate,unitpriceall,source_destination,unit)" +
 						"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-				PreparedStatement statement3 = connection.prepareStatement(ss33);
+				PreparedStatement statement3 = connection.prepareStatement(ss33,Statement.RETURN_GENERATED_KEYS);
 				statement3.setInt(1, proid);
 				statement3.setString(2, itemeng);
 				statement3.setString(3, itemchn);
@@ -345,18 +345,14 @@ public class UpdateServlet extends HttpServlet {
 				statement3.setString(13, sourceDestination);
 				statement3.setString(14, unit);
 				statement3.executeUpdate();
-				statement3.close();
 
-				PreparedStatement stm4 = connection.prepareStatement("select id from items where proId=? and itemeng=? and itemchn=?");
-				stm4.setInt(1, proid);
-				stm4.setString(2, itemeng);
-				stm4.setString(3, itemchn);
-				ResultSet resultSet = stm4.executeQuery();
-				if(resultSet.next()){
-					itemid = resultSet.getInt("id");
+
+				ResultSet rs = statement3.getGeneratedKeys();
+				if (rs.next()) {
+					itemid = rs.getInt(1);
 				}
-				stm4.close();
-				resultSet.close();
+				statement3.close();
+				rs.close();
 			}
 
 			String no = StringUtils.trim(request.getParameter("contractno"+i));
@@ -375,10 +371,9 @@ public class UpdateServlet extends HttpServlet {
 			vo.setQuantity(Integer.parseInt(contractQuantity));
 			vo.setItemId(itemid);
 			lst1.add(vo);
-
-
 		}
 		contractItemsMapper.insertBatch(lst1);
 	}
+
 
 }

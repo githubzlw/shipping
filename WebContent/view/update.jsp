@@ -458,7 +458,7 @@
  	    	// $('#order_form').submit();
     	 }
 			var isMacth = true;
-    	 for(var i=0;i<13;i++){
+    	 /*for(var i=0;i<13;i++){
 			 var count = 0;
 			 var itemCount = 0;
 			 var countStr = $(".item-tr-parent"+i).find(".export-cn1").val();
@@ -474,7 +474,7 @@
 			 })
 			 isMacth = isMacth & (itemCount == count);
 
-		 }
+		 }*/
 			if(isMacth){
 				$('#order_form').submit();
 			}else{
@@ -496,8 +496,37 @@
 	    	}
 	    	
 	    }
-	    
-	    
+
+	 function checkProductName(obj){
+		 var itemname = $(obj).val();
+		 var pro = $(obj).parents('tr').find('.select-n').val();
+		 var factory = $("#fac-"+pro).val();
+		 if(!itemname || !factory){
+			 return false;
+		 }
+		 $.ajax({
+			 type : "post",
+			 datatype : "json",
+			 async : false,
+			 url : "../CheckProductNameServlet",
+			 data : {
+				 "factory" : factory,
+				 "name" : itemname
+			 },
+			 success : function(result) {
+				 var dataObj = eval("("+result+")");
+				 if(dataObj.isContains != 1){
+					 showNotice('你选的品名'+itemname+' 不在该厂能开的品名列表里面 '+
+							 dataObj.lstName+',你确定可以开到这个新品名的话，请忽略此信息',2000);
+				 }
+
+			 },
+			 error : function() {
+
+			 }
+		 });
+
+	 }
 	    
 	  //根据合同号获取出货，工厂信息
 	    function getDetailByProjectId(obj,status){
@@ -521,6 +550,7 @@
 	   				var dataObj = eval("("+result+")");		
 
 	   				$(obj).parents('tr').find('td:last').find('input:last').val(dataObj.haveBargain);
+					//writeOption();
 	   				if(dataObj.haveBargain == false){
 	   					$(obj).parents('tr').find('td:eq(6)').find('span:eq(0)').html('合同未上传');
 	   					showNotice('未查询到合同'+purno+',请填写正确格式',2000);
@@ -534,6 +564,7 @@
 	   				
 	   				if(status == 1){
 		   				$(obj).parents('tr').find('td:eq(1)').find('input').val(dataObj.factoryName);
+						$(obj).parents('tr').find('td:eq(1)').find('input').attr("id","fac-"+purno);
 		   				$(obj).parents('tr').find('td:eq(2)').find('input').val(dataObj.totalPrice);
 // 	   					if(Number(dataObj.totaltimes) > Number(dataObj.times)){
 // 	   						$(obj).parents('tr').find('td:eq(3)').find('input').val(Number(dataObj.times)+1);
@@ -832,11 +863,13 @@
 	   			<td>工厂名称</td>
 	   			<td>合同金额(格式：100000.00)</td>
 	   			<td>第几次出货批次</td>
+	   			<td>出货批次金额(RMB)</td>
 	   			<td>总共几次出货批次</td>
 	   			<td>本次出口人民币金额(格式：100000.00)</td>
 	   			<td>参考数据</td>
 	   			<td>录入目的</td>
-	   		</tr>	 
+	   			<td>该工厂未开票金额</td>
+	   		</tr>
 	   			
    					<%
    				    Integer totalSize = Integer.parseInt(request.getAttribute("totalSize").toString());
@@ -845,9 +878,17 @@
    			    	%>
    			    	 <tr>
 	   			    	<td><input type="text" name="purno<%=i+1%>" class="order-id" value="<%=request.getAttribute("purno"+(i+1))%>" onblur="getDetailByProjectId(this,1)"/></td>
-			   			<td><input type="text" name="factory<%=i+1%>" value="<%=request.getAttribute("factory"+(i+1))%>"/></td>
+			   			<td><input type="text" name="factory<%=i+1%>" value="<%=request.getAttribute("factory"+(i+1))%>" id="fac-<%=request.getAttribute("purno"+(i+1))%>"/></td>
 			   			<td><input type="text" name="money<%=i+1%>" value="<%=request.getAttribute("money"+(i+1))%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td><input type="text" name="times<%=i+1%>" value="<%=request.getAttribute("times"+(i+1))%>"/></td>
+			   			<td>
+							<c:forEach  items='<%=request.getAttribute("shipBatch"+(i+1))%>' var="shipbatch" varStatus="varStatus">
+								<c:if test="${varStatus.index > 0}">&nbsp;&nbsp;/<br></c:if>
+								<span>${shipbatch}</span>
+							</c:forEach>
+
+
+						</td>
 			   			<td><input type="text" name="totaltimes<%=i+1%>" value="<%=request.getAttribute("totaltimes"+(i+1))%>"/></td>
 			   			<td><input type="text" name="rmb<%=i+1%>" class="export-cn" value="<%=request.getAttribute("rmb"+(i+1))%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
@@ -867,7 +908,8 @@
 			   			     }
 			   			     %>
 			   			    />带票</td>  
-			   			<td><input type="hidden" name="conid<%=i+1%>" value="<%=request.getAttribute("conid"+(i+1))%>"/><input type="hidden"/></td>  
+			   			<td><a  target="_blank" href="http://117.144.21.74:33168/ERP-NBEmail/helpServlet?action=allDetailedAccounts&className=InvoiceServlet&factoryName=<%=request.getAttribute("factory"+(i+1))%>&num=0&saleName=">未开票</a>
+							<input type="hidden" name="conid<%=i+1%>" value="<%=request.getAttribute("conid"+(i+1))%>"/><input type="hidden"/></td>
 	   			     </tr>
 	   			    <% 	  
 	   			      }
@@ -878,6 +920,7 @@
 			   			<td><input type="text" name="factory1"/></td>
 			   			<td><input type="text" name="money1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td><input type="text" name="times1"/></td>
+			   			<td></td>
 			   			<td><input type="text" name="totaltimes1"/></td>
 			   			<td><input type="text" name="rmb1" class="export-cn"  onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
@@ -955,11 +998,13 @@
 			    <td width="50px">合同号</td>
 			    <td width="50px">报关金额</td>
 			    <td width="50px">报关数量</td>
-	   		</tr>
+				<td width="50px">可以开该品名的工厂列表</td>
+
+			</tr>
 			<c:forEach items="${items}" var="item" varStatus="sdex">
 				<tr class="item-tr-parent${sdex.index}">
 				<td><input size="10" type="text" name="itemeng${sdex.index+1}" value="${item.itemeng}"/></td>
-				<td><input size="10" type="text" name="itemchn${sdex.index+1}" value="${item.itemchn}"/></td>
+				<td><input size="10" type="text" name="itemchn${sdex.index+1}" value="${item.itemchn}"  onblur="checkProductName(this)"/></td>
 				<td><input size="10" type="text" name="quantity${sdex.index+1}" value="${item.quantity}"/></td>
 				<td><select name="unit${sdex.index+1}" style="width: 99%;"><option <c:if test="${item.unit == '个'}">selected</c:if>>个</option><option <c:if test="${item.unit == '件'}">selected</c:if>>件</option><option <c:if test="${item.unit == '套'}">selected</c:if>>套</option><option <c:if test="${item.unit == '台'}">selected</c:if>>台</option></select></td>
 				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -983,10 +1028,10 @@
 					<select name="contractno${sdex.index+1}" class="select-n">
 						<c:forEach items="${purnos}" var="pr">
 							<c:if test="${pr.purno==item.contractNo}">
-								<option selected>${pr.purno}</option>
+								<option selected vlaue="${pr.purno}">${pr.purno}</option>
 							</c:if>
 							<c:if test="${pr.purno!=item.contractNo}">
-								<option>${pr.purno}</option>
+								<option vlaue="${pr.purno}">${pr.purno}</option>
 							</c:if>
 						</c:forEach>
 					</select>
@@ -996,12 +1041,13 @@
 					<td><input size="10" type="text" name="contractquantity${sdex.index+1}" value="${item.declareQuantity}"/>
 						<input value="${item.contractItemId}" name="contractitemid${sdex.index+1}" class="in-id" type="hidden">
 					</td>
+					<td><a href="http://117.144.21.74:33168/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>
 	   		   <tr>
 			</c:forEach>
 			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">
 			<tr class="item-tr-parent${itemsSize+sdex.index}">
 				<td><input size="10" type="text" name="itemeng${itemsSize+sdex.index}" value=""/></td>
-				<td><input size="10" type="text" name="itemchn${itemsSize+sdex.index}" value=""/></td>
+				<td><input size="10" type="text" name="itemchn${itemsSize+sdex.index}" value=""  onblur="checkProductName(this)"/></td>
 				<td><input size="10" type="text" name="quantity${itemsSize+sdex.index}" value=""/></td>
 				<td><select name="unit${itemsSize+sdex.index}" style="width: 99%;"><option>个</option><option>件</option><option >套</option><option>台</option></select></td>
 				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -1025,7 +1071,7 @@
 			<td>
 				<select name="contractno${itemsSize+sdex.index}" class="select-n">
 					<c:forEach items="${purnos}" var="pr">
-						<option>${pr.purno}</option>
+						<option vlaue="${pr.purno}">${pr.purno}</option>
 					</c:forEach>
 				</select>
 
@@ -1034,6 +1080,7 @@
 			<td><input  type="text" name="contractquantity${itemsSize+sdex.index}" value=""/>
 				<input value="" name="contractitemid${itemsSize+sdex.index}" class="in-id" type="hidden">
 			</td>
+			<td></td>
 			<tr>
 
 
@@ -1338,7 +1385,7 @@ function addInvoice(proId){
 		showNotice('请上传发票截图',2000);	
 		 return false; 	
 	}
-	
+	AddInvoiceImgServlet
       	$.ajax({
    			type : "post",
    			datatype : "json",
@@ -1391,6 +1438,18 @@ function delInvoice(id,obj){
 	   		});		
 	}
 }
+function writeOption(){
+	var ophtml = "";
+	$(".order-id").each(function(){
+		var v = $(this).val();
+		if(v != ''){
+			ophtml +='<option value="'+v+'">'+v+'</option>';
+		}
+	})
+	$(".select-n").append(ophtml);
+}
+
+
 /*
 function addContract(t){
 	var tb = $(t).parents(".tr-contract-al");

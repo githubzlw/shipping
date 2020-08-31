@@ -63,18 +63,26 @@
        
     </style>
 	<script type="text/javascript">
-	     
+	     function writeOption(){
+			 var ophtml ="";
+			 $(".order-id").each(function(){
+				 var v = $(this).val();
+				 if(v != ''){
+					 ophtml +='<option value="'+v+'">'+v+'</option>';
+				 }
+			 })
+			 $(".select-n").html(ophtml);
+		 }
 	  $(function(){
 		  
 		 $('#table1').find('tr').each(function(i){
 			 if(i>0){
 				 $(this).find('td:last').before('<td><select style="width: 84%;" class="select-type"><option></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></td>');
 			 }
-		 })		  
-		  
+		 })
+		  writeOption();
 	  })
-	  
-	
+
 	
 
 	    //获取NBMail客户地址
@@ -96,7 +104,7 @@
 					if(result == null || result == "" || result == undefined || result == 'NO'){
 						$('#attr').show();
 						$('#attr_msg').hide();
-						alert("未获取到客户地址");						
+						alert("未获取到客户地址,客户ERPID可以通过ERP系统查得");
 					}else{
 						var customerName = '';
 						var s = result.split("CustomerName:");
@@ -121,7 +129,7 @@
 					}
 				},
 				error : function() {
-					alert("未获取到客户地址");	
+					alert("未获取到客户地址,客户ERPID可以通过ERP系统查得");
 				}
 			});
 	    }
@@ -388,7 +396,37 @@
 
 	    	})	    	
 	  }
-	    
+
+	  function checkProductName(obj){
+	  	var itemname = $(obj).val();
+	  var pro = $(obj).parents('tr').find('.select-n').val();
+	  var factory = $("#fac-"+pro).val();
+	  if(!itemname || !factory){
+		  return false;
+	  }
+		  $.ajax({
+			  type : "post",
+			  datatype : "json",
+			  async : false,
+			  url : "../CheckProductNameServlet",
+			  data : {
+				  "factory" : factory,
+				  "name" : itemname
+			  },
+			  success : function(result) {
+				  var dataObj = eval("("+result+")");
+				  if(dataObj.isContains != 1){
+					showNotice('你选的品名'+itemname+' 不在该厂能开的品名列表里面 '+
+							dataObj.lstName+',你确定可以开到这个新品名的话，请忽略此信息',2000);
+				}
+
+			  },
+			  error : function() {
+
+			  }
+		  });
+
+	  }
 	    
       //根据合同号获取出货，工厂信息
       function getDetailByProjectId(obj,status){
@@ -407,6 +445,7 @@
 				success : function(result) {
 					var dataObj = eval("("+result+")");		
 					$(obj).parents('tr').find('td:eq(1)').find('input').val(dataObj.factoryName);
+					$(obj).parents('tr').find('td:eq(1)').find('input').attr("id","fac-"+purno);
 					$(obj).parents('tr').find('td:eq(2)').find('input').val(dataObj.totalPrice);
 					if(status == 1){
 						if(Number(dataObj.totaltimes) > Number(dataObj.times)){
@@ -420,6 +459,9 @@
 					$(obj).parents('tr').find('td:last').find('span:eq(2)').text('已出货金额:'+dataObj.totalPay);
 	
 					$(obj).parents('tr').find('td:last').find('input:last').val(dataObj.haveBargain);
+
+					writeOption();
+
 					if(dataObj.haveBargain == false){
 						$(obj).parents('tr').find('td:last').find('span:eq(0)').html('合同未上传');
 						showNotice('未查询到合同'+purno+',请填写正确格式',2000);
@@ -432,7 +474,7 @@
 						showNotice(purno+'已出完货,请确认',2000);
 						return false;
 					}
-					
+
 				},
 				error : function() {
                     
@@ -842,10 +884,13 @@
 			    <td width="80px">实际报关总价(会计填)(格式：100000.00)</td>
 			    <td width="150px">HS Code (物流填)</td>
 			    <td width="80px">退税率 (物流填 *%)</td>
+			    <td width="80px">合同号</td>
+			    <td width="80px">报关金额</td>
+			    <td width="80px">报关数量</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng1"/></td>
-	   			<td><input size="10" type="text" name="itemchn1"/></td>
+	   			<td><input size="10" type="text" name="itemchn1"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity1"/></td>
 	   			<td><select name="unit1" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice1" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -857,10 +902,20 @@
 	   			<td><input size="10" type="text" name="trueprice1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode1"/></td>
 	   			<td><input size="10" type="text" name="rate1"/></td>
+				<td>
+					<select name="contractno1" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount1" value=""/></td>
+				<td><input  type="text" name="contractquantity1" value=""/>
+					<input value="" name="contractitemid1" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng2"/></td>
-	   			<td><input size="10" type="text" name="itemchn2"/></td>
+	   			<td><input size="10" type="text" name="itemchn2"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity2"/></td>
 	   			<td><select name="unit2" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice2" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -872,10 +927,20 @@
 	   			<td><input size="10" type="text" name="trueprice2" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode2"/></td>
 	   			<td><input size="10" type="text" name="rate2"/></td>
+				<td>
+					<select name="contractno2" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount2" value=""/></td>
+				<td><input  type="text" name="contractquantity2" value=""/>
+					<input value="" name="contractitemid2" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng3"/></td>
-	   			<td><input size="10" type="text" name="itemchn3"/></td>
+	   			<td><input size="10" type="text" name="itemchn3" onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity3"/></td>
 	   			<td><select name="unit3" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice3" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -887,10 +952,20 @@
 	   			<td><input size="10" type="text" name="trueprice3" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode3"/></td>
 	   			<td><input size="10" type="text" name="rate3"/></td>
+				<td>
+					<select name="contractno3" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount3" value=""/></td>
+				<td><input  type="text" name="contractquantity3" value=""/>
+					<input value="" name="contractitemid3" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng4"/></td>
-	   			<td><input size="10" type="text" name="itemchn4"/></td>
+	   			<td><input size="10" type="text" name="itemchn4" onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity4"/></td>
 	   			<td><select name="unit4" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice4" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -902,10 +977,20 @@
 	   			<td><input size="10" type="text" name="trueprice4" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode4"/></td>
 	   			<td><input size="10" type="text" name="rate4"/></td>
+				<td>
+					<select name="contractno4" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount4" value=""/></td>
+				<td><input  type="text" name="contractquantity4" value=""/>
+					<input value="" name="contractitemid4" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
-	   			<td><input size="10" type="text" name="itemeng5"/></td>
-	   			<td><input size="10" type="text" name="itemchn5"/></td>
+	   			<td><input size="10" type="text" name="itemeng5" /></td>
+	   			<td><input size="10" type="text" name="itemchn5"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity5"/></td>
 	   			<td><select name="unit5" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice5" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -917,10 +1002,20 @@
 	   			<td><input size="10" type="text" name="trueprice5" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode5"/></td>
 	   			<td><input size="10" type="text" name="rate5"/></td>
+				<td>
+					<select name="contractno5" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount5" value=""/></td>
+				<td><input  type="text" name="contractquantity5" value=""/>
+					<input value="" name="contractitemid5" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng6"/></td>
-	   			<td><input size="10" type="text" name="itemchn6"/></td>
+	   			<td><input size="10" type="text" name="itemchn6"   onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity6"/></td>
 	   			<td><select name="unit6" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice6" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -932,10 +1027,20 @@
 	   			<td><input size="10" type="text" name="trueprice6" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode6"/></td>
 	   			<td><input size="10" type="text" name="rate6"/></td>
+				<td>
+					<select name="contractno6" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount6" value=""/></td>
+				<td><input  type="text" name="contractquantity6" value=""/>
+					<input value="" name="contractitemid6" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng7"/></td>
-	   			<td><input size="10" type="text" name="itemchn7"/></td>
+	   			<td><input size="10" type="text" name="itemchn7"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity7"/></td>
 	   			<td><select name="unit7" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice7" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -947,10 +1052,20 @@
 	   			<td><input size="10" type="text" name="trueprice7" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode7"/></td>
 	   			<td><input size="10" type="text" name="rate7"/></td>
+				<td>
+					<select name="contractno7" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount7" value=""/></td>
+				<td><input  type="text" name="contractquantity7" value=""/>
+					<input value="" name="contractitemid7" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng8"/></td>
-	   			<td><input size="10" type="text" name="itemchn8"/></td>
+	   			<td><input size="10" type="text" name="itemchn8"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity8"/></td>
 	   			<td><select name="unit8" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice8" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -962,10 +1077,20 @@
 	   			<td><input size="10" type="text" name="trueprice8" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode8"/></td>
 	   			<td><input size="10" type="text" name="rate8"/></td>
+				<td>
+					<select name="contractno8" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount8" value=""/></td>
+				<td><input  type="text" name="contractquantity8" value=""/>
+					<input value="" name="contractitemid8" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
-	   			<td><input size="10" type="text" name="itemeng9"/></td>
-	   			<td><input size="10" type="text" name="itemchn9"/></td>
+	   			<td><input size="10" type="text" name="itemeng9" /></td>
+	   			<td><input size="10" type="text" name="itemchn9"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity9"/></td>
 	   			<td><select name="unit9" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice9" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -977,10 +1102,20 @@
 	   			<td><input size="10" type="text" name="trueprice9" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode9"/></td>
 	   			<td><input size="10" type="text" name="rate9"/></td>
+				<td>
+					<select name="contractno9" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount9" value=""/></td>
+				<td><input  type="text" name="contractquantity9" value=""/>
+					<input value="" name="contractitemid9" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
-	   			<td><input size="10" type="text" name="itemeng10"/></td>
-	   			<td><input size="10" type="text" name="itemchn10"/></td>
+	   			<td><input size="10" type="text" name="itemeng10" /></td>
+	   			<td><input size="10" type="text" name="itemchn10" onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity10"/></td>
 	   			<td><select name="unit10" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice10" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -992,10 +1127,20 @@
 	   			<td><input size="10" type="text" name="trueprice10" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode10"/></td>
 	   			<td><input size="10" type="text" name="rate10"/></td>
+				<td>
+					<select name="contractno10" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount10" value=""/></td>
+				<td><input  type="text" name="contractquantity10" value=""/>
+					<input value="" name="contractitemid10" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
-	   			<td><input size="10" type="text" name="itemeng11"/></td>
-	   			<td><input size="10" type="text" name="itemchn11"/></td>
+	   			<td><input size="10" type="text" name="itemeng11" /></td>
+	   			<td><input size="10" type="text" name="itemchn11"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity11"/></td>
 	   			<td><select name="unit11" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice11" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -1007,10 +1152,20 @@
 	   			<td><input size="10" type="text" name="trueprice11" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode11"/></td>
 	   			<td><input size="10" type="text" name="rate11"/></td>
+				<td>
+					<select name="contractno11" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount11" value=""/></td>
+				<td><input  type="text" name="contractquantity11" value=""/>
+					<input value="" name="contractitemid11" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng12"/></td>
-	   			<td><input size="10" type="text" name="itemchn12"/></td>
+	   			<td><input size="10" type="text" name="itemchn12"  onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity12"/></td>
 	   			<td><select name="unit12" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice12" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -1022,10 +1177,20 @@
 	   			<td><input size="10" type="text" name="trueprice12" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode12"/></td>
 	   			<td><input size="10" type="text" name="rate12"/></td>
+				<td>
+					<select name="contractno12" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount12" value=""/></td>
+				<td><input  type="text" name="contractquantity12" value=""/>
+					<input value="" name="contractitemid12" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		<tr>
-	   			<td><input size="10" type="text" name="itemeng13"/></td>
-	   			<td><input size="10" type="text" name="itemchn13"/></td>
+	   			<td><input size="10" type="text" name="itemeng13" /></td>
+	   			<td><input size="10" type="text" name="itemchn13"    onblur="checkProductName(this)"/></td>
 	   			<td><input size="10" type="text" name="quantity13"/></td>
 	   			<td><select name="unit13" style="width: 99%;"><option>个</option><option>件</option><option>套</option><option>台</option></select></td>
 	   			<td><input size="10" type="text" name="purprice13" class="export-cn1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
@@ -1037,6 +1202,16 @@
 	   			<td><input size="10" type="text" name="trueprice13" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode13"/></td>
 	   			<td><input size="10" type="text" name="rate13"/></td>
+				<td>
+					<select name="contractno13" class="select-n">
+
+					</select>
+
+				</td>
+				<td><input  type="text" name="contractamount13" value=""/></td>
+				<td><input  type="text" name="contractquantity13" value=""/>
+					<input value="" name="contractitemid13" class="in-id" type="hidden">
+				</td>
 	   		</tr>
 	   		
 	   		
@@ -1063,10 +1238,10 @@
    </form>
    <form onsubmit="return false;" method="post" enctype="multipart/form-data">
    <span style="color:red;">(填写记得不要留空,如要加行,需整行增加,重复内容请复制增加，不允许合并单元格处理)</span>	   
-	   <p>多合同多品类详情上传（Excel）：<input type="file" name="file" class="pull-left" onchange="upload(this)"></p>
+	   <%--<p>多合同多品类详情上传（Excel）：<input type="file" name="file" class="pull-left" onchange="upload(this)"></p>--%>
    </form>
-  <p style="color:red;">正式保存 多合同多品类请上传Excel</p>
-  <input type="submit" value="预保存" onclick="save_order(0)"></input> 
+  <%--<p style="color:red;">正式保存 多合同多品类请上传Excel</p>--%>
+  <%--<input type="submit" value="预保存" onclick="save_order(0)"></input> --%>
   <input type="submit" value="正式保存" onclick="save_order(1)"></input> 
   </body>
 </html>
