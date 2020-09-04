@@ -155,11 +155,6 @@ public class InfoServlet extends HttpServlet {
 				items.add(item);
 			}
 
-
-
-
-
-
 			List<String> lstCase = new ArrayList<>();
 			List<ContractWrap> purnos = new ArrayList<ContractWrap>();
 			String sql3;

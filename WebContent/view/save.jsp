@@ -325,11 +325,11 @@
 	        //普通用户才能修改报关状态（预保存0或者正式保存1）
 		    $('#orderStatus').val(orderStatus);
 	        //上传excel的文件名
- 	        var fileName = $('#fileName').val();
+ 	       /* var fileName = $('#fileName').val();
 	        if(!checkProduct() && !fileName && orderStatus == 1){
 	        	showNotice('多合同多品类，请上传详情excel',2000);
 	        	return false;
-	        }
+	        }*/
 	        
 	        
 	    	$('#order_form').submit();

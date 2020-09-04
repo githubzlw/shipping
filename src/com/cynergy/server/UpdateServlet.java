@@ -63,14 +63,14 @@ public class UpdateServlet extends HttpServlet {
 			excelPath = excelPath == null ? "" : excelPath;
 			//增加合同对应产品数据
 			if(StringUtils.isNotBlank(excelPath)){
-				ReadExcelUtils readUtil = new ReadExcelUtils(propertisUtil.get("excel_path")+File.separator+excelPath, id);				
+				/*ReadExcelUtils readUtil = new ReadExcelUtils(propertisUtil.get("excel_path")+File.separator+excelPath, id);
 				try {
 					List<ReadExcelVO> contents = readUtil.readExcelContent();
 					contractItemsMapper.insertBatch(contents);
 				} catch (Exception e) {
 					e.printStackTrace();
 					out.println("解析上传excel失败");
-				}
+				}*/
 			}else{
 				contractItemsMapper.insertBatchSingle(id);
 			}

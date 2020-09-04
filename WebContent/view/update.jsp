@@ -449,10 +449,10 @@
  		        $('#orderStatus').val(orderStatus);
  		        //正式保存时，判断是否上传多品类excel
  		        var fileName = $('#fileName').val();
- 		        if(!checkProduct() && !fileName && orderStatus == 1){
+ 		       /* if(!checkProduct() && !fileName && orderStatus == 1){
  		        	showNotice('多合同多品类，请上传详情excel',2000);
  		        	return false;
- 		        } 
+ 		        } */
  	    	}	    	
  	    	
  	    	// $('#order_form').submit();
@@ -774,12 +774,12 @@
 	       
 	      
 	      //判断多品类多合同是否上传表格
-	      $(function(){
+	      /*$(function(){
 	    	    var fileName = $('#fileName').val();
 		        if(!checkProduct() && !fileName){
 		        	$('#show').show();
 		        }
-	      })
+	      })*/
 	      
 	      
 	      
@@ -908,7 +908,7 @@
 			   			     }
 			   			     %>
 			   			    />带票</td>  
-			   			<td><a  target="_blank" href="http://117.144.21.74:33168/ERP-NBEmail/helpServlet?action=allDetailedAccounts&className=InvoiceServlet&factoryName=<%=request.getAttribute("factory"+(i+1))%>&num=0&saleName=">未开票</a>
+			   			<td><a  target="_blank" href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=allDetailedAccounts&className=InvoiceServlet&factoryName=<%=request.getAttribute("factory"+(i+1))%>&num=0&saleName=">未开票</a>
 							<input type="hidden" name="conid<%=i+1%>" value="<%=request.getAttribute("conid"+(i+1))%>"/><input type="hidden"/></td>
 	   			     </tr>
 	   			    <% 	  
@@ -1041,7 +1041,7 @@
 					<td><input size="10" type="text" name="contractquantity${sdex.index+1}" value="${item.declareQuantity}"/>
 						<input value="${item.contractItemId}" name="contractitemid${sdex.index+1}" class="in-id" type="hidden">
 					</td>
-					<td><a href="http://117.144.21.74:33168/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>
+					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>
 	   		   <tr>
 			</c:forEach>
 			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">
@@ -1152,14 +1152,14 @@
    	</table>
    <br/>  
    </form>
-   <div>
+  <%-- <div>
      <span>请先下载本出运单专用模板：<a href="/shipping/GetProductExcelServlet?proId=<%=request.getAttribute("id")%>">拆分报关品名.xlsx</a>填写时候注意不要留空，如要加行，需整行增加，重复内容请复制补全,不允许合并单元格处理。</span>
-   </div>
+   </div>--%>
    <%
     if(request.getAttribute("excelPath")!=null && !"".equals(request.getAttribute("excelPath"))){
    	%>
    <div>
-     <span>已上传报关品名下载：<a href="/shipping/DownloadDrawbackServlet?fileName=<%=request.getAttribute("excelPath")%>">已上传报关品名.xlsx</a></span>
+     <%--<span>已上传报关品名下载：<a href="/shipping/DownloadDrawbackServlet?fileName=<%=request.getAttribute("excelPath")%>">已上传报关品名.xlsx</a></span>--%>
    </div>
    	<%	
     }
