@@ -884,9 +884,6 @@
 			    <td width="80px">实际报关总价(会计填)(格式：100000.00)</td>
 			    <td width="150px">HS Code (物流填)</td>
 			    <td width="80px">退税率 (物流填 *%)</td>
-			    <td width="80px">合同号</td>
-			    <td width="80px">报关金额</td>
-			    <td width="80px">报关数量</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng1"/></td>
@@ -902,16 +899,7 @@
 	   			<td><input size="10" type="text" name="trueprice1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode1"/></td>
 	   			<td><input size="10" type="text" name="rate1"/></td>
-				<td>
-					<select name="contractno1" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount1" value=""/></td>
-				<td><input  type="text" name="contractquantity1" value=""/>
-					<input value="" name="contractitemid1" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng2"/></td>
@@ -927,16 +915,7 @@
 	   			<td><input size="10" type="text" name="trueprice2" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode2"/></td>
 	   			<td><input size="10" type="text" name="rate2"/></td>
-				<td>
-					<select name="contractno2" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount2" value=""/></td>
-				<td><input  type="text" name="contractquantity2" value=""/>
-					<input value="" name="contractitemid2" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng3"/></td>
@@ -952,16 +931,7 @@
 	   			<td><input size="10" type="text" name="trueprice3" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode3"/></td>
 	   			<td><input size="10" type="text" name="rate3"/></td>
-				<td>
-					<select name="contractno3" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount3" value=""/></td>
-				<td><input  type="text" name="contractquantity3" value=""/>
-					<input value="" name="contractitemid3" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng4"/></td>
@@ -977,16 +947,7 @@
 	   			<td><input size="10" type="text" name="trueprice4" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode4"/></td>
 	   			<td><input size="10" type="text" name="rate4"/></td>
-				<td>
-					<select name="contractno4" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount4" value=""/></td>
-				<td><input  type="text" name="contractquantity4" value=""/>
-					<input value="" name="contractitemid4" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng5" /></td>
@@ -1002,16 +963,7 @@
 	   			<td><input size="10" type="text" name="trueprice5" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode5"/></td>
 	   			<td><input size="10" type="text" name="rate5"/></td>
-				<td>
-					<select name="contractno5" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount5" value=""/></td>
-				<td><input  type="text" name="contractquantity5" value=""/>
-					<input value="" name="contractitemid5" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng6"/></td>
@@ -1027,16 +979,7 @@
 	   			<td><input size="10" type="text" name="trueprice6" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode6"/></td>
 	   			<td><input size="10" type="text" name="rate6"/></td>
-				<td>
-					<select name="contractno6" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount6" value=""/></td>
-				<td><input  type="text" name="contractquantity6" value=""/>
-					<input value="" name="contractitemid6" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng7"/></td>
@@ -1052,16 +995,7 @@
 	   			<td><input size="10" type="text" name="trueprice7" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode7"/></td>
 	   			<td><input size="10" type="text" name="rate7"/></td>
-				<td>
-					<select name="contractno7" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount7" value=""/></td>
-				<td><input  type="text" name="contractquantity7" value=""/>
-					<input value="" name="contractitemid7" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng8"/></td>
@@ -1077,16 +1011,7 @@
 	   			<td><input size="10" type="text" name="trueprice8" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode8"/></td>
 	   			<td><input size="10" type="text" name="rate8"/></td>
-				<td>
-					<select name="contractno8" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount8" value=""/></td>
-				<td><input  type="text" name="contractquantity8" value=""/>
-					<input value="" name="contractitemid8" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng9" /></td>
@@ -1102,16 +1027,7 @@
 	   			<td><input size="10" type="text" name="trueprice9" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode9"/></td>
 	   			<td><input size="10" type="text" name="rate9"/></td>
-				<td>
-					<select name="contractno9" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount9" value=""/></td>
-				<td><input  type="text" name="contractquantity9" value=""/>
-					<input value="" name="contractitemid9" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng10" /></td>
@@ -1127,16 +1043,7 @@
 	   			<td><input size="10" type="text" name="trueprice10" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode10"/></td>
 	   			<td><input size="10" type="text" name="rate10"/></td>
-				<td>
-					<select name="contractno10" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount10" value=""/></td>
-				<td><input  type="text" name="contractquantity10" value=""/>
-					<input value="" name="contractitemid10" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng11" /></td>
@@ -1152,16 +1059,7 @@
 	   			<td><input size="10" type="text" name="trueprice11" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode11"/></td>
 	   			<td><input size="10" type="text" name="rate11"/></td>
-				<td>
-					<select name="contractno11" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount11" value=""/></td>
-				<td><input  type="text" name="contractquantity11" value=""/>
-					<input value="" name="contractitemid11" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng12"/></td>
@@ -1177,16 +1075,7 @@
 	   			<td><input size="10" type="text" name="trueprice12" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode12"/></td>
 	   			<td><input size="10" type="text" name="rate12"/></td>
-				<td>
-					<select name="contractno12" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount12" value=""/></td>
-				<td><input  type="text" name="contractquantity12" value=""/>
-					<input value="" name="contractitemid12" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		<tr>
 	   			<td><input size="10" type="text" name="itemeng13" /></td>
@@ -1202,16 +1091,7 @@
 	   			<td><input size="10" type="text" name="trueprice13" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 	   			<td><input size="20" type="text" name="hscode13"/></td>
 	   			<td><input size="10" type="text" name="rate13"/></td>
-				<td>
-					<select name="contractno13" class="select-n">
 
-					</select>
-
-				</td>
-				<td><input  type="text" name="contractamount13" value=""/></td>
-				<td><input  type="text" name="contractquantity13" value=""/>
-					<input value="" name="contractitemid13" class="in-id" type="hidden">
-				</td>
 	   		</tr>
 	   		
 	   		

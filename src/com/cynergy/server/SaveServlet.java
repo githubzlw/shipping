@@ -321,7 +321,7 @@ public class SaveServlet extends HttpServlet {
 				rs.close();
 				statement3.close();
 
-				String no = StringUtils.trim(request.getParameter("contractno"+i));
+				/*String no = StringUtils.trim(request.getParameter("contractno"+i));
 				String amount = StringUtils.trim(request.getParameter("contractamount"+i));
 				String contractQuantity = StringUtils.trim(request.getParameter("contractquantity"+i));
 				String declareid = StringUtils.trim(request.getParameter("contractid"+i));
@@ -336,9 +336,9 @@ public class SaveServlet extends HttpServlet {
 				vo.setId(StringUtils.isNotEmpty(declareid) ? Integer.parseInt(declareid) : 0);
 				vo.setQuantity(Integer.parseInt(contractQuantity));
 				vo.setItemId(itemid);
-				lst1.add(vo);
+				lst1.add(vo);*/
 			}
-			contractItemsMapper.insertBatch(lst1);
+			/*contractItemsMapper.insertBatch(lst1);*/
 
 			Cookie[] cookies = request.getCookies();
 			
@@ -382,23 +382,27 @@ public class SaveServlet extends HttpServlet {
 			
 			
 			//增加合同对应产品数据
-			if(StringUtils.isNotBlank(excelPath)){
-				/*ReadExcelUtils readUtil = new ReadExcelUtils(PATH+File.separator+excelPath, proId);
+			/*if(StringUtils.isNotBlank(excelPath)){
+				ReadExcelUtils readUtil = new ReadExcelUtils(PATH+File.separator+excelPath, proId);
 				try {
 					contents = readUtil.readExcelContent();
 					contractItemsMapper.insertBatch(contents);
 				} catch (Exception e) {
 					e.printStackTrace();
 					out.println("解析上传excel失败");
-				}*/
+				}
 			}else{
 				contractItemsMapper.insertBatchSingle(proId);
+			}*/
+			
+			
+			if(proId > 0){
+				RequestDispatcher homeDispatcher = request.getRequestDispatcher("InfoServlet?id="+proId);
+				homeDispatcher.forward(request, response);
+			}else{
+				RequestDispatcher homeDispatcher = request.getRequestDispatcher("PreprintServlet");
+				homeDispatcher.forward(request, response);
 			}
-			
-			
-			
-			RequestDispatcher homeDispatcher = request.getRequestDispatcher("PreprintServlet");
-			homeDispatcher.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			out.println("失败");

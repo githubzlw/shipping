@@ -19,10 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import com.cynergy.mapper.InvoiceInfoMapper;
 import com.cynergy.mapper.InvoiceInfoMapperImpl;
-import com.cynergy.pojo.CaseFund;
-import com.cynergy.pojo.ContractItem;
-import com.cynergy.pojo.ContractItemOther;
-import com.cynergy.pojo.ContractWrap;
+import com.cynergy.pojo.*;
 import org.apache.commons.lang.StringUtils;
 
 import com.cynergy.main.DBHelper;
@@ -47,6 +44,7 @@ public class InfoServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		String idString = request.getParameter("id");
 		int id = Integer.parseInt(idString);
+		request.setAttribute("cproid",idString);
 		
 		HttpSession session = request.getSession();
 		//添加权限管理  每个人只能看到自己项目   Author:polo   2017/11/30
@@ -113,22 +111,18 @@ public class InfoServlet extends HttpServlet {
 			}
 			String sql2;
 			if(Integer.parseInt(auth.toString()) == 1){
-				sql2="select  i.*,c.purno,c.amount as contract_amount,c.quantity as contract_quantity,c.id as cid " +
-						"from  items i left join contract_items c on i.id=c.item_id" +
-						" where i.proId ="+id;
+				sql2="select  i.* from  items i  where i.proId ="+id;
 			}else{
-				sql2="select  i.*,c.purno,c.amount as contract_amount,c.quantity as contract_quantity,c.id as cid " +
-						"from  items i left join contract_items c on i.id=c.item_id" +
-						" where i.proId ="+id +" and i.proId in ("+pds+")";
+				sql2="select  i.* from  items i where i.proId ="+id +" and i.proId in ("+pds+")";
 			}
 			
 			ResultSet res2 = createStatement.executeQuery(sql2);
-			List<ContractItem> items = new ArrayList<>();
+			List<ContractProduct> items = new ArrayList<>();
 			int totalpro2=0;
-			ContractItem item = null;
+			ContractProduct item = null;
 			while (res2.next()) {
 				totalpro2++;
-				item = new ContractItem();
+				item = new ContractProduct();
 				item.setItemid(res2.getInt("id"));
 				item.setItemeng(res2.getString("itemeng"));
 				item.setItemchn( res2.getString("itemchn"));
@@ -148,10 +142,6 @@ public class InfoServlet extends HttpServlet {
 					item.setHbFive(df.format(truePrice/1.13/5));
 					item.setHbSenven(df.format(truePrice/1.13/7));
 				}
-				item.setContractNo(res2.getString("purno"));
-				item.setDeclareAmount(res2.getString("contract_amount"));
-				item.setDeclareQuantity(res2.getString("contract_quantity"));
-				item.setContractItemId(res2.getInt("cid"));
 				items.add(item);
 			}
 
@@ -201,7 +191,7 @@ public class InfoServlet extends HttpServlet {
 			}
 
 			Map<String, CaseFund> contractMoney = invoiceInfoMapper.getContractMoney(lstCase);
-			for(ContractItem i:items){
+			for(ContractProduct i:items){
 				String no = i.getContractNo();
 				if(StringUtils.isEmpty(no)){
 					continue;

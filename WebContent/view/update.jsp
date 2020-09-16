@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="${ctx}/js/jquery-1.4.2.min.js"></script>	
 	<script type="text/javascript" src="${ctx}/js/jquery-form.js"></script>
 	<style type="text/css">
-		.green-font {color: green;font-weight: bold;}
+		.green-font {font-size: 10px;}
 	   #table1{
             border-collapse: collapse;
     		border-spacing: 0;
@@ -995,95 +995,62 @@
 			    <td width="50px"  style="word-wrap:break-word;" >实际报关总价(会计填)(格式：100000.00)</td>
 			    <td width="50px">HS Code (物流填)</td>
 			    <td width="50px">退税率 (物流填 *%)</td>
-			    <td width="50px">合同号</td>
-			    <td width="50px">报关金额</td>
-			    <td width="50px">报关数量</td>
 				<td width="50px">可以开该品名的工厂列表</td>
+				<td>合同</td>
 
 			</tr>
 			<c:forEach items="${items}" var="item" varStatus="sdex">
-				<tr class="item-tr-parent${sdex.index}">
-				<td><input size="10" type="text" name="itemeng${sdex.index+1}" value="${item.itemeng}"/></td>
-				<td><input size="10" type="text" name="itemchn${sdex.index+1}" value="${item.itemchn}"  onblur="checkProductName(this)"/></td>
-				<td><input size="10" type="text" name="quantity${sdex.index+1}" value="${item.quantity}"/></td>
-				<td><select name="unit${sdex.index+1}" style="width: 99%;"><option <c:if test="${item.unit == '个'}">selected</c:if>>个</option><option <c:if test="${item.unit == '件'}">selected</c:if>>件</option><option <c:if test="${item.unit == '套'}">selected</c:if>>套</option><option <c:if test="${item.unit == '台'}">selected</c:if>>台</option></select></td>
-				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td><input size="10" type="text" name="unitprice${sdex.index+1}" value="${item.unitprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td><input size="10" type="text" name="unitpriceall${sdex.index+1}" class="unit-price-all" value="${item.unitpriceall}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<tr class="citem-tr-parent item-tr-parent${sdex.index}">
+				<td><input size="10" type="text" class="citemeng" name="itemeng${sdex.index+1}" value="${item.itemeng}"/></td>
+				<td><input size="10" type="text" class="citemchn" name="itemchn${sdex.index+1}" value="${item.itemchn}"  onblur="checkProductName(this)"/></td>
+				<td><input size="10" type="text" class="cquantity" name="quantity${sdex.index+1}" value="${item.quantity}"/></td>
+				<td><select name="unit${sdex.index+1}" style="width: 99%;" class="cunit" >
+					<option <c:if test="${item.unit == '个'}">selected</c:if>>个</option><option <c:if test="${item.unit == '件'}">selected</c:if>>件</option><option <c:if test="${item.unit == '套'}">selected</c:if>>套</option><option <c:if test="${item.unit == '台'}">selected</c:if>>台</option></select></td>
+				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1 cpurprice" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" class="cunitprice" name="unitprice${sdex.index+1}" value="${item.unitprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitpriceall${sdex.index+1}" class="unit-price-all cunitpriceall" value="${item.unitpriceall}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td>${item.orderActualMoney}</td>
 				<td>${item.orderAmountReceived}</td>
-				<td><input size="10" type="text" name="shopingmark${sdex.index+1}" value="${item.shopingmark}"/></td>
-				<td><input size="10" type="text" name="nw${sdex.index+1}" class="n_weight" value="${item.nw}"/></td>
-				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="sourceDestination"/></td>
-				<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
-					<input type="hidden" value="${item.itemid}"/>
-					<p>换汇比5：<span class="hb5 green-font" >${item.hbFive}</span></p>
-					<p>换汇比7：<span class="hb7 green-font" >${item.hbSenven}</span></p>
+				<td><input size="10" type="text" name="shopingmark${sdex.index+1}" value="${item.shopingmark}" class="cshopingmark"/></td>
+				<td><input size="10" type="text" name="nw${sdex.index+1}" class="cnw n_weight" value="${item.nw}" class="cnw"/></td>
+				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="csourceDestination sourceDestination"/></td>
+				<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="ctrueprice true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
+					<p class="green-font">换汇比5：<span class="hb5 " >${item.hbFive}</span></p>
+					<p class="green-font">换汇比7：<span class="hb7 " >${item.hbSenven}</span></p>
 				</td>
-				<td><input size="20" type="text" name="hscode${sdex.index+1}" value="${item.hscode}"/></td>
-				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}"/>
-					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}"/>
+				<td><input size="20" type="text" name="hscode${sdex.index+1}" value="${item.hscode}" class="chscode"/></td>
+				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}" class="crate"/>
+					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}" class="citemid"/>
 				</td>
-				<td>
-					<select name="contractno${sdex.index+1}" class="select-n">
-						<c:forEach items="${purnos}" var="pr">
-							<c:if test="${pr.purno==item.contractNo}">
-								<option selected vlaue="${pr.purno}">${pr.purno}</option>
-							</c:if>
-							<c:if test="${pr.purno!=item.contractNo}">
-								<option vlaue="${pr.purno}">${pr.purno}</option>
-							</c:if>
-						</c:forEach>
-					</select>
-
-				</td>
-					<td><input size="10" type="text" name="contractamount${sdex.index+1}" value="${item.declareAmount}"/></td>
-					<td><input size="10" type="text" name="contractquantity${sdex.index+1}" value="${item.declareQuantity}"/>
-						<input value="${item.contractItemId}" name="contractitemid${sdex.index+1}" class="in-id" type="hidden">
-					</td>
 					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>
-	   		   <tr>
+					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>
+			<tr>
 			</c:forEach>
 			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">
-			<tr class="item-tr-parent${itemsSize+sdex.index}">
-				<td><input size="10" type="text" name="itemeng${itemsSize+sdex.index}" value=""/></td>
-				<td><input size="10" type="text" name="itemchn${itemsSize+sdex.index}" value=""  onblur="checkProductName(this)"/></td>
-				<td><input size="10" type="text" name="quantity${itemsSize+sdex.index}" value=""/></td>
-				<td><select name="unit${itemsSize+sdex.index}" style="width: 99%;"><option>个</option><option>件</option><option >套</option><option>台</option></select></td>
-				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td><input size="10" type="text" name="unitprice${itemsSize+sdex.index}" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td><input size="10" type="text" name="unitpriceall${itemsSize+sdex.index}" class="unit-price-all" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+			<tr class="item-tr-parent${itemsSize+sdex.index} citem-tr-parent">
+				<td><input size="10" type="text"  class="citemeng" name="itemeng${itemsSize+sdex.index}" value=""/></td>
+				<td><input size="10" type="text"  class="citemchn" name="itemchn${itemsSize+sdex.index}" value=""  onblur="checkProductName(this)"/></td>
+				<td><input size="10" type="text"  class="cquantity" name="quantity${itemsSize+sdex.index}" value=""/></td>
+				<td><select name="unit${itemsSize+sdex.index}"  class="cunit" style="width: 99%;"><option>个</option><option>件</option><option >套</option><option>台</option></select></td>
+				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="cpurprice export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text"  class="cunitprice" name="unitprice${itemsSize+sdex.index}" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitpriceall${itemsSize+sdex.index}" class="cunitpriceall unit-price-all" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			<td></td>
 			<td></td>
-			<td><input size="10" type="text" name="shopingmark${itemsSize+sdex.index}" value=""/></td>
-				<td><input size="10" type="text" name="nw${itemsSize+sdex.index}" class="n_weight" value=""/></td>
-				<td><input size="10" type="text" name="sourceDestination${itemsSize+sdex.index}" value="" class="sourceDestination"/></td>
-				<td><input size="10" type="text" name="trueprice${itemsSize+sdex.index}" class="true-price" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
-					<input type="hidden" value=""/>
-					<p>换汇比5：<span class="hb5" ></span></p>
-					<p>换汇比7：<span class="hb7" ></span></p>
+			<td><input size="10" type="text" name="shopingmark${itemsSize+sdex.index}" value="" class="cshopingmark"/></td>
+				<td><input size="10" type="text" name="nw${itemsSize+sdex.index}" class="cnw n_weight" value=""/></td>
+				<td><input size="10" type="text" name="sourceDestination${itemsSize+sdex.index}" value="" class="csourceDestination sourceDestination"/></td>
+				<td><input size="10" type="text" name="trueprice${itemsSize+sdex.index}" class="ctrueprice true-price" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
+				<%--	<p class="green-font">换汇比5：<span class="hb5" ></span></p>
+					<p class="green-font">换汇比7：<span class="hb7" ></span></p>--%>
 				</td>
-				<td><input size="20" type="text" name="hscode${itemsSize+sdex.index}" value=""/></td>
-				<td><input size="10" type="text" name="rate${itemsSize+sdex.index}" value=""/>
-					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value=""/>
+				<td><input size="20" type="text" name="hscode${itemsSize+sdex.index}" value="" class="chscode"/></td>
+				<td><input size="10" type="text" name="rate${itemsSize+sdex.index}" value="" class="crate"/>
+					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value="" class="citemid"/>
 				</td>
-
-			<td>
-				<select name="contractno${itemsSize+sdex.index}" class="select-n">
-					<c:forEach items="${purnos}" var="pr">
-						<option vlaue="${pr.purno}">${pr.purno}</option>
-					</c:forEach>
-				</select>
-
-			</td>
-			<td><input  type="text" name="contractamount${itemsSize+sdex.index}" value=""/></td>
-			<td><input  type="text" name="contractquantity${itemsSize+sdex.index}" value=""/>
-				<input value="" name="contractitemid${itemsSize+sdex.index}" class="in-id" type="hidden">
-			</td>
+			<td></td>
 			<td></td>
 			<tr>
-
-
 			</c:forEach>
 
 
@@ -1272,11 +1239,48 @@
    			     %>  	        	
 		</div>
    </div>
-   
+
+
+  <form action="/ItemOfContractServlet" id="addContract" stype="display:none;">
+		  <input  type="hidden" id="cproid" name="cproid" value="${cproid}"/>
+		  <input  type="hidden" id="itemeng" name="itemeng" value=""/>
+		  <input  type="hidden" id="itemchn" name="itemchn" value="" />
+		  <input  type="hidden" id="quantity" name="quantity" value=""/>
+	      <input  type="hidden" id="unit" name="unit">
+		  <input  type="hidden" id="purprice" name="purprice" value="" />
+		  <input  type="hidden" id="unitprice" name="unitprice" value=""/>
+		  <input  type="hidden" id="unitpriceall" name="unitpriceall" value=""/>
+		  <input  type="hidden" id="shopingmark" name="shopingmark" value=""/>
+		  <input  type="hidden" id="nw" name="nw" class="n_weight" value=""/>
+		  <input  type="hidden" id="sourceDestination" name="sourceDestination" value=""/>
+		  <input  type="hidden" id="trueprice" name="trueprice"/>
+		  <input  type="hidden" id="hscode" name="hscode" value=""/>
+		  <input type="hidden" id="rate" name="rate" value=""/>
+		 <input  type="hidden" id="itemid" name="itemid" value=""/>
+  </form>
   
   </body>
   
 <script type="text/javascript">
+
+	function addcontract(v){
+		var p = $(v).parents(".citem-tr-parent");
+		$("#itemeng").val(p.find(".citemeng").val());
+		$("#itemchn").val(p.find(".citemchn").val());
+		$("#quantity").val(p.find(".cquantity").val());
+		$("#unit").val(p.find(".cunit").val());
+		$("#purprice").val(p.find(".cpurprice").val());
+		$("#unitprice").val(p.find(".cunitprice").val());
+		$("#unitpriceall").val(p.find(".cunitpriceall").val());
+		$("#shopingmark").val(p.find(".cshopingmark").val());
+		$("#nw").val(p.find(".cnw").val());
+		$("#sourceDestination").val(p.find(".csourceDestination").val());
+		$("#trueprice").val(p.find(".ctrueprice").val());
+		$("#hscode").val(p.find(".chscode").val());
+		$("#rate").val(p.find(".crate").val());
+		$("#itemid").val(p.find(".citemid").val());
+		$("#addContract").submit();
+	}
 
 function addShipping(proId){
 	var serialNumber = $('#serialNumber').val();

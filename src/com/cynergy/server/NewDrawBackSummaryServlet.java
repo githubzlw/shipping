@@ -83,12 +83,13 @@ public class NewDrawBackSummaryServlet extends HttpServlet {
 				if(yunfei==null||yunfei.trim().equals("")){
 					yunfei="0";
 				}
-				String sql3="select purno from contract where proId="+id;
+				String sql3="select purno,rmb from contract where proId="+id;
 
 				ResultSet res3 = createStatement3.executeQuery(sql3);
 				int yunfeitotal=0;
 				while (res3.next()) {
 					String purno = res3.getString("purno");
+					String rmb = res3.getString("rmb");
 //
 					String sql2="select i.hscode,i.itemeng,i.itemchn,i.rate,i.purprice,i.quantity,i.trueprice,c.purno from items i " +
 							"left join contract_items c  on i.id=c.item_id " +
@@ -114,7 +115,7 @@ public class NewDrawBackSummaryServlet extends HttpServlet {
 					String hscode = "";
 					double parseDoubless = 0;
 					double truepriceD = 0;
-					double truepriceTotalD = 0;
+					double truepriceTotalD = Double.parseDouble(rmb);
 					double backMoney=0;
 					while (res.next()) {
 						itemchn +=" "+res.getString("itemchn");
@@ -125,7 +126,6 @@ public class NewDrawBackSummaryServlet extends HttpServlet {
 						}
 						parseDoubless = Double.parseDouble(purprice);
 						totalPurprice += parseDoubless;
-						truepriceTotalD += parseDoubless;
 
 						String trueprice = res.getString("trueprice");
 						if(trueprice==null||trueprice.trim().equals("")||trueprice.trim().equals("null")){

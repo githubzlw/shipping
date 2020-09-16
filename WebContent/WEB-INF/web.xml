@@ -228,10 +228,29 @@
     <servlet-name>InvoicePrintServlet</servlet-name>
     <servlet-class>com.cynergy.server.InvoicePrintServlet</servlet-class>
   </servlet>
+
+
+
+  <servlet>
+    <servlet-name>ItemOfContractServlet</servlet-name>
+    <servlet-class>com.cynergy.server.ItemOfContractServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ItemOfContractServlet</servlet-name>
+    <url-pattern>/ItemOfContractServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddItemOfContractServlet</servlet-name>
+    <servlet-class>com.cynergy.server.AddItemOfContractServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddItemOfContractServlet</servlet-name>
+    <url-pattern>/AddItemOfContractServlet</url-pattern>
+  </servlet-mapping>
   
-  
-  
-  
+
+
+
   <servlet-mapping>
     <servlet-name>InvoicePrintServlet</servlet-name>
     <url-pattern>/InvoicePrintServlet</url-pattern>

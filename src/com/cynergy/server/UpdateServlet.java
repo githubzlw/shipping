@@ -62,20 +62,20 @@ public class UpdateServlet extends HttpServlet {
 			String excelPath = request.getParameter("fileName");
 			excelPath = excelPath == null ? "" : excelPath;
 			//增加合同对应产品数据
-			if(StringUtils.isNotBlank(excelPath)){
-				/*ReadExcelUtils readUtil = new ReadExcelUtils(propertisUtil.get("excel_path")+File.separator+excelPath, id);
+			/*if(StringUtils.isNotBlank(excelPath)){
+				ReadExcelUtils readUtil = new ReadExcelUtils(propertisUtil.get("excel_path")+File.separator+excelPath, id);
 				try {
 					List<ReadExcelVO> contents = readUtil.readExcelContent();
 					contractItemsMapper.insertBatch(contents);
 				} catch (Exception e) {
 					e.printStackTrace();
 					out.println("解析上传excel失败");
-				}*/
+				}
 			}else{
 				contractItemsMapper.insertBatchSingle(id);
-			}
+			}*/
 			request.setAttribute("id", id);
-			RequestDispatcher homeDispatcher = request.getRequestDispatcher("PreprintServlet");
+			RequestDispatcher homeDispatcher = request.getRequestDispatcher("InfoServlet?id="+id);
 			homeDispatcher.forward(request, response);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -206,7 +206,8 @@ public class UpdateServlet extends HttpServlet {
 		}
 	}
 
-	private void updateContract(HttpServletRequest request, HttpServletResponse response,Connection connection,int id) throws SQLException{
+	private void updateContract(HttpServletRequest request, HttpServletResponse response,
+					Connection connection,int id) throws SQLException{
 		int totalSize = 10;
 		if(StringUtils.isNotBlank(request.getParameter("totalSize"))){
 			totalSize = Integer.parseInt(request.getParameter("totalSize"));
@@ -292,7 +293,7 @@ public class UpdateServlet extends HttpServlet {
 			String rate = StringUtils.trim(request.getParameter("rate"+i));
 			String unitpriceall = StringUtils.trim(request.getParameter("unitpriceall"+i));
 			int itemid = 0;
-			if(itemids!=null){
+			if(StringUtils.isNotEmpty(itemids)){
 				itemid = Integer.parseInt(itemids);
 				if(itemeng.equals("")){
 					String ss33="delete from items where id=?";
@@ -304,7 +305,8 @@ public class UpdateServlet extends HttpServlet {
 				}else{
 
 					String ss33="update items set itemeng=?,itemchn=?,quantity=?,purprice=?," +
-							"unitprice=?,trueprice=?,shopingmark=?,hscode=?,nw=?,rate=?,unitpriceall=?,source_destination=?,unit=? where id=?";
+							"unitprice=?,trueprice=?,shopingmark=?,hscode=?,nw=?,rate=?," +
+							"unitpriceall=?,source_destination=?,unit=? where id=?";
 					PreparedStatement statement3 = connection.prepareStatement(ss33);
 					statement3.setString(1, itemeng);
 					statement3.setString(2, itemchn);
@@ -327,7 +329,8 @@ public class UpdateServlet extends HttpServlet {
 
 			}else if(StringUtils.isNotEmpty(itemeng)){
 //
-				String ss33="insert into items(proId,itemeng,itemchn,quantity,purprice,unitprice,trueprice,shopingmark,hscode,nw,rate,unitpriceall,source_destination,unit)" +
+				String ss33="insert into items(proId,itemeng,itemchn,quantity,purprice,unitprice," +
+						"trueprice,shopingmark,hscode,nw,rate,unitpriceall,source_destination,unit)" +
 						"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				PreparedStatement statement3 = connection.prepareStatement(ss33,Statement.RETURN_GENERATED_KEYS);
 				statement3.setInt(1, proid);
@@ -355,7 +358,7 @@ public class UpdateServlet extends HttpServlet {
 				rs.close();
 			}
 
-			String no = StringUtils.trim(request.getParameter("contractno"+i));
+			/*String no = StringUtils.trim(request.getParameter("contractno"+i));
 			String amount = StringUtils.trim(request.getParameter("contractamount"+i));
 			String contractQuantity = StringUtils.trim(request.getParameter("contractquantity"+i));
 			String declareid = StringUtils.trim(request.getParameter("contractid"+i));
@@ -370,9 +373,9 @@ public class UpdateServlet extends HttpServlet {
 			vo.setId(StringUtils.isNotEmpty(declareid) ? Integer.parseInt(declareid) : 0);
 			vo.setQuantity(Integer.parseInt(contractQuantity));
 			vo.setItemId(itemid);
-			lst1.add(vo);
+			lst1.add(vo);*/
 		}
-		contractItemsMapper.insertBatch(lst1);
+		//contractItemsMapper.insertBatch(lst1);
 	}
 
 
