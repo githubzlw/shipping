@@ -1015,8 +1015,8 @@
 				<td><input size="10" type="text" name="nw${sdex.index+1}" class="cnw n_weight" value="${item.nw}" class="cnw"/></td>
 				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="csourceDestination sourceDestination"/></td>
 				<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="ctrueprice true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
-					<p class="green-font">换汇比5：<span class="hb5 " >${item.hbFive}</span></p>
-					<p class="green-font">换汇比7：<span class="hb7 " >${item.hbSenven}</span></p>
+                    <br><span class="green-font">换汇比5：${item.hbFive}</span><br>
+					<span class="green-font">换汇比7：${item.hbSenven}</span>
 				</td>
 				<td><input size="20" type="text" name="hscode${sdex.index+1}" value="${item.hscode}" class="chscode"/></td>
 				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}" class="crate"/>
