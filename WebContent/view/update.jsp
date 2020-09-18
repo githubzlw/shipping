@@ -1241,7 +1241,7 @@
    </div>
 
 
-  <form action="/ItemOfContractServlet" id="addContract" stype="display:none;">
+  <form action="../shipping/ItemOfContractServlet" id="addContract" stype="display:none;">
 		  <input  type="hidden" id="cproid" name="cproid" value="${cproid}"/>
 		  <input  type="hidden" id="itemeng" name="itemeng" value=""/>
 		  <input  type="hidden" id="itemchn" name="itemchn" value="" />
