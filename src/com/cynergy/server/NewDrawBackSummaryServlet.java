@@ -153,17 +153,17 @@ public class NewDrawBackSummaryServlet extends HttpServlet {
 							rated +=" "+rate;
 						}
 
-						if(!rate.equals("")){
+						/*if(!rate.equals("")){
 							Number parse = dfss.parse(rate);
 							backMoney +=(parseDoubless/1.13)*parse.doubleValue();
 							totalbackMoney +=backMoney;
-						}
+						}*/
 					}
 					request.setAttribute("itemchn"+total, itemchn);
 					request.setAttribute("purprice"+total, df2.format(truepriceTotalD));
 					request.setAttribute("trueprice"+total, df.format(truepriceD));
 					request.setAttribute("hscode"+total, hscode);
-					request.setAttribute("backMoney"+total, df2.format(backMoney));
+					request.setAttribute("backMoney"+total, df2.format(truepriceTotalD/1.13*0.13));
 					request.setAttribute("rate"+total,rated);
 					total++;
 					yunfeitotal++;
@@ -179,7 +179,7 @@ public class NewDrawBackSummaryServlet extends HttpServlet {
 			request.setAttribute("totalTruepriceGBP", df.format(totalTruepriceGBP));
 			request.setAttribute("totalTruepriceAUD", df.format(totalTruepriceAUD));
 			request.setAttribute("totalbackMoney", df.format(totalbackMoney));
-		} catch (SQLException | ParseException e) {
+		} catch (SQLException  e) {
 			e.printStackTrace();
 		}finally {
  			DBHelper.returnConnection(connection);

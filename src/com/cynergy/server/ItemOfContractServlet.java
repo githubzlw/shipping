@@ -58,12 +58,28 @@ public class ItemOfContractServlet extends HttpServlet {
 		}
 		String stritemid = request.getParameter("itemid");
 		int itemid = StringUtils.isNotBlank(stritemid) ? Integer.parseInt(stritemid):0;
+		String itemchn = request.getParameter("itemchn");
+		if(StringUtils.isNotEmpty(itemchn)){
+			//判断是乱码 (GBK包含全部中文字符；UTF-8则包含全世界所有国家需要用到的字符。)
+			if (!(java.nio.charset.Charset.forName("GBK").newEncoder().canEncode(itemchn))) {
+				itemchn = new String(itemchn.getBytes("ISO-8859-1"), "utf-8"); //转码UTF8
+			}
+		}
+		String sourceDestination = request.getParameter("sourceDestination");
+		if(StringUtils.isNotEmpty(sourceDestination)){
+			//判断是乱码 (GBK包含全部中文字符；UTF-8则包含全世界所有国家需要用到的字符。)
+			if (!(java.nio.charset.Charset.forName("GBK").newEncoder().canEncode(sourceDestination))) {
+				sourceDestination = new String(sourceDestination.getBytes("ISO-8859-1"), "utf-8"); //转码UTF8
+			}
+		}
+
+
 		System.out.println("itemid"+request.getParameter("itemid"));
 		request.setAttribute("itemid",request.getParameter("itemid"));
 		request.setAttribute("rate",request.getParameter("rate"));
 		request.setAttribute("hscode",request.getParameter("hscode"));
 		request.setAttribute("trueprice",request.getParameter("trueprice"));
-		request.setAttribute("sourceDestination",request.getParameter("sourceDestination"));
+		request.setAttribute("sourceDestination",sourceDestination);
 		request.setAttribute("nw",request.getParameter("nw"));
 		request.setAttribute("shopingmark",request.getParameter("shopingmark"));
 		request.setAttribute("unitpriceall",request.getParameter("unitpriceall"));
@@ -71,7 +87,7 @@ public class ItemOfContractServlet extends HttpServlet {
 		request.setAttribute("purprice",request.getParameter("purprice"));
 		request.setAttribute("unit",request.getParameter("unit"));
 		request.setAttribute("quantity",request.getParameter("quantity"));
-		request.setAttribute("itemchn",request.getParameter("itemchn"));
+		request.setAttribute("itemchn",itemchn);
 		request.setAttribute("itemeng",request.getParameter("itemeng"));
 		request.setAttribute("cproid",request.getParameter("cproid"));
 

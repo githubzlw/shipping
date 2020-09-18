@@ -64,6 +64,13 @@ public class AddItemOfContractServlet extends HttpServlet {
 			int itemsize = Integer.parseInt(stritemsize);
 			ReadExcelVO vo;
 			String itemchn = request.getParameter("itemchn");
+			if(StringUtils.isNotEmpty(itemchn)){
+				//判断是乱码 (GBK包含全部中文字符；UTF-8则包含全世界所有国家需要用到的字符。)
+				if (!(java.nio.charset.Charset.forName("GBK").newEncoder().canEncode(itemchn))) {
+					itemchn = new String(itemchn.getBytes("ISO-8859-1"), "utf-8"); //转码UTF8
+				}
+			}
+
 			int proid = Integer.parseInt(cproid);
 			List<ReadExcelVO> lst1 = new ArrayList<>();
 			for(int i=0;i<itemsize;i++){
@@ -85,7 +92,7 @@ public class AddItemOfContractServlet extends HttpServlet {
 				lst1.add(vo);
 			}
 			contractItemsMapper.insertBatch(lst1);
-			RequestDispatcher homeDispatcher = request.getRequestDispatcher("InfoServlet?id="+cproid);
+			RequestDispatcher homeDispatcher = request.getRequestDispatcher("../shipping/InfoServlet?id="+cproid);
 			homeDispatcher.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

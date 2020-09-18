@@ -396,13 +396,14 @@ public class SaveServlet extends HttpServlet {
 			}*/
 			
 			
-			if(proId > 0){
+			/*if(proId > 0){
 				RequestDispatcher homeDispatcher = request.getRequestDispatcher("InfoServlet?id="+proId);
 				homeDispatcher.forward(request, response);
 			}else{
-				RequestDispatcher homeDispatcher = request.getRequestDispatcher("PreprintServlet");
-				homeDispatcher.forward(request, response);
-			}
+
+			}*/
+			RequestDispatcher homeDispatcher = request.getRequestDispatcher("PreprintServlet");
+			homeDispatcher.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			out.println("失败");
