@@ -68,7 +68,7 @@
     </c:forEach>
 
     <c:if test="${size >0}">
-    <c:forEach  begin="1" step="1" end="${size}" varStatus="sdex">
+    <c:forEach  begin="0" step="1" end="${size}" varStatus="sdex">
         <tr>
             <td><select name="itemcontractpurno${sdex.index+sdix}">
                 <c:forEach items="${purnos}" var="p">
