@@ -166,7 +166,11 @@
 	    		alert("请输入客户公司名称");
 				return false;
 	    	}
-	    	
+	    	//报关单需要客户公司名称
+	    	if(!$('input:radio[name="ladingReminder"]:checked').val()){
+	    		alert("请选择提单说明");
+				return false;
+	    	}
 	    	//验证是否已经上传合同	
 	        var haveBargain = true;
 	    	var purno = "";
@@ -325,11 +329,11 @@
 	        //普通用户才能修改报关状态（预保存0或者正式保存1）
 		    $('#orderStatus').val(orderStatus);
 	        //上传excel的文件名
- 	       /* var fileName = $('#fileName').val();
+ 	        var fileName = $('#fileName').val();
 	        if(!checkProduct() && !fileName && orderStatus == 1){
 	        	showNotice('多合同多品类，请上传详情excel',2000);
 	        	return false;
-	        }*/
+	        }
 	        
 	        
 	    	$('#order_form').submit();
@@ -859,7 +863,14 @@
 	   	 <br/><br/>
 	  特殊要求备注(用&ltbr&gt换行)：<textarea name="detailed" cols="45" rows="5"></textarea>
 	  <br>
-      <div class="line_01"></div>
+	  
+	  <div class="line_01"></div>
+      <div >
+      <strong><span>提单说明:</span>
+      <input type="radio" id="ladingReminder"  name="ladingReminder" value="0">正本提单
+      <input type="radio" id="ladingReminder" name="ladingReminder" value="1">电放提单(或者SWB)
+      <input type="radio" id="ladingReminder" name="ladingReminder" value="2">等通知电放</strong>
+      </div> <div class="line_01"></div>
       <div>    
       <ul id="contract_ul">
     
@@ -1118,10 +1129,10 @@
    </form>
    <form onsubmit="return false;" method="post" enctype="multipart/form-data">
    <span style="color:red;">(填写记得不要留空,如要加行,需整行增加,重复内容请复制增加，不允许合并单元格处理)</span>	   
-	   <%--<p>多合同多品类详情上传（Excel）：<input type="file" name="file" class="pull-left" onchange="upload(this)"></p>--%>
+	   <p>多合同多品类详情上传（Excel）：<input type="file" name="file" class="pull-left" onchange="upload(this)"></p>
    </form>
-  <%--<p style="color:red;">正式保存 多合同多品类请上传Excel</p>--%>
-  <%--<input type="submit" value="预保存" onclick="save_order(0)"></input> --%>
+  <p style="color:red;">正式保存 多合同多品类请上传Excel</p>
+  <input type="submit" value="预保存" onclick="save_order(0)"></input> 
   <input type="submit" value="正式保存" onclick="save_order(1)"></input> 
   </body>
 </html>

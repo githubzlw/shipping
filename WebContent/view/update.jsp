@@ -19,7 +19,13 @@
 	<script type="text/javascript" src="${ctx}/js/jquery-1.4.2.min.js"></script>	
 	<script type="text/javascript" src="${ctx}/js/jquery-form.js"></script>
 	<style type="text/css">
-		.green-font {font-size: 10px;}
+	.line_01{
+		   height:1px;
+			 width:100%;
+			 background:#aaa;
+			 overflow:hidden;
+			 margin-top: 21px;
+       }
 	   #table1{
             border-collapse: collapse;
     		border-spacing: 0;
@@ -109,8 +115,57 @@
 	     
 	 
 	 	 //验算出口人民币和采购价是否一致
-	    function update_order(orderStatus){
+	    function update_order(orderStatus1){
          var exchangeFlag = true;
+	    	 	//验证需要提供电子出货确认单
+	 	    	var id = $('#proId').val();
+	    		var isShipingFlag = true;
+	    		 var isShipment = true;
+		        if(id > 18061){
+		        	var tl = $('#div_list').find('p').length;
+		        	var li = tl;
+		        	if((adminName.toUpperCase() == '施姐808' || adminName.toUpperCase() == 'MANDY' 
+		        		  || adminName.toUpperCase() == 'ROSELI'||adminName.toUpperCase() == 'FUN' 
+		        		  || adminName.toUpperCase() == 'CANDY') && orderStatus1!=2){
+		        	$('.order-id').each(function(){
+		        		 var orderId = $(this).val();
+		        		 var reg = new RegExp("[a-zA-Z]","g");
+		        		 orderId = orderId.replace(reg,"").replace("合","");
+		        		 orderId = $.trim(orderId);
+		        		 //获取录入目的
+		        		 var isExtraInvoice = $(this).parents('tr').find('input[type="radio"]:checked').val();
+		        		 
+		        		 //判断是否存在该合同
+		        		 var isContract = false;
+		        		
+		        		 for(var i=0;i<li;i++){
+		        			var projectNo = $('#div_list').find('p').eq(i).find('a').text(); 
+//		        			projectNo = projectNo.replace("SHS","");
+		        			if(projectNo.indexOf(orderId) != -1){
+		        				isContract = true;
+		        			}
+		        			if(projectNo.indexOf("未确认") != -1){
+		        				isShipment = false;
+		        			}
+		        			
+		        		 }	
+	        			 if(isExtraInvoice == 1){
+		        			isContract = true;
+		        		 }
+		        		 if(!isContract){
+		        			isShipingFlag = false;
+		        		 }		        		 		        		 
+		        	})
+		        	}
+		        	
+		        	if(!isShipingFlag){
+		        		showNotice('请录入每个合同准予电子出货单号',4000);
+		        		return false;
+		        	}	        	
+		        	if(!isShipment){
+		        		showNotice('请处理准予电子出货确认单',4000);
+		        		return false;
+		        	}
     	 if(adminName.toUpperCase() == 'FUN' || adminName.toUpperCase() == 'CANDY'){ 		 
   	    	$('.true-price').each(function(){
  	    		if(!($(this).val() == null || $(this).val() == '' || $(this).val() == undefined || $(this).val() == 0)){
@@ -124,7 +179,7 @@
     					if(exchange > 7){
     						alert('当前汇率比已大于7');  
     					}
-    					exchange = Number(exchange/1.16).toFixed(2);
+    					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 7){
     						showNotice('退税后汇率比大于7，请验算',2000);  
     						exchangeFlag = false;
@@ -136,7 +191,7 @@
     					if(exchange > 9){
     						alert('当前汇率比已大于9',2000);  
     					}
-    					exchange = Number(exchange/1.16).toFixed(2);
+    					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 9){
     						showNotice('退税后汇率比大于9，请验算',2000);  
     						exchangeFlag = false;
@@ -148,7 +203,7 @@
     					if(exchange > 8){
     						alert('当前汇率比已大于8');  
     					}
-    					exchange = Number(exchange/1.16).toFixed(2);
+    					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 8){
     						showNotice('退税后汇率比大于8，请验算',2000);  
     						exchangeFlag = false;
@@ -160,7 +215,7 @@
     					if(exchange > 5.5){
     						alert('当前汇率比已大于5.5'); 
     					}
-    					exchange = Number(exchange/1.16).toFixed(2);
+    					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 5.5){
     						showNotice('退税后汇率比大于5.5，请验算',2000); 
     						exchangeFlag = false;
@@ -174,7 +229,7 @@
  	    	if(!exchangeFlag){
  	    		return false;
  	    	}
-    		 // $('#order_form').submit();
+    		  $('#order_form').submit();
     	 }else{
     		 //报关单需要客户公司名称
  	    	if(!$('#company_name').val()){
@@ -214,20 +269,29 @@
  	    	
  	    	$('.true-price').each(function(){
  	    		if(!($(this).val() == null || $(this).val() == '' || $(this).val() == undefined || $(this).val() == 0)){
+ 	    			var id=0;
+ 	    			if(adminName.toUpperCase() == "施姐808"){
+ 	    				id=1
+ 	    			}
+ 	    			if(adminName.toUpperCase() == "MANDY"){
+ 	    				id=1
+ 	    			}
+ 	    			if(adminName.toUpperCase() == "ROSELI"){
+ 	    				id=1
+ 	    			}
  	    			
- 	    			
- 	    			
-	 	    		    if(adminName.toUpperCase() == '施姐808' ||adminName.toUpperCase() == 'MANDY'||adminName.toUpperCase() == 'roseli'){
+	 	    		    if(id==1){
 	 	    	   			    var truePrice = $(this).val();
 	 	 	    			    var colInput = $(this).parents('tr').find('.export-cn1').val();
 		 	    			    var currency = $('#select_currency').val();
+								//var rate = $(this).parents('tr').find("input[name^='tj']").val():
 			    				var exchange = 0.0;
 			    				if(currency == 'USD'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-			    					if(exchange > 7){
-			    						alert('当前汇率比已大于7'); 
-			    					}
-			    					exchange = Number(exchange/1.16).toFixed(2);
+			    					//if(exchange > 7){
+			    					//	alert('当前汇率比已大于7'); 
+			    					//}
+			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 7){
 			    						showNotice('退税后汇率比大于7，请验算',2000);
 			    						exchangeFlag = false;
@@ -239,7 +303,7 @@
 			    					if(exchange > 9){
 			    						alert('当前汇率比已大于9');
 			    					}
-			    					exchange = Number(exchange/1.16).toFixed(2);
+			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 9){
 			    						showNotice('退税后汇率比大于9，请验算',2000);
 			    						exchangeFlag = false;
@@ -251,7 +315,7 @@
 			    					if(exchange > 8){
 			    						alert('当前汇率比已大于8');
 			    					}
-			    					exchange = Number(exchange/1.16).toFixed(2);
+			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 8){
 			    						showNotice('退税后汇率比大于8，请验算',2000);
 			    						exchangeFlag = false;
@@ -263,7 +327,7 @@
 			    					if(exchange > 5.5){
 			    						alert('当前汇率比已大于5.5');
 			    					}
-			    					exchange = Number(exchange/1.16).toFixed(2);
+			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 5.5){
 			    						showNotice('退税后汇率比大于5.5，请验算',2000);
 			    						exchangeFlag = false;
@@ -371,42 +435,6 @@
  	    		return false;
  	    	}
  	    	 	    	
- 	    	if(adminName.toUpperCase() != '施姐808' && adminName.toUpperCase() != 'MANDY'  && adminName.toUpperCase() != 'roseli'){
- 	    		//验证需要提供电子出货确认单
- 	 	    	var id = $('#proId').val();
- 	    		var isShipingFlag = true;
- 		        if(id > 18061){
- 		        	var tl = $('#div_list').find('p').length;
- 		        	var li = tl;
- 		        	$('.order-id').each(function(){
- 		        		 var orderId = $(this).val();
- 		        		 var reg = new RegExp("[a-zA-Z]","g");
- 		        		 orderId = orderId.replace(reg,"").replace("合","");
- 		        		 orderId = $.trim(orderId);
- 		        		 //获取录入目的
- 		        		 var isExtraInvoice = $(this).parents('tr').find('input[type="radio"]:checked').val();
- 		        		 
- 		        		 //判断是否存在该合同
- 		        		 var isContract = false;
- 		        		 for(var i=0;i<li;i++){
- 		        			var projectNo = $('#div_list').find('p').eq(i).find('a').text(); 
-//  		        			projectNo = projectNo.replace("SHS","");
- 		        			if(projectNo.indexOf(orderId) != -1){
- 		        				isContract = true;
- 		        			}
- 		        		 }	
-	        			 if(isExtraInvoice == 1){
-		        			isContract = true;
-		        		 }
- 		        		 if(!isContract){
- 		        			isShipingFlag = false;
- 		        		 }		        		 		        		 
- 		        	})
- 		        	if(!isShipingFlag){
- 		        		showNotice('请录入每个合同准予电子出货单号',4000);
- 		        		return false;
- 		        	}	        	
- 		        }
  		        
  		        
  		       if($('#contract_date').val() == null || $('#contract_date').val() == ''){
@@ -444,42 +472,24 @@
  		        	showNotice('发货地址不能为空',2000);
  		        	return false;
  		        }
- 		        
+ 		        var orderStatus=0;
+ 		        if(orderStatus1==1 ||orderStatus1==2){
+ 		        	orderStatus=1;
+ 		        }
  		        //普通用户才能修改报关状态（预保存0或者正式保存1）
  		        $('#orderStatus').val(orderStatus);
  		        //正式保存时，判断是否上传多品类excel
  		        var fileName = $('#fileName').val();
- 		       /* if(!checkProduct() && !fileName && orderStatus == 1){
+ 		        if(!checkProduct() && !fileName && orderStatus == 1){
  		        	showNotice('多合同多品类，请上传详情excel',2000);
  		        	return false;
- 		        } */
+ 		        } 
  	    	}	    	
  	    	
- 	    	// $('#order_form').submit();
+ 	    	
+ 	    	$('#order_form').submit();   	
     	 }
-			var isMacth = true;
-    	 /*for(var i=0;i<13;i++){
-			 var count = 0;
-			 var itemCount = 0;
-			 var countStr = $(".item-tr-parent"+i).find(".export-cn1").val();
-			 if(countStr && countStr != ''){
-				 count = parseFloat(countStr).toFixed(3);
-			 }
-
-			 $(".item-tr-parent"+i).find(".table-contract-all").find(".tr-tb-c").each(function(){
-				 var temAmount = $(this).find(".in-amount").val();
-				 if(temAmount && temAmount != ''){
-					 itemCount += parseFloat(temAmount).toFixed(3);
-				 }
-			 })
-			 isMacth = isMacth & (itemCount == count);
-
-		 }*/
-			if(isMacth){
-				$('#order_form').submit();
-			}else{
-				alert('报关金额与合同金额不匹配');
-			}
+    	  
 	    
      }
 	 
@@ -774,12 +784,12 @@
 	       
 	      
 	      //判断多品类多合同是否上传表格
-	      /*$(function(){
+	      $(function(){
 	    	    var fileName = $('#fileName').val();
 		        if(!checkProduct() && !fileName){
 		        	$('#show').show();
 		        }
-	      })*/
+	      })
 	      
 	      
 	      
@@ -830,7 +840,7 @@
   </head>
   <body>
   <div class="tan"></div>	
-  <h1>修改出运单</h1><%--<h3 id="show" style="text-align: center;color: red;display:none;">注意：属于多合同、多品类报关，您还未上传品类Excel</h3>--%>
+  <h1>修改出运单</h1><h3 id="show" style="text-align: center;color: red;display:none;">注意：属于多合同、多品类报关，您还未上传品类Excel</h3>
    <form action="UpdateServlet" method="post" id="order_form">
    	<table border="1">
    	  <tr>
@@ -977,6 +987,17 @@
 			 </select>  
 	 <br/><br/>
 	  特殊要求备注(用&ltbr&gt换行)：<textarea name="detailed" cols="45" rows="5"><%=request.getAttribute("detailed")%></textarea>
+	 <div class="line_01"></div>
+      <div >
+      <strong><span>提单说明:</span>
+      <c:if test="${ladingReminder==0 }">正本提单</c:if> 
+       <c:if test="${ladingReminder==1 }">电放提单(或者SWB)</c:if> 
+        <c:if test="${ladingReminder==2 }">等通知电放</c:if>  
+      <input type="radio" id="ladingReminder"  name="ladingReminder" value="0">正本提单
+      <input type="radio" id="ladingReminder" name="ladingReminder" value="1">电放提单(或者SWB)
+      <input type="radio" id="ladingReminder" name="ladingReminder" value="2">等通知电放 </strong>
+      </div>
+      <div class="line_01"></div>
 	   	<br/>
 	   	<table border="1" id="item_table" style="table-layout:fixed;">
 	   		<tr>
@@ -996,7 +1017,7 @@
 			    <td width="50px">HS Code (物流填)</td>
 			    <td width="50px">退税率 (物流填 *%)</td>
 				<td width="50px">可以开该品名的工厂列表</td>
-				<td>合同</td>
+<%--				<td>合同</td>--%>
 
 			</tr>
 			<c:forEach items="${items}" var="item" varStatus="sdex">
@@ -1023,7 +1044,7 @@
 					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}" class="citemid"/>
 				</td>
 					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>
-					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>
+<%--					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>--%>
 			<tr>
 			</c:forEach>
 			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">
@@ -1049,7 +1070,7 @@
 					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value="" class="citemid"/>
 				</td>
 			<td></td>
-			<td></td>
+<%--			<td></td>--%>
 			<tr>
 			</c:forEach>
 
@@ -1119,26 +1140,26 @@
    	</table>
    <br/>  
    </form>
-  <%-- <div>
+   <div>
      <span>请先下载本出运单专用模板：<a href="/shipping/GetProductExcelServlet?proId=<%=request.getAttribute("id")%>">拆分报关品名.xlsx</a>填写时候注意不要留空，如要加行，需整行增加，重复内容请复制补全,不允许合并单元格处理。</span>
-   </div>--%>
+   </div>
    <%
     if(request.getAttribute("excelPath")!=null && !"".equals(request.getAttribute("excelPath"))){
    	%>
    <div>
-     <%--<span>已上传报关品名下载：<a href="/shipping/DownloadDrawbackServlet?fileName=<%=request.getAttribute("excelPath")%>">已上传报关品名.xlsx</a></span>--%>
+     <span>已上传报关品名下载：<a href="/shipping/DownloadDrawbackServlet?fileName=<%=request.getAttribute("excelPath")%>">已上传报关品名.xlsx</a></span>
    </div>
    	<%	
     }
     %>
-   <%--<form onsubmit="return false;" method="post" enctype="multipart/form-data">
+   <form onsubmit="return false;" method="post" enctype="multipart/form-data">
 	   <p>多合同多品类详情上传（Excel）：<input type="file" name="file" class="pull-left" onchange="upload(this)"></p>
-   </form>--%>
+   </form>
    
     <div class="region">
 		<h3>准予电子出货确认单</h3>
 		<div class="reginon_con">
-			<p>请输入【准予电子出货确认单】编号：(本栏目可后补)</p>
+			<p>请输入【准予电子出货确认单】编号：(本栏目要求在报关总价录入前处理完毕)</p>
 			<div class="add">
 				<input type="text" id="serialNumber">
 				<button onclick="addShipping('<%=request.getAttribute("id")%>')">添加</button> 
@@ -1192,17 +1213,21 @@
 	</div>
    
   
-	   <input type="button" style="margin-top: 50px;" value="保存修改" onclick="update_order(1)"></input>
-  <%-- <c:choose>
+
+ <c:choose>
 	   <c:when test="${sessionScope.auth == 1}">
 	       <input type="button" style="margin-top: 50px;" value="保存修改" onclick="update_order(1)"></input>
+	       <c:if test="${adminName=='CANDY' || adminName=='FUN'}">
+		   <input type="button" value="进入打印页" onclick="update_order(2)"></input>
+		   </c:if>
 	   </c:when>
 	   <c:otherwise>
 	       <p style="color:red;" style="margin-top: 50px;" >正式保存 多合同多品类请上传Excel</p>
 		   <input type="button" value="预保存修改" onclick="update_order(0)"></input>
 		   <input type="button" value="保存修改" onclick="update_order(1)"></input>
-	   </c:otherwise>
-   </c:choose>--%>
+		   
+	   </c:otherwise>   
+   </c:choose>
    <form action="DeleteServlet">
    <table>
    		<input type="hidden" name="id" value="<%=request.getAttribute("id")%>" id="proId"/>
@@ -1241,46 +1266,46 @@
    </div>
 
 
-  <form action="../shipping/ItemOfContractServlet" id="addContract" stype="display:none;">
-		  <input  type="hidden" id="cproid" name="cproid" value="${cproid}"/>
-		  <input  type="hidden" id="itemeng" name="itemeng" value=""/>
-		  <input  type="hidden" id="itemchn" name="itemchn" value="" />
-		  <input  type="hidden" id="quantity" name="quantity" value=""/>
-	      <input  type="hidden" id="unit" name="unit">
-		  <input  type="hidden" id="purprice" name="purprice" value="" />
-		  <input  type="hidden" id="unitprice" name="unitprice" value=""/>
-		  <input  type="hidden" id="unitpriceall" name="unitpriceall" value=""/>
-		  <input  type="hidden" id="shopingmark" name="shopingmark" value=""/>
-		  <input  type="hidden" id="nw" name="nw" class="n_weight" value=""/>
-		  <input  type="hidden" id="sourceDestination" name="sourceDestination" value=""/>
-		  <input  type="hidden" id="trueprice" name="trueprice"/>
-		  <input  type="hidden" id="hscode" name="hscode" value=""/>
-		  <input type="hidden" id="rate" name="rate" value=""/>
-		 <input  type="hidden" id="itemid" name="itemid" value=""/>
-  </form>
+<%--  <form action="../shipping/ItemOfContractServlet" id="addContract" stype="display:none;">--%>
+<%--		  <input  type="hidden" id="cproid" name="cproid" value="${cproid}"/>--%>
+<%--		  <input  type="hidden" id="itemeng" name="itemeng" value=""/>--%>
+<%--		  <input  type="hidden" id="itemchn" name="itemchn" value="" />--%>
+<%--		  <input  type="hidden" id="quantity" name="quantity" value=""/>--%>
+<%--	      <input  type="hidden" id="unit" name="unit">--%>
+<%--		  <input  type="hidden" id="purprice" name="purprice" value="" />--%>
+<%--		  <input  type="hidden" id="unitprice" name="unitprice" value=""/>--%>
+<%--		  <input  type="hidden" id="unitpriceall" name="unitpriceall" value=""/>--%>
+<%--		  <input  type="hidden" id="shopingmark" name="shopingmark" value=""/>--%>
+<%--		  <input  type="hidden" id="nw" name="nw" class="n_weight" value=""/>--%>
+<%--		  <input  type="hidden" id="sourceDestination" name="sourceDestination" value=""/>--%>
+<%--		  <input  type="hidden" id="trueprice" name="trueprice"/>--%>
+<%--		  <input  type="hidden" id="hscode" name="hscode" value=""/>--%>
+<%--		  <input type="hidden" id="rate" name="rate" value=""/>--%>
+<%--		 <input  type="hidden" id="itemid" name="itemid" value=""/>--%>
+<%--  </form>--%>
   
   </body>
   
 <script type="text/javascript">
 
-	function addcontract(v){
-		var p = $(v).parents(".citem-tr-parent");
-		$("#itemeng").val(p.find(".citemeng").val());
-		$("#itemchn").val(p.find(".citemchn").val());
-		$("#quantity").val(p.find(".cquantity").val());
-		$("#unit").val(p.find(".cunit").val());
-		$("#purprice").val(p.find(".cpurprice").val());
-		$("#unitprice").val(p.find(".cunitprice").val());
-		$("#unitpriceall").val(p.find(".cunitpriceall").val());
-		$("#shopingmark").val(p.find(".cshopingmark").val());
-		$("#nw").val(p.find(".cnw").val());
-		$("#sourceDestination").val(p.find(".csourceDestination").val());
-		$("#trueprice").val(p.find(".ctrueprice").val());
-		$("#hscode").val(p.find(".chscode").val());
-		$("#rate").val(p.find(".crate").val());
-		$("#itemid").val(p.find(".citemid").val());
-		$("#addContract").submit();
-	}
+	// function addcontract(v){
+	// 	var p = $(v).parents(".citem-tr-parent");
+	// 	$("#itemeng").val(p.find(".citemeng").val());
+	// 	$("#itemchn").val(p.find(".citemchn").val());
+	// 	$("#quantity").val(p.find(".cquantity").val());
+	// 	$("#unit").val(p.find(".cunit").val());
+	// 	$("#purprice").val(p.find(".cpurprice").val());
+	// 	$("#unitprice").val(p.find(".cunitprice").val());
+	// 	$("#unitpriceall").val(p.find(".cunitpriceall").val());
+	// 	$("#shopingmark").val(p.find(".cshopingmark").val());
+	// 	$("#nw").val(p.find(".cnw").val());
+	// 	$("#sourceDestination").val(p.find(".csourceDestination").val());
+	// 	$("#trueprice").val(p.find(".ctrueprice").val());
+	// 	$("#hscode").val(p.find(".chscode").val());
+	// 	$("#rate").val(p.find(".crate").val());
+	// 	$("#itemid").val(p.find(".citemid").val());
+	// 	$("#addContract").submit();
+	// }
 
 function addShipping(proId){
 	var serialNumber = $('#serialNumber').val();
@@ -1389,7 +1414,7 @@ function addInvoice(proId){
 		showNotice('请上传发票截图',2000);	
 		 return false; 	
 	}
-	AddInvoiceImgServlet
+	
       	$.ajax({
    			type : "post",
    			datatype : "json",
@@ -1442,16 +1467,16 @@ function delInvoice(id,obj){
 	   		});		
 	}
 }
-function writeOption(){
-	var ophtml = "";
-	$(".order-id").each(function(){
-		var v = $(this).val();
-		if(v != ''){
-			ophtml +='<option value="'+v+'">'+v+'</option>';
-		}
-	})
-	$(".select-n").append(ophtml);
-}
+// function writeOption(){
+// 	var ophtml = "";
+// 	$(".order-id").each(function(){
+// 		var v = $(this).val();
+// 		if(v != ''){
+// 			ophtml +='<option value="'+v+'">'+v+'</option>';
+// 		}
+// 	})
+// 	$(".select-n").append(ophtml);
+// }
 
 
 /*
