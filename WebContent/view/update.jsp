@@ -873,12 +873,12 @@
 	   			<td>工厂名称</td>
 	   			<td>合同金额(格式：100000.00)</td>
 	   			<td>第几次出货批次</td>
-	   			<td>出货批次金额(RMB)</td>
+<%--	   			<td>出货批次金额(RMB)</td>--%>
 	   			<td>总共几次出货批次</td>
 	   			<td>本次出口人民币金额(格式：100000.00)</td>
 	   			<td>参考数据</td>
 	   			<td>录入目的</td>
-	   			<td>该工厂未开票金额</td>
+<%--	   			<td>该工厂未开票金额</td>--%>
 	   		</tr>
 	   			
    					<%
@@ -891,14 +891,14 @@
 			   			<td><input type="text" name="factory<%=i+1%>" value="<%=request.getAttribute("factory"+(i+1))%>" id="fac-<%=request.getAttribute("purno"+(i+1))%>"/></td>
 			   			<td><input type="text" name="money<%=i+1%>" value="<%=request.getAttribute("money"+(i+1))%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td><input type="text" name="times<%=i+1%>" value="<%=request.getAttribute("times"+(i+1))%>"/></td>
-			   			<td>
-							<c:forEach  items='<%=request.getAttribute("shipBatch"+(i+1))%>' var="shipbatch" varStatus="varStatus">
-								<c:if test="${varStatus.index > 0}">&nbsp;&nbsp;/<br></c:if>
-								<span>${shipbatch}</span>
-							</c:forEach>
+<%--			   			<td>--%>
+<%--							<c:forEach  items='<%=request.getAttribute("shipBatch"+(i+1))%>' var="shipbatch" varStatus="varStatus">--%>
+<%--								<c:if test="${varStatus.index > 0}">&nbsp;&nbsp;/<br></c:if>--%>
+<%--								<span>${shipbatch}</span>--%>
+<%--							</c:forEach>--%>
 
 
-						</td>
+<%--						</td>--%>
 			   			<td><input type="text" name="totaltimes<%=i+1%>" value="<%=request.getAttribute("totaltimes"+(i+1))%>"/></td>
 			   			<td><input type="text" name="rmb<%=i+1%>" class="export-cn" value="<%=request.getAttribute("rmb"+(i+1))%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
@@ -918,7 +918,7 @@
 			   			     }
 			   			     %>
 			   			    />带票</td>  
-			   			<td><a  target="_blank" href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=allDetailedAccounts&className=InvoiceServlet&factoryName=<%=request.getAttribute("factory"+(i+1))%>&num=0&saleName=">未开票</a>
+<%--			   			<td><a  target="_blank" href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=allDetailedAccounts&className=InvoiceServlet&factoryName=<%=request.getAttribute("factory"+(i+1))%>&num=0&saleName=">未开票</a>--%>
 							<input type="hidden" name="conid<%=i+1%>" value="<%=request.getAttribute("conid"+(i+1))%>"/><input type="hidden"/></td>
 	   			     </tr>
 	   			    <% 	  
@@ -930,7 +930,7 @@
 			   			<td><input type="text" name="factory1"/></td>
 			   			<td><input type="text" name="money1" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td><input type="text" name="times1"/></td>
-			   			<td></td>
+<%--			   			<td></td>--%>
 			   			<td><input type="text" name="totaltimes1"/></td>
 			   			<td><input type="text" name="rmb1" class="export-cn"  onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
@@ -1008,8 +1008,8 @@
 			    <td width="50px"  style="word-wrap:break-word;" ><strong>采购价 总价(只填数字 单位:RMB)(格式：100000.00)</strong></td>
 			    <td width="40px"  style="word-wrap:break-word;" >Unit Price(对外销售单价)</td>
 			    <td width="50px"  style="word-wrap:break-word;" >(客户)清关总价(格式：100000.00)</td>
-			    <td width="50px"  style="word-wrap:break-word;" >客户订单的实际金额(项目级)</td>
-			    <td width="50px"  style="word-wrap:break-word;" >客户实际到账金额(项目级)</td>
+<%--			    <td width="50px"  style="word-wrap:break-word;" >客户订单的实际金额(项目级)</td>--%>
+<%--			    <td width="50px"  style="word-wrap:break-word;" >客户实际到账金额(项目级)</td>--%>
 			    <td width="50px">Shipping Mark</td>
 			    <td width="50px"><p>N.W.(请只填数字 单位:kg)</p></td>
 			    <td width="50px"  style="word-wrap:break-word;" >境内货源地</td>
@@ -1030,8 +1030,8 @@
 				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1 cpurprice" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td><input size="10" type="text" class="cunitprice" name="unitprice${sdex.index+1}" value="${item.unitprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td><input size="10" type="text" name="unitpriceall${sdex.index+1}" class="unit-price-all cunitpriceall" value="${item.unitpriceall}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td>${item.orderActualMoney}</td>
-				<td>${item.orderAmountReceived}</td>
+<%--				<td>${item.orderActualMoney}</td>--%>
+<%--				<td>${item.orderAmountReceived}</td>--%>
 				<td><input size="10" type="text" name="shopingmark${sdex.index+1}" value="${item.shopingmark}" class="cshopingmark"/></td>
 				<td><input size="10" type="text" name="nw${sdex.index+1}" class="cnw n_weight" value="${item.nw}" class="cnw"/></td>
 				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="csourceDestination sourceDestination"/></td>

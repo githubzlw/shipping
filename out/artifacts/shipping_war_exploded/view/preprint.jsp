@@ -57,6 +57,7 @@
 	   		   %>	
 	   		
 	   	</table>
+	 
 	   	<br/>
 	   	希望出口日期:<%=request.getAttribute("hopeDate")%>&nbsp;&nbsp;&nbsp;&nbsp;
 	   	预计工厂可送仓日期:<%=request.getAttribute("estimateDate")%>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -74,6 +75,13 @@
 	   	小箱件数：<%=request.getAttribute("casketQuantity")%><br/>
 	   	订框箱型：<%=request.getAttribute("casketType")%>&nbsp;&nbsp;&nbsp;&nbsp;
 	   	特殊要求备注：<%=request.getAttribute("detailed")%><br/>
+	   	  	<div >
+      <strong><span>提单说明:</span>
+      <c:if test="${ladingReminder==0 }">正本提单</c:if> 
+       <c:if test="${ladingReminder==1 }">电放提单(或者SWB)</c:if> 
+        <c:if test="${ladingReminder==2 }">等通知电放</c:if>  
+      
+      </div>
 	   	<table border="1">
 	   		<tr>
 	   			<td width="50px">Item英文名</td>

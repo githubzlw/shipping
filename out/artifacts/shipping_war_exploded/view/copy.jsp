@@ -69,7 +69,10 @@ $(function(){
         var rmb_flag = true;
 	    //验算出口人民币和采购价是否一致
 	    function save_order(orderStatus){
-	    		    	
+	    	if(!$('input:radio[name="ladingReminder"]:checked').val()){
+	    		alert("请选择提单说明");
+				return false;
+	    	}	    	
 	    	//验证是否已经上传合同	
 	        var haveBargain = true;
 	    	var purno = "";
@@ -578,6 +581,14 @@ $(function(){
 			 </select>  <br/>
 	  特殊要求备注(用&ltbr&gt换行)：<textarea name="detailed" cols="45" rows="5"><%=request.getAttribute("detailed")%></textarea>
 	   	<br/>
+			<div >
+      <strong><span>提单说明:</span>
+      
+      <input type="radio" id="ladingReminder"  name="ladingReminder" value="0">正本提单
+      <input type="radio" id="ladingReminder" name="ladingReminder" value="1">电放提单(或者SWB)
+      <input type="radio" id="ladingReminder" name="ladingReminder" value="2">等通知电放 </strong>
+      </div>
+      <br/>
 	   	<table border="1">
 	   		<tr>
 	   			<td width="80px">Item英文名</td>

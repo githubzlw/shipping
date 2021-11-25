@@ -15,7 +15,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
   </head>
   
   <body>
@@ -30,6 +29,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	   <c:if test="${year==2018 }"><option  value ="2018">2018年</option></c:if>
   	   <c:if test="${year==2019 }"><option  value ="2019">2019年</option></c:if>
   	   <c:if test="${year==2020 }"><option  value ="2020">2020年</option></c:if>
+		   <c:if test="${year==2020 }"><option  value ="2021">2021年</option></c:if>
+		   <c:if test="${year==2021 }"><option  value ="2022">2022年</option></c:if>
+		   <c:if test="${year==2022 }"><option  value ="2023">2023年</option></c:if>
 	    <option  value ="2013">2013年</option>
 	    <option   value ="2014" >2014年</option>
 	    <option  value ="2015">2015年</option>
@@ -38,6 +40,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <option  value ="2018">2018年</option>
 	    <option  value ="2019" >2019年</option>
 	    <option  value ="2020">2020年</option>
+		   <option  value ="2021">2021年</option>
+		   <option  value ="2022">2022年</option>
+		   <option  value ="2023">2023年</option>
 	  </select>
   	   <select name="select2">
   	   <c:if test="${month==1 }"><option value ="01" >1月</option></c:if>
