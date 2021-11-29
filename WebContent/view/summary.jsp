@@ -8,57 +8,68 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
   <base href="<%=basePath%>">
     <title>汇总</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
+
+	  <meta http-equiv="pragma" content="no-cache">
+	  <meta http-equiv="cache-control" content="no-cache">
+	  <meta http-equiv="expires" content="0">
+	  <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	  <meta http-equiv="description" content="This is my page">
 
   </head>
-  
+
   <body>
-  	<h1 align="center">汇总</h1>
-  	 <form action="SummaryServlet">
-  	   <select name="select1">
-	    <option value ="2013">2013年</option>
-	    <option value ="2014" selected="selected">2014年</option>
-	    <option value ="2015">2015年</option>
-	    <option value ="2016">2016年</option>
-	    <option value ="2017">2017年</option>
-	    <option value ="2018">2018年</option>
-	    <option value ="2019">2019年</option>
-	    <option value ="2020">2020年</option>
-		   <option value ="2021">2021年</option>
-		   <option value ="2022">2022年</option>
-		   <option value ="2023">2023年</option>
+  <h1 align="center">汇总</h1>
+  <form action="SummaryServlet" id="form1">
+	  <select name="select1">
+		  <option value="2013">2013年</option>
+		  <option value="2014">2014年</option>
+		  <option value="2015">2015年</option>
+		  <option value="2016">2016年</option>
+		  <option value="2017">2017年</option>
+		  <option value="2018">2018年</option>
+		  <option value="2019">2019年</option>
+		  <option value="2020">2020年</option>
+		  <option value="2021">2021年</option>
+		  <option value="2022">2022年</option>
+		  <option value="2023">2023年</option>
 	  </select>
-  	   <select name="select2">
-	    <option value ="01" selected="selected">1月</option>
-	    <option value ="02">2月</option>
-	    <option value ="03">3月</option>
-	    <option value ="04">4月</option>
-	    <option value ="05">5月</option>
-	    <option value ="06">6月</option>
-	    <option value ="07">7月</option>
-	    <option value ="08">8月</option>
-	    <option value ="09">9月</option>
-	    <option value ="10">10月</option>
-	    <option value ="11">11月</option>
-	    <option value ="12">12月</option>
+	  <select name="select2">
+		  <option value="01">1月</option>
+		  <option value="02">2月</option>
+		  <option value="03">3月</option>
+		  <option value="04">4月</option>
+		  <option value="05">5月</option>
+		  <option value="06">6月</option>
+		  <option value="07">7月</option>
+		  <option value="08">8月</option>
+		  <option value="09">9月</option>
+		  <option value="10">10月</option>
+		  <option value="11">11月</option>
+		  <option value="12">12月</option>
 	  </select>
-  <input type="submit" value="列表">
+	  <input type="submit" value="列表">
   </form>
-  
-结果：<br/>
-   	<table border="1" id="table">
-   		<tr>
-   			<td><Strong>序号</Strong></td>
-   			<td><Strong>发票号</Strong></td>
-   			<td><Strong>出口日期</Strong></td>
-   			<td><Strong>运输方式</Strong></td>
-   			<td><Strong>发货港</Strong></td>
-   			<td><Strong>目的港</Strong></td>
+  <form action="SummaryPrintServlet" id="form2">
+	  <input type="hidden" name="select1">
+	  <input type="hidden" name="select2">
+	  <input type="button" value="导出汇总表" onclick="print(this)">
+  </form>
+
+  <form action="SummaryPrintEveryServlet" id="form3">
+	  <input type="hidden" name="select1">
+	  <input type="hidden" name="select2">
+	  <input type="button" value="导出汇总明细表" onclick="print(this)">
+  </form>
+
+  结果：<br/>
+  <table border="1" id="table">
+	  <tr>
+		  <td><Strong>序号</Strong></td>
+		  <td><Strong>发票号</Strong></td>
+		  <td><Strong>出口日期</Strong></td>
+		  <td><Strong>运输方式</Strong></td>
+		  <td><Strong>发货港</Strong></td>
+		  <td><Strong>目的港</Strong></td>
    			<td><Strong>HS</Strong></td>
    			<td><Strong>英文名称</Strong></td>
    			<td><Strong>中文名称</Strong></td>
@@ -66,18 +77,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    			<td><Strong>报关总金额</Strong></td>
    			<td><Strong>清关总金额</Strong></td>
    			<td><Strong>销售</Strong></td>
-   			<td><Strong>采购</Strong></td>
-   			<td><Strong>合同号</Strong></td>
-   			<td><Strong>合同金额</Strong></td>
-   			<td><Strong>出口批次</Strong></td>
-   			<td><Strong>客户名称</Strong></td>
-   			<td><Strong>退税率</Strong></td>
-   			<td><Strong>货代</Strong></td>
-   			<td><Strong>运费</Strong></td>
-   		</tr>
-   	</table>
-   			<script type="text/javascript">
-	  var tab=document.getElementById("table");
+		  <td><Strong>采购</Strong></td>
+		  <td><Strong>合同号</Strong></td>
+		  <td><Strong>合同金额</Strong></td>
+		  <td><Strong>出口批次</Strong></td>
+		  <td><Strong>客户名称</Strong></td>
+		  <td><Strong>退税率</Strong></td>
+		  <td><Strong>货代</Strong></td>
+		  <td><Strong>运费</Strong></td>
+	  </tr>
+  </table>
+  <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript">
+
+	  var tab = document.getElementById("table");
 	  <%
 	  if(request.getAttribute("total")!=null)
 	  {
@@ -131,6 +144,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  }
 	  }
 	  %>
+	  //导出
+	  function print(obj) {
+		  var select1 = $('#form1').find('select[name="select1"]').val();
+		  var select2 = $('#form1').find('select[name="select2"]').val();
+		  $(obj).parents('form').find('input[name="select1"]').val(select1);
+		  $(obj).parents('form').find('input[name="select2"]').val(select2);
+		  $(obj).parents('form').submit();
+	  }
   </script>
+
   </body>
 </html>

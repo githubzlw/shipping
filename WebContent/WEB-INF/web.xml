@@ -563,9 +563,31 @@
     <servlet-name>adminUpdate</servlet-name>
     <url-pattern>/adminUpdate</url-pattern>
   </servlet-mapping>
-  
+
   <servlet-mapping>
     <servlet-name>AddProjectAuthServlet</servlet-name>
     <url-pattern>/AddProjectAuthServlet</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SummaryPrintServlet</servlet-name>
+    <servlet-class>com.cynergy.server.SummaryPrintServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SummaryPrintServlet</servlet-name>
+    <url-pattern>/SummaryPrintServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SummaryPrintEveryServlet</servlet-name>
+    <servlet-class>com.cynergy.server.SummaryPrintEveryServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SummaryPrintEveryServlet</servlet-name>
+    <url-pattern>/SummaryPrintEveryServlet</url-pattern>
+  </servlet-mapping>
+
+
 </web-app>

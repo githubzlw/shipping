@@ -24,6 +24,9 @@ public class SummaryVO {
 	private String huodai;
 	private String yunfei;
 
+	private String purno;
+	private String money;
+
 	public int getNum() {
 		return num;
 	}
@@ -192,4 +195,19 @@ public class SummaryVO {
 		this.yunfei = yunfei;
 	}
 
+	public String getPurno() {
+		return purno;
+	}
+
+	public void setPurno(String purno) {
+		this.purno = purno;
+	}
+
+	public String getMoney() {
+		return money;
+	}
+
+	public void setMoney(String money) {
+		this.money = money;
+	}
 }
