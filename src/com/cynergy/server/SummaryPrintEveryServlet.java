@@ -44,7 +44,7 @@ public class SummaryPrintEveryServlet extends HttpServlet {
 			//清空response  
 			response.reset();
 			//设置response的Header  
-			String fileName = "汇总.xls";
+			String fileName = "汇总明细.xls";
 			fileName = URLEncoder.encode(fileName, "utf-8");                                  //这里要用URLEncoder转下才能正确显示中文名称  
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
 			response.addHeader("Content-Length", "" + outFile.length());

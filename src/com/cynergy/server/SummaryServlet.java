@@ -312,7 +312,7 @@ public class SummaryServlet extends HttpServlet {
 			int total = 0;
 			int totalTrue = 0;
 			while (resultSet.next()) {
-				totalTrue++;
+
 				String nonum = resultSet.getString("nonum");
 				int id = resultSet.getInt("id");
 				String saildate = resultSet.getString("saildate");
@@ -368,6 +368,7 @@ public class SummaryServlet extends HttpServlet {
 					String sql2 = "select hscode,itemeng,itemchn,rate,purprice,quantity,trueprice,unitpriceall from items where proId=" + id;
 					ResultSet res = createStatement1.executeQuery(sql2);
 					while (res.next()) {
+						totalTrue++;
 						String trueprice = res.getString("trueprice");
 						if (trueprice == null || trueprice.trim().equals("")) {
 							trueprice = "0";

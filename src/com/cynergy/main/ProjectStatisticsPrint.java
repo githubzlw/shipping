@@ -972,10 +972,10 @@ public class ProjectStatisticsPrint {
 			cell.setCellStyle(lastStyle);
 			cell.setCellValue(list.get(i).getYunfei());
 			cell = row.createCell(21);
-			cell.setCellStyle(lastStyle);
+			cell.setCellStyle(boderStyle);
 			cell.setCellValue(list.get(i).getPurno());
 			cell = row.createCell(22);
-			cell.setCellStyle(lastStyle);
+			cell.setCellStyle(boderStyle);
 			cell.setCellValue(list.get(i).getMoney());
 		}
 
