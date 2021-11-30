@@ -134,14 +134,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  newNameTD16.innerHTML = "<%=request.getAttribute("timesall"+j)%>";
 		  var newNameTD17 = newTR.insertCell(17);
 		  newNameTD17.innerHTML = "<%=request.getAttribute("clientName"+j)%>";
-		  var newNameTD18 = newTR.insertCell(18);
-		  newNameTD18.innerHTML = "<%=request.getAttribute("rate"+j)%>";
-		  var newNameTD19 = newTR.insertCell(19);
-		  newNameTD19.innerHTML = "<%=request.getAttribute("huodai"+j)%>";
-		  var newNameTD20 = newTR.insertCell(20);
-		  newNameTD20.innerHTML = "<%=request.getAttribute("yunfei"+j)%>";
+	  var newNameTD18 = newTR.insertCell(18);
+	  newNameTD18.innerHTML = "<%=request.getAttribute("rate"+j)%>";
+	  var newNameTD19 = newTR.insertCell(19);
+	  newNameTD19.innerHTML = "<%=request.getAttribute("huodai"+j)%>";
+	  var newNameTD20 = newTR.insertCell(20);
+	  newNameTD20.innerHTML = "<%=request.getAttribute("yunfei"+j)%>";
 	  <%
 	  }
+	  }
+	  %>
+
+	  <%
+	  	if(request.getAttribute("year")!=null){
+	  %>
+	  $('#form1').find('select[name="select1"]').val('<%=request.getAttribute("year")%>')
+	  <%
+	  }
+	  %>
+	  <%
+         if(request.getAttribute("month")!=null){
+     %>
+
+	  $('#form1').find('select[name="select2"]').val('<%=request.getAttribute("month")%>')
+	  <%
 	  }
 	  %>
 	  //导出
