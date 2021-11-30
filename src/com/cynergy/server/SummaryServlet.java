@@ -153,15 +153,17 @@ public class SummaryServlet extends HttpServlet {
 					}else{
 						request.setAttribute("yunfei"+total, 0);
 					}
-					request.setAttribute("rate"+total, res.getString("rate"));
-					request.setAttribute("purnoall"+total, purnoall);
-					request.setAttribute("timesall"+total, timesall);
+					request.setAttribute("rate" + total, res.getString("rate"));
+					request.setAttribute("purnoall" + total, purnoall);
+					request.setAttribute("timesall" + total, timesall);
 					total++;
 					yunfeitotal++;
 				}
 			}
 //			System.out.println("total:"+total+";totalTrue:"+totalTrue);
 			request.setAttribute("total", total);
+			request.setAttribute("year", year);
+			request.setAttribute("month", month);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
