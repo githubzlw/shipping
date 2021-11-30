@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cynergy.main.DBHelper;
 import com.cynergy.main.MainSql;
+import com.cynergy.main.SummaryVO;
+import com.cynergy.pojo.ContractFundWrap;
 
 public class SummaryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -167,5 +172,261 @@ public class SummaryServlet extends HttpServlet {
 		out.flush();
 		out.close();
 	}
+
+
+	public List<SummaryVO> getSummaryList(String year, String month){
+		//获取用户权限
+		List<SummaryVO> summaryVOList = new ArrayList<>();
+		String ymString=year+"-"+month;
+		Connection connection = DBHelper.getConnection();
+		try {
+			Statement createStatement = connection.createStatement();
+			Statement createStatement1 = connection.createStatement();
+			Statement createStatement3 = connection.createStatement();
+			String sql="select * from products where saildate like '"+ymString+"%' and date != '' order by date";
+			System.out.println("汇总："+sql);
+			ResultSet resultSet = createStatement.executeQuery(sql);
+			int total=0;
+			int totalTrue=0;
+			while (resultSet.next()) {
+				totalTrue++;
+				String nonum = resultSet.getString("nonum");
+				int id = resultSet.getInt("id");
+				String saildate = resultSet.getString("saildate");
+				String transaction1 = resultSet.getString("transaction1");
+				String transaction2 = resultSet.getString("transaction2");
+				String fromwhere = resultSet.getString("fromwhere");
+				String towhere = resultSet.getString("towhere");
+				String currency = resultSet.getString("currency");
+				if(currency.equals("USD")){
+					currency="$";
+				}
+				if(currency.equals("EUR")){
+					currency="€";
+				}
+				if(currency.equals("GBP")){
+					currency="￡";
+				}
+				if(currency.equals("RMB")){
+					currency="¥";
+				}
+				if(currency.equals("AUD")){
+					currency="$";
+				}
+				String sale = resultSet.getString("sale");
+				String purchase = resultSet.getString("purchase");
+				String clientName = resultSet.getString("clientName");
+				String huodai = resultSet.getString("huodai");
+				String yunfei = resultSet.getString("yunfei");
+				if(yunfei==null||yunfei.trim().equals("")){
+					yunfei="0";
+				}
+				String sql3="select purno,times,totaltimes,money from contract where proId="+id;
+				System.out.println(sql3);
+				String purnoall="";
+				String timesall="";
+//				int moneyall=0;
+				float moneyall=0;
+				int purnoalltotal=0;
+				ResultSet res3 = createStatement3.executeQuery(sql3);
+				while (res3.next()) {
+					purnoall=purnoall+res3.getString("purno")+" ";
+					timesall=timesall+res3.getString("times")+"/"+res3.getString("totaltimes")+"  ";
+					String money = res3.getString("money");
+					if(money!=null){
+						moneyall=moneyall+Float.parseFloat(money);
+					}
+					purnoalltotal++;
+				}
+				if(purnoalltotal>1){
+					purnoall="合  "+purnoall;
+				}
+
+
+				DecimalFormat df=new DecimalFormat(currency+"###,##0.00");
+				DecimalFormat df2=new DecimalFormat("¥###,##0.00");
+				String sql2="select hscode,itemeng,itemchn,rate,purprice,quantity,trueprice,unitpriceall from items where proId="+id;
+				ResultSet res = createStatement1.executeQuery(sql2);
+				while (res.next()) {
+					String trueprice = res.getString("trueprice");
+					if(trueprice==null||trueprice.trim().equals("")){
+						trueprice="0";
+					}
+					double price = Double.parseDouble(trueprice);
+					String unitpriceall = res.getString("unitpriceall");
+
+					if(unitpriceall==null||unitpriceall.trim().equals("")||unitpriceall.trim().equals("null")){
+						unitpriceall="0";
+					}
+					System.out.println(id+"==="+unitpriceall);
+					double unitpriceallss = Double.parseDouble(unitpriceall);
+					String purprice = res.getString("purprice");
+					double purprices=Double.parseDouble(purprice);
+					SummaryVO summaryVO = new SummaryVO();
+					summaryVO.setNum(totalTrue);
+					summaryVO.setNonum(nonum);
+					summaryVO.setSaildate(saildate);
+					summaryVO.setTran2(transaction2);
+					summaryVO.setFromwhere(fromwhere);
+					summaryVO.setTowhere(towhere);
+					summaryVO.setHscode(res.getString("hscode"));
+					summaryVO.setItemeng(res.getString("itemeng"));
+					summaryVO.setItemchn(res.getString("itemchn"));
+					summaryVO.setTran1(transaction1);
+					summaryVO.setTotalmoney(df.format(price));
+					summaryVO.setUnitpriceall(df.format(unitpriceallss));
+					summaryVO.setSale(sale);
+					summaryVO.setPurchase(purchase);
+					summaryVO.setPurnoall(purnoall);
+					summaryVO.setMoneyall(df2.format(purprices));
+					summaryVO.setTimesall(timesall);
+					summaryVO.setClientName(clientName);
+					summaryVO.setRate(res.getString("rate"));
+					summaryVO.setHuodai(huodai);
+					summaryVO.setYunfei(yunfei);
+					summaryVOList.add(summaryVO);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBHelper.returnConnection(connection);
+		}
+		return summaryVOList;
+	}
+
+
+	public List<SummaryVO> getSummaryEveryList(String year, String month) {
+		//获取用户权限
+		List<SummaryVO> summaryVOList = new ArrayList<>();
+		String ymString = year + "-" + month;
+		Connection connection = DBHelper.getConnection();
+		try {
+			Statement createStatement = connection.createStatement();
+			Statement createStatement1 = connection.createStatement();
+			Statement createStatement3 = connection.createStatement();
+			String sql = "select * from products where saildate like '" + ymString + "%' and date != '' order by date";
+			System.out.println("汇总：" + sql);
+			ResultSet resultSet = createStatement.executeQuery(sql);
+			int total = 0;
+			int totalTrue = 0;
+			while (resultSet.next()) {
+
+				String nonum = resultSet.getString("nonum");
+				int id = resultSet.getInt("id");
+				String saildate = resultSet.getString("saildate");
+				String transaction1 = resultSet.getString("transaction1");
+				String transaction2 = resultSet.getString("transaction2");
+				String fromwhere = resultSet.getString("fromwhere");
+				String towhere = resultSet.getString("towhere");
+				String currency = resultSet.getString("currency");
+				if (currency.equals("USD")) {
+					currency = "$";
+				}
+				if (currency.equals("EUR")) {
+					currency = "€";
+				}
+				if (currency.equals("GBP")) {
+					currency = "￡";
+				}
+				if (currency.equals("RMB")) {
+					currency = "¥";
+				}
+				if (currency.equals("AUD")) {
+					currency = "$";
+				}
+				String sale = resultSet.getString("sale");
+				String purchase = resultSet.getString("purchase");
+				String clientName = resultSet.getString("clientName");
+				String huodai = resultSet.getString("huodai");
+				String yunfei = resultSet.getString("yunfei");
+				if (yunfei == null || yunfei.trim().equals("")) {
+					yunfei = "0";
+				}
+				List<SummaryVO> summaryVOList1 = new ArrayList<>();
+				String sql3 = "select purno,times,totaltimes,money from contract where proId=" + id;
+				System.out.println(sql3);
+				String purnoall = "";
+				String timesall = "";
+//				int moneyall=0;
+				float moneyall = 0;
+				int purnoalltotal = 0;
+				ResultSet res3 = createStatement3.executeQuery(sql3);
+
+				while (res3.next()) {
+					purnoall = purnoall + res3.getString("purno") + " ";
+					timesall = timesall + res3.getString("times") + "/" + res3.getString("totaltimes") + "  ";
+					String money = res3.getString("money");
+					/*if(money!=null){
+						moneyall=moneyall+Float.parseFloat(money);
+					}*/
+					purnoalltotal++;
+
+					DecimalFormat df = new DecimalFormat(currency + "###,##0.00");
+					DecimalFormat df2 = new DecimalFormat("¥###,##0.00");
+					String sql2 = "select hscode,itemeng,itemchn,rate,purprice,quantity,trueprice,unitpriceall from items where proId=" + id;
+					ResultSet res = createStatement1.executeQuery(sql2);
+					while (res.next()) {
+						totalTrue++;
+						String trueprice = res.getString("trueprice");
+						if (trueprice == null || trueprice.trim().equals("")) {
+							trueprice = "0";
+						}
+						double price = Double.parseDouble(trueprice);
+						String unitpriceall = res.getString("unitpriceall");
+
+						if (unitpriceall == null || unitpriceall.trim().equals("") || unitpriceall.trim().equals("null")) {
+							unitpriceall = "0";
+						}
+						System.out.println(id + "===" + unitpriceall);
+						double unitpriceallss = Double.parseDouble(unitpriceall);
+						String purprice = res.getString("purprice");
+						double purprices = Double.parseDouble(purprice);
+						SummaryVO summaryVO = new SummaryVO();
+						summaryVO.setNum(totalTrue);
+						summaryVO.setNonum(nonum);
+						summaryVO.setSaildate(saildate);
+						summaryVO.setTran2(transaction2);
+						summaryVO.setFromwhere(fromwhere);
+						summaryVO.setTowhere(towhere);
+						summaryVO.setHscode(res.getString("hscode"));
+						summaryVO.setItemeng(res.getString("itemeng"));
+						summaryVO.setItemchn(res.getString("itemchn"));
+						summaryVO.setTran1(transaction1);
+						summaryVO.setTotalmoney(df.format(price));
+						summaryVO.setUnitpriceall(df.format(unitpriceallss));
+						summaryVO.setSale(sale);
+						summaryVO.setPurchase(purchase);
+						//summaryVO.setPurnoall(purnoall);
+						summaryVO.setMoneyall(df2.format(purprices));
+						summaryVO.setTimesall(timesall);
+						summaryVO.setClientName(clientName);
+						summaryVO.setRate(res.getString("rate"));
+						summaryVO.setHuodai(huodai);
+						summaryVO.setYunfei(yunfei);
+						summaryVO.setMoney(money);
+						summaryVO.setPurno(res3.getString("purno"));
+						summaryVOList1.add(summaryVO);
+					}
+				}
+				if (purnoalltotal > 1) {
+					purnoall = "合  " + purnoall;
+				}
+				for (SummaryVO summaryVO : summaryVOList1) {
+					summaryVO.setPurnoall(purnoall);
+				}
+				summaryVOList.addAll(summaryVOList1);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBHelper.returnConnection(connection);
+		}
+		return summaryVOList;
+	}
+
 
 }
