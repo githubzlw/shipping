@@ -108,6 +108,7 @@ public class InfoServlet extends HttpServlet {
 				request.setAttribute("excelPath", (res1.getString("excel_path") == null ? "" : res1.getString("excel_path")));
 				request.setAttribute("exportPlace", (res1.getString("export_place") == null ? "" : res1.getString("export_place")));
 				request.setAttribute("orderStatus", (res1.getInt("order_status")));
+				request.setAttribute("ladingReminder", Integer.valueOf(res1.getInt("lading_reminder")));
 			}
 			String sql2;
 			if(Integer.parseInt(auth.toString()) == 1){

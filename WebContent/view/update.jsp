@@ -1016,7 +1016,7 @@
 			    <td width="50px"  style="word-wrap:break-word;" >实际报关总价(会计填)(格式：100000.00)</td>
 			    <td width="50px">HS Code (物流填)</td>
 			    <td width="50px">退税率 (物流填 *%)</td>
-				<td width="50px">可以开该品名的工厂列表</td>
+<%--				<td width="50px">可以开该品名的工厂列表</td>--%>
 <%--				<td>合同</td>--%>
 
 			</tr>
@@ -1036,18 +1036,19 @@
 				<td><input size="10" type="text" name="nw${sdex.index+1}" class="cnw n_weight" value="${item.nw}" class="cnw"/></td>
 				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="csourceDestination sourceDestination"/></td>
 				<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="ctrueprice true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
-                    <br><span class="green-font">换汇比5：${item.hbFive}</span><br>
-					<span class="green-font">换汇比7：${item.hbSenven}</span>
+<%--                    <br><span class="green-font">换汇比5：${item.hbFive}</span><br>--%>
+<%--					<span class="green-font">换汇比7：${item.hbSenven}</span>--%>
 				</td>
 				<td><input size="20" type="text" name="hscode${sdex.index+1}" value="${item.hscode}" class="chscode"/></td>
 				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}" class="crate"/>
 					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}" class="citemid"/>
 				</td>
-					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>
+<%--					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>--%>
 <%--					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>--%>
 			<tr>
 			</c:forEach>
-			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">
+<%--			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">--%>
+				<c:forEach  begin="1" step="1" end="12" varStatus="sdex">
 			<tr class="item-tr-parent${itemsSize+sdex.index} citem-tr-parent">
 				<td><input size="10" type="text"  class="citemeng" name="itemeng${itemsSize+sdex.index}" value=""/></td>
 				<td><input size="10" type="text"  class="citemchn" name="itemchn${itemsSize+sdex.index}" value=""  onblur="checkProductName(this)"/></td>
@@ -1056,8 +1057,8 @@
 				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="cpurprice export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td><input size="10" type="text"  class="cunitprice" name="unitprice${itemsSize+sdex.index}" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td><input size="10" type="text" name="unitpriceall${itemsSize+sdex.index}" class="cunitpriceall unit-price-all" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-			<td></td>
-			<td></td>
+<%--			<td></td>--%>
+<%--			<td></td>--%>
 			<td><input size="10" type="text" name="shopingmark${itemsSize+sdex.index}" value="" class="cshopingmark"/></td>
 				<td><input size="10" type="text" name="nw${itemsSize+sdex.index}" class="cnw n_weight" value=""/></td>
 				<td><input size="10" type="text" name="sourceDestination${itemsSize+sdex.index}" value="" class="csourceDestination sourceDestination"/></td>
@@ -1068,8 +1069,8 @@
 				<td><input size="20" type="text" name="hscode${itemsSize+sdex.index}" value="" class="chscode"/></td>
 				<td><input size="10" type="text" name="rate${itemsSize+sdex.index}" value="" class="crate"/>
 					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value="" class="citemid"/>
-				</td>
-			<td></td>
+<%--				</td>--%>
+<%--			<td></td>--%>
 <%--			<td></td>--%>
 			<tr>
 			</c:forEach>

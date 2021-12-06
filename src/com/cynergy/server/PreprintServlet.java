@@ -76,6 +76,7 @@ public class PreprintServlet extends HttpServlet {
 				request.setAttribute("casketType", res1.getString("casket_type"));
 				request.setAttribute("companyName", res1.getString("company_name"));
 				request.setAttribute("exportPlace", res1.getString("export_place"));
+				request.setAttribute("ladingReminder", Integer.valueOf(res1.getInt("lading_reminder")));
 			}
 			String sql2="select * from items where proId ="+id;
 			ResultSet res2 = createStatement.executeQuery(sql2);
