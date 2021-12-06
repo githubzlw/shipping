@@ -1047,8 +1047,7 @@
 <%--					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>--%>
 			<tr>
 			</c:forEach>
-<%--			<c:forEach  begin="1" step="1" end="${30-itemsSize}" varStatus="sdex">--%>
-				<c:forEach  begin="1" step="1" end="12" varStatus="sdex">
+			<c:forEach  begin="1" step="1" end="${13-itemsSize}" varStatus="sdex">
 			<tr class="item-tr-parent${itemsSize+sdex.index} citem-tr-parent">
 				<td><input size="10" type="text"  class="citemeng" name="itemeng${itemsSize+sdex.index}" value=""/></td>
 				<td><input size="10" type="text"  class="citemchn" name="itemchn${itemsSize+sdex.index}" value=""  onblur="checkProductName(this)"/></td>
