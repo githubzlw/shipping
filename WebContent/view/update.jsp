@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="java.util.*"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -1017,8 +1018,10 @@
 			    <td width="50px"  style="word-wrap:break-word;" >实际报关总价(会计填)(格式：100000.00)</td>
 			    <td width="50px">HS Code (物流填)</td>
 			    <td width="50px">退税率 (物流填 *%)</td>
+				<td width="80px">建议报关额(<=6.5)</td>
 <%--				<td width="50px">可以开该品名的工厂列表</td>--%>
 <%--				<td>合同</td>--%>
+
 
 			</tr>
 			<c:forEach items="${items}" var="item" varStatus="sdex">
@@ -1045,6 +1048,7 @@
 				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}" class="crate"/>
 					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}" class="citemid"/>
 				</td>
+					<td><input size="20" type="text" name="tj${sdex.index+1}"  value="<fmt:formatNumber type='number' value='${item.purprice/(1.13*6.5) }' maxFractionDigits='0' /> "  /> </td>
 <%--					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>--%>
 <%--					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>--%>
 			<tr>
@@ -1070,6 +1074,7 @@
 				<td><input size="20" type="text" name="hscode${itemsSize+sdex.index}" value="" class="chscode"/></td>
 				<td><input size="10" type="text" name="rate${itemsSize+sdex.index}" value="" class="crate"/>
 					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value="" class="citemid"/>
+			<td><input size="20" type="text" name="tj${itemsSize+sdex.index}" value=""/></td>
 <%--				</td>--%>
 <%--			<td></td>--%>
 <%--			<td></td>--%>
