@@ -654,6 +654,7 @@
 		 	    		 var purchasePrice = $(this).val();
 		 	    		 var rate = 0.0;
 		 	    		 if(purchasePrice){
+
 		 	    			purchasePrice = Number(purchasePrice);
 		 	    			rate = purchasePrice/totalPurchasePrice;
 		 	    			addAmount = Number(a*purchasePrice/totalPurchasePrice).toFixed(2);
@@ -1027,16 +1028,17 @@
 				<td><input size="10" type="text" class="cquantity" name="quantity${sdex.index+1}" value="${item.quantity}"/></td>
 				<td><select name="unit${sdex.index+1}" style="width: 99%;" class="cunit" >
 					<option <c:if test="${item.unit == '个'}">selected</c:if>>个</option><option <c:if test="${item.unit == '件'}">selected</c:if>>件</option><option <c:if test="${item.unit == '套'}">selected</c:if>>套</option><option <c:if test="${item.unit == '台'}">selected</c:if>>台</option></select></td>
-				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1 cpurprice" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" field="${item.purprice}" type="text" name="purprice${sdex.index+1}" class="export-cn1" value="${item.purprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td><input size="10" type="text" class="cunitprice" name="unitprice${sdex.index+1}" value="${item.unitprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td><input size="10" type="text" name="unitpriceall${sdex.index+1}" class="unit-price-all cunitpriceall" value="${item.unitpriceall}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitpriceall${sdex.index+1}" class="unit-price-all" value="${item.unitpriceall}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 <%--				<td>${item.orderActualMoney}</td>--%>
 <%--				<td>${item.orderAmountReceived}</td>--%>
 				<td><input size="10" type="text" name="shopingmark${sdex.index+1}" value="${item.shopingmark}" class="cshopingmark"/></td>
 				<td><input size="10" type="text" name="nw${sdex.index+1}" class="cnw n_weight" value="${item.nw}" class="cnw"/></td>
 				<td><input size="10" type="text" name="sourceDestination${sdex.index+1}" value="${item.sourceDestination==null?"":item.sourceDestination}" class="csourceDestination sourceDestination"/></td>
-				<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="ctrueprice true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
-<%--                    <br><span class="green-font">换汇比5：${item.hbFive}</span><br>--%>
+					<td><input size="10" type="text" name="trueprice${sdex.index+1}" class="true-price" value="${item.trueprice}" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
+						<input type="hidden"value="${item.itemid}"/><%--
+<br><span class="green-font">换汇比5：${item.hbFive}</span><br>--%>
 <%--					<span class="green-font">换汇比7：${item.hbSenven}</span>--%>
 				</td>
 				<td><input size="20" type="text" name="hscode${sdex.index+1}" value="${item.hscode}" class="chscode"/></td>
@@ -1053,15 +1055,15 @@
 				<td><input size="10" type="text"  class="citemchn" name="itemchn${itemsSize+sdex.index}" value=""  onblur="checkProductName(this)"/></td>
 				<td><input size="10" type="text"  class="cquantity" name="quantity${itemsSize+sdex.index}" value=""/></td>
 				<td><select name="unit${itemsSize+sdex.index}"  class="cunit" style="width: 99%;"><option>个</option><option>件</option><option >套</option><option>台</option></select></td>
-				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="cpurprice export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" field="" type="text" name="purprice${itemsSize+sdex.index}" class="export-cn1" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 				<td><input size="10" type="text"  class="cunitprice" name="unitprice${itemsSize+sdex.index}" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
-				<td><input size="10" type="text" name="unitpriceall${itemsSize+sdex.index}" class="cunitpriceall unit-price-all" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+				<td><input size="10" type="text" name="unitpriceall${itemsSize+sdex.index}" class="unit-price-all" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
 <%--			<td></td>--%>
 <%--			<td></td>--%>
 			<td><input size="10" type="text" name="shopingmark${itemsSize+sdex.index}" value="" class="cshopingmark"/></td>
 				<td><input size="10" type="text" name="nw${itemsSize+sdex.index}" class="cnw n_weight" value=""/></td>
 				<td><input size="10" type="text" name="sourceDestination${itemsSize+sdex.index}" value="" class="csourceDestination sourceDestination"/></td>
-				<td><input size="10" type="text" name="trueprice${itemsSize+sdex.index}" class="ctrueprice true-price" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
+				<td><input size="10" type="text" name="trueprice${itemsSize+sdex.index}" class="true-price" value="" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')" <c:if test="${sessionScope.auth != 1}">readonly</c:if>/>
 				<%--	<p class="green-font">换汇比5：<span class="hb5" ></span></p>
 					<p class="green-font">换汇比7：<span class="hb7" ></span></p>--%>
 				</td>
