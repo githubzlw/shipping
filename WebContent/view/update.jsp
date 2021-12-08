@@ -619,7 +619,7 @@
 	    			   }
 	    		   }   	    		   
 	    	  })
-	    	  $('#table1').find('tr:last').find('td:last').find('input:first').val('');
+	    	  //$('#table1').find('tr:last').find('td:last').find('input:first').val('');20211208
 	    	  $('#totalSize').val(index);
 	       }
 	    

@@ -311,6 +311,11 @@ public class UpdateServlet extends HttpServlet {
 				Integer isExtraInvoice = null;
 				String isExtraInvoiceStr = request.getParameter("isExtraInvoice" + j);
 				if (isExtraInvoiceStr != null)
+				    //20211208 start
+				    if("true".equals(isExtraInvoiceStr)){
+                        isExtraInvoiceStr="1";
+                    }
+                    //20211208 end
 					isExtraInvoice = Integer.valueOf(Integer.parseInt(isExtraInvoiceStr));
 				if (conids != null && !"".equals(conids)) {
 					int conid = Integer.parseInt(conids);
