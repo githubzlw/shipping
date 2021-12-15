@@ -27,7 +27,7 @@
   		</tr>
   		<tr>
   			<td>银行编号</td>
-  			<td>044094-860016005008093001</td>
+  			<td>454659256117</td>
   			<td>外运公司编号</td>
   			<td colspan="2"></td>
   		</tr>
@@ -35,7 +35,7 @@
   			<td rowspan="3">经营单位<br/>(SHIPPER)</td>
   			<td rowspan="3" colspan="2">上海凯融信息科技有限公司<br/>Shanghai CS Manufacturing Co.</td>
   			<td colspan="5">合同（合约）号: <%=request.getAttribute("purnoall") %></td>
-  		</tr>
+  		</tr>BANK NAME：
   		<tr>
   			<td>开证日期</td>
   			<td></td>

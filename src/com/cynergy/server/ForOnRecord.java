@@ -52,8 +52,10 @@ public class ForOnRecord extends HttpServlet {
 			String sailDateTime="";
 			while (resultSet.next()) {
 				String currency = resultSet.getString("currency");
+//				request.setAttribute("clientName", resultSet
+//						.getString("clientName"));
 				request.setAttribute("clientName", resultSet
-						.getString("clientName"));
+						.getString("address"));
 				request.setAttribute("fromwhere", resultSet
 						.getString("fromwhere"));
 				request.setAttribute("towhere", resultSet.getString("towhere"));
