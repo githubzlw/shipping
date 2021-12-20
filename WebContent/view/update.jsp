@@ -126,7 +126,7 @@
 		        	var tl = $('#div_list').find('p').length;
 		        	var li = tl;
 		        	if((adminName.toUpperCase() == '施姐808' || adminName.toUpperCase() == 'MANDY' 
-		        		  || adminName.toUpperCase() == 'ROSELI'||adminName.toUpperCase() == 'FUN' 
+		        		  || adminName.toUpperCase() == 'BELLA'||adminName.toUpperCase() == 'FUN'
 		        		  || adminName.toUpperCase() == 'CANDY') && orderStatus1!=2){
 		        	$('.order-id').each(function(){
 		        		 var orderId = $(this).val();
@@ -135,7 +135,6 @@
 		        		 orderId = $.trim(orderId);
 		        		 //获取录入目的
 		        		 var isExtraInvoice = $(this).parents('tr').find('input[type="radio"]:checked').val();
-		        		 
 		        		 //判断是否存在该合同
 		        		 var isContract = false;
 		        		
@@ -144,16 +143,18 @@
 //		        			projectNo = projectNo.replace("SHS","");
 		        			if(projectNo.indexOf(orderId) != -1){
 		        				isContract = true;
+
 		        			}
 		        			if(projectNo.indexOf("未确认") != -1){
 		        				isShipment = false;
 		        			}
-		        			
-		        		 }	
-	        			 if(isExtraInvoice == 1){
+		        		 }
+	        			 // if(isExtraInvoice == 1 ){ 20211220
+						if(isExtraInvoice == 1 || isExtraInvoice){
 		        			isContract = true;
 		        		 }
 		        		 if(!isContract){
+
 		        			isShipingFlag = false;
 		        		 }		        		 		        		 
 		        	})
@@ -177,9 +178,9 @@
     				var exchange = 0.0;
     				if(currency == 'USD'){
     					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-    					if(exchange > 7){
-    						alert('当前汇率比已大于7');  
-    					}
+    					// if(exchange > 7){
+    					// 	alert('当前汇率比已大于7');
+    					// }
     					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 7){
     						showNotice('退税后汇率比大于7，请验算',2000);  
@@ -189,9 +190,9 @@
     				}
     				if(currency == 'GBP'){
     					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-    					if(exchange > 9){
-    						alert('当前汇率比已大于9',2000);  
-    					}
+    					// if(exchange > 9){
+    					// 	alert('当前汇率比已大于9',2000);
+    					// }
     					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 9){
     						showNotice('退税后汇率比大于9，请验算',2000);  
@@ -201,9 +202,9 @@
     				}
     				if(currency == 'EUR'){
     					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-    					if(exchange > 8){
-    						alert('当前汇率比已大于8');  
-    					}
+    					// if(exchange > 8){
+    					// 	alert('当前汇率比已大于8');
+    					// }
     					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 8){
     						showNotice('退税后汇率比大于8，请验算',2000);  
@@ -213,9 +214,9 @@
     				}
     				if(currency == 'AUD'){
     					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-    					if(exchange > 5.5){
-    						alert('当前汇率比已大于5.5'); 
-    					}
+    					// if(exchange > 5.5){
+						// 	alert('当前汇率比已大于5.5');
+						// }
     					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 5.5){
     						showNotice('退税后汇率比大于5.5，请验算',2000); 
@@ -277,7 +278,7 @@
  	    			if(adminName.toUpperCase() == "MANDY"){
  	    				id=1
  	    			}
- 	    			if(adminName.toUpperCase() == "ROSELI"){
+ 	    			if(adminName.toUpperCase() == "BELLA"){
  	    				id=1
  	    			}
  	    			
@@ -301,9 +302,9 @@
 			    				}
 			    				if(currency == 'GBP'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-			    					if(exchange > 9){
-			    						alert('当前汇率比已大于9');
-			    					}
+			    					// if(exchange > 9){
+			    					// 	alert('当前汇率比已大于9');
+			    					// }
 			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 9){
 			    						showNotice('退税后汇率比大于9，请验算',2000);
@@ -313,9 +314,9 @@
 			    				}
 			    				if(currency == 'EUR'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-			    					if(exchange > 8){
-			    						alert('当前汇率比已大于8');
-			    					}
+			    					// if(exchange > 8){
+			    					// 	alert('当前汇率比已大于8');
+			    					// }
 			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 8){
 			    						showNotice('退税后汇率比大于8，请验算',2000);
@@ -325,9 +326,9 @@
 			    				}
 			    				if(currency == 'AUD'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
-			    					if(exchange > 5.5){
-			    						alert('当前汇率比已大于5.5');
-			    					}
+			    					// if(exchange > 5.5){
+			    					// 	alert('当前汇率比已大于5.5');
+			    					// }
 			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 5.5){
 			    						showNotice('退税后汇率比大于5.5，请验算',2000);
