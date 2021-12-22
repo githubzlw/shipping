@@ -539,6 +539,22 @@
 		 });
 
 	 }
+
+	 // 判断输入金额是否大于剩余金额
+	 function checkAndShowUp(obj) {
+		 var tempVal = $(obj).val().replace(/[^\d\.]/g,'')
+		 var balance = $(obj).parent().find('span').text();
+		 if(balance && Number(balance) > 0){
+		 	if(Number(balance) < Number(tempVal)){
+		 		alert("输入的金额大于剩余金额：" + balance);
+				$(obj).val(0);
+		 		return false;
+			}
+		 }else{
+			 $(obj).val(tempVal);
+		 }
+	 }
+
 	    
 	  //根据合同号获取出货，工厂信息
 	    function getDetailByProjectId(obj,status){
@@ -571,9 +587,10 @@
 	   				
 	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(0)').text(dataObj.times == 0 ? '还未出货' : '已出货'+dataObj.times+'次');
 	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(1)').text('合同总金额:'+dataObj.totalPrice);
-	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(2)').text('已出货金额:'+dataObj.totalPay);	
-	   				
-	   				
+	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(2)').text('已出货金额:'+dataObj.totalPay);
+					$(obj).parents('tr').find('td:eq(5)').find('span').text(dataObj.balancePrice);
+
+
 	   				if(status == 1){
 		   				$(obj).parents('tr').find('td:eq(1)').find('input').val(dataObj.factoryName);
 						$(obj).parents('tr').find('td:eq(1)').find('input').attr("id","fac-"+purno);
@@ -903,7 +920,7 @@
 
 <%--						</td>--%>
 			   			<td><input type="text" name="totaltimes<%=i+1%>" value="<%=request.getAttribute("totaltimes"+(i+1))%>"/></td>
-			   			<td><input type="text" name="rmb<%=i+1%>" class="export-cn" value="<%=request.getAttribute("rmb"+(i+1))%>" onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+			   			<td><input type="text" name="rmb<%=i+1%>" class="export-cn" value="<%=request.getAttribute("rmb"+(i+1))%>" onkeyup="checkAndShowUp(this)" onblur="checkAndShowUp(this)"/><span class="hd_notice" style="display: none"></span></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
 			   			<td><input type="radio" style="width: auto;" name="isExtraInvoice<%=i+1%>" value="0" 
 			   			    <%
@@ -935,7 +952,7 @@
 			   			<td><input type="text" name="times1"/></td>
 <%--			   			<td></td>--%>
 			   			<td><input type="text" name="totaltimes1"/></td>
-			   			<td><input type="text" name="rmb1" class="export-cn"  onkeyup="value=value.replace(/[^\d\.]/g,'')" onblur="value=value.replace(/[^\d\.]/g,'')"/></td>
+			   			<td><input type="text" name="rmb1" class="export-cn"  onkeyup="checkAndShowUp(this)" onblur="checkAndShowUp(this)"/><span class="hd_notice" style="display: none"></span></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
 			   			<td><input type="radio" style="width: auto;" name="isExtraInvoice1" value="0" />正常<input type="radio" name="isExtraInvoice1" value="1"/>带票</td>  
 			   			<td><input type="hidden" style="width: auto;" name="conid1"/><input type="hidden"/></td>  
