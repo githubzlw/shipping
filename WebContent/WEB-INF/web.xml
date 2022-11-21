@@ -37,6 +37,10 @@
     <servlet-class>com.cynergy.server.CheckProductNameServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>CheckPairedServlet</servlet-name>
+    <servlet-class>com.cynergy.server.CheckPairedServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>CheckProjectERPServlet</servlet-name>
     <servlet-class>com.cynergy.server.CheckProjectERPServlet</servlet-class>
   </servlet>
@@ -63,6 +67,41 @@
   <servlet>
     <servlet-name>SummaryServlet</servlet-name>
     <servlet-class>com.cynergy.server.SummaryServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ShipmentPaymentServlet</servlet-name>
+  <servlet-class>com.cynergy.server.ShipmentPaymentServlet</servlet-class>
+</servlet>
+
+    <servlet>
+        <servlet-name>ShipmentPaymentNServlet</servlet-name>
+        <servlet-class>com.cynergy.server.ShipmentPaymentNServlet</servlet-class>
+    </servlet>
+
+  <servlet>
+    <servlet-name>ShipmentCaseServlet</servlet-name>
+    <servlet-class>com.cynergy.server.ShipmentCaseServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ShipmentPaymentReParidServlet</servlet-name>
+    <servlet-class>com.cynergy.server.ShipmentPaymentReParidServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ShipmentPaymentReParidPrintServlet</servlet-name>
+    <servlet-class>com.cynergy.server.ShipmentPaymentReParidPrintServlet</servlet-class>
+  </servlet>
+
+
+  <servlet>
+    <servlet-name>ShipmentPaymentReParidNServlet</servlet-name>
+    <servlet-class>com.cynergy.server.ShipmentPaymentReParidNServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ShipmentPairedServlet</servlet-name>
+    <servlet-class>com.cynergy.server.ShipmentPairedServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>UpdateServlet</servlet-name>
@@ -260,6 +299,10 @@
     <url-pattern>/CheckProductNameServlet</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>CheckPairedServlet</servlet-name>
+    <url-pattern>/CheckPairedServlet</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>CheckProjectERPPrintServlet</servlet-name>
@@ -371,6 +414,41 @@
   <servlet-mapping>
     <servlet-name>SummaryServlet</servlet-name>
     <url-pattern>/SummaryServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ShipmentPaymentServlet</servlet-name>
+    <url-pattern>/ShipmentPaymentServlet</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ShipmentPaymentNServlet</servlet-name>
+        <url-pattern>/ShipmentPaymentNServlet</url-pattern>
+    </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ShipmentCaseServlet</servlet-name>
+    <url-pattern>/ShipmentCaseServlet</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet-mapping>
+    <servlet-name>ShipmentPaymentReParidServlet</servlet-name>
+    <url-pattern>/ShipmentPaymentReParidServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ShipmentPaymentReParidPrintServlet</servlet-name>
+    <url-pattern>/ShipmentPaymentReParidPrintServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ShipmentPaymentReParidNServlet</servlet-name>
+    <url-pattern>/ShipmentPaymentReParidNServlet</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet-mapping>
+    <servlet-name>ShipmentPairedServlet</servlet-name>
+    <url-pattern>/ShipmentPairedServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UpdateServlet</servlet-name>

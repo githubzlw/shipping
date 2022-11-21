@@ -171,6 +171,20 @@ public class SaveServlet extends HttpServlet {
 			String excelPath = request.getParameter("fileName");
 			excelPath = excelPath == null ? "" : excelPath;
 
+			//提单说明
+			int ladingReminder1 = 0;
+			String ladingReminder = request.getParameter("ladingReminder");
+			if (ladingReminder != null && !"".equalsIgnoreCase(ladingReminder)){
+				ladingReminder1 = Integer.parseInt(ladingReminder);
+			}
+
+			//品牌
+			Integer brandInfo = Integer.valueOf(0);
+			if (StringUtils.isNotBlank(request.getParameter("brandInfo"))){
+				brandInfo = Integer.valueOf(Integer.parseInt(request.getParameter("brandInfo")));
+			}
+
+
 			//报关状态（预保存 0：正式保存：1）
 			Integer orderStatus = 0;
 			if(StringUtils.isNotBlank(request.getParameter("orderStatus"))){
@@ -185,8 +199,8 @@ public class SaveServlet extends HttpServlet {
 			String format2 = format.format(date2);
 			String ss="insert into products(purchase,sale,clientName,hopeDate,estimateDate,totalGW," +
 					"totalNW,detailed,frieght,nonum,date,address,transaction1,transaction2,volume," +
-					"saildate,fromwhere,towhere,package,packagenum,currency,huodai,yunfei,yunfeifs,premium,timeDate,adminName,waixiaotime,attr_source,pallet_dimension,casket_size,casket_quantity,casket_type,freight_info,company_name,excel_path,export_place,order_status) " +
-					"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+					"saildate,fromwhere,towhere,package,packagenum,currency,huodai,yunfei,yunfeifs,premium,timeDate,adminName,waixiaotime,attr_source,pallet_dimension,casket_size,casket_quantity,casket_type,freight_info,company_name,excel_path,export_place,order_status,lading_reminder,brand_info) " +
+					"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement statement = connection.prepareStatement(ss,Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, purchase);
@@ -227,6 +241,8 @@ public class SaveServlet extends HttpServlet {
 			statement.setString(36, excelPath);
 			statement.setString(37, exportPlace);
 			statement.setInt(38, orderStatus);
+			statement.setInt(39, ladingReminder1);
+			statement.setInt(40, brandInfo);
 			System.out.println("插入商品语句："+ss);
 			statement.executeUpdate();
 

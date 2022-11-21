@@ -58,8 +58,10 @@ public class InfoServlet extends HttpServlet {
 		
 		
 		Connection connection = DBHelper.getConnection();
+		Connection connectionErp = DBHelper.getConnectionERP();
 		try {
 			Statement createStatement = connection.createStatement();
+			Statement createStatementErp = connectionErp.createStatement();
 			String sql1;
 			if(Integer.parseInt(auth.toString()) == 1){
 				sql1="select * from products where id ="+id;
@@ -109,6 +111,44 @@ public class InfoServlet extends HttpServlet {
 				request.setAttribute("exportPlace", (res1.getString("export_place") == null ? "" : res1.getString("export_place")));
 				request.setAttribute("orderStatus", (res1.getInt("order_status")));
 				request.setAttribute("ladingReminder", Integer.valueOf(res1.getInt("lading_reminder")));
+                request.setAttribute("brandInfo", Integer.valueOf(res1.getInt("brand_info")));
+
+				//20220801 add start
+				//银行到账用的是“代理”的情况下，报关文件需要 有双抬头
+				//代理名
+				String agentName ="";
+				//代理公司名
+				String agentCpName ="";
+				String clientName = res1.getString("clientName");
+				if(StringUtils.isNotBlank(clientName)){
+					Statement createStatement1 = connection.createStatement();
+					String shSql2 ="select agent_name,agent_cp_name from shipment_object where customer_name='"+clientName+"' and agent_status=2";
+					ResultSet resSh2 = createStatement1.executeQuery(shSql2);
+					while (resSh2.next()) {
+						agentName = resSh2.getString("agent_name");
+						agentCpName = resSh2.getString("agent_cp_name");
+
+					}
+				}
+//				request.setAttribute("agentName",agentName);
+//				request.setAttribute("agentCpName",agentCpName);
+
+				// 20220905 代理处理 start
+				if(StringUtils.isNotBlank(agentCpName)){
+					String strAddS = res1.getString("address");
+					strAddS = strAddS.substring(0,strAddS.indexOf("\r\n"));
+					strAddS = strAddS+"/"+agentName;
+					String strAddE = res1.getString("address");
+					strAddE = strAddE.substring(strAddE.indexOf("\r\n"));
+
+					request.setAttribute("address", strAddS+strAddE);
+				}
+				// 20220905 代理处理 end
+
+
+
+				//20220801 add end
+
 			}
 			String sql2;
 			if(Integer.parseInt(auth.toString()) == 1){
@@ -189,6 +229,25 @@ public class InfoServlet extends HttpServlet {
 				if(!lstCase.contains(no)){
 					lstCase.add(no);
 				}
+
+				//20220801 add start
+				//每个合同后面再显示一下 该合同是否有收到发票
+				String invNo = res3.getString("purno");
+				invNo = invNo.replace("合", "INV");
+				String shSql1 ="select count(1) as cn  from  invoiceinfo where iinvno= '"+invNo +"' and iurl is not null";
+				ResultSet resSh1 = createStatementErp.executeQuery(shSql1);
+				while (resSh1.next()) {
+					int cn = resSh1.getInt("cn");
+					if(cn>0){
+						request.setAttribute("invoicepdf"+totalpro3, "是");
+					}else{
+						request.setAttribute("invoicepdf"+totalpro3, "否");
+					}
+
+				}
+				//20220801 add end
+
+
 			}
 
 			Map<String, CaseFund> contractMoney = invoiceInfoMapper.getContractMoney(lstCase);
@@ -283,6 +342,8 @@ public class InfoServlet extends HttpServlet {
 			e.printStackTrace();
 		}finally {
  			DBHelper.returnConnection(connection);
+			DBHelper.returnConnection(connectionErp);
+
  		}
 		out.flush();
 		out.close();

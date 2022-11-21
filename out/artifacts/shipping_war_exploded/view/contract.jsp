@@ -85,7 +85,7 @@
    			<td><strong>Title/Description</strong></td>
    			<td><strong>UM</strong></td>
    			<td><strong>Quantity</strong></td>
-   			<td><strong>Unit Price(USD/PC)</strong></td>
+   			<td><strong>Unit Price(<%=request.getAttribute("currency")%>/PC)</strong></td>
    			<td><strong>Total Price</strong></td>
    		</tr>
    		
@@ -131,11 +131,12 @@
   	<strong>Delivery Term</strong><br/>
   	<strong>Lead Time</strong>&nbsp&nbsp P15 days finish mass production after receiving your payment.<br/>
   	<strong>Bank Account Information</strong><br/>
-  	BANK NAME：Shanghai Sourcing Ltd.<br/>
+	ACCOUNT NAME/Beneficiary：Shanghai Sourcing Ltd.<br/>
   	Bank Address: 	NO.431 FU ZHOU ROAD,SHANGHAI CHINA<br/>
   	SWIFT CODE: 	BKCHCNBJ300<br/>
-ACCOUNT NO. : 	044094-8600-16005008093014<br/>
-COMPANY ADDRESS: 	NO.188 MIDDLE FUJIAN ROAD,SUITE 1407,SHANGHAI， 200001<br/>
+ACCOUNT NO. : 	454659256117<br/>
+COMPANY ADDRESS: 	Room 605,6 floor,Building No.1,Hui Yin Ming Zun,<br/>
+No.609 East Yun Ling Road,Putuo district,Shanghai City,China.200062<br/>
 Intermediary Bank Name(for US Customers)：Bank of China, New York Branch<br/>
 Intermediary Bank ABA Routing#: 026003269<br/>
 Note: 	1. Be sure to spell our name correctly. (e.g., Sourcing not souring, Shanghai not shangai)<br/>

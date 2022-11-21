@@ -122,12 +122,24 @@
 	 	    	var id = $('#proId').val();
 	    		var isShipingFlag = true;
 	    		 var isShipment = true;
+			     var isContractFlag=false;
+
+				//发票总额
+				var sumColInput=0;
+				//报关金额总额
+				var sumTruePrice=0
+				var currencyFlag ="";
+
 		        if(id > 18061){
 		        	var tl = $('#div_list').find('p').length;
-		        	var li = tl;
+
+					var li = tl;
 		        	if((adminName.toUpperCase() == '施姐808' || adminName.toUpperCase() == 'MANDY' 
 		        		  || adminName.toUpperCase() == 'BELLA'||adminName.toUpperCase() == 'FUN'
-		        		  || adminName.toUpperCase() == 'CANDY') && orderStatus1!=2){
+		        		  || adminName.toUpperCase() == 'CANDY'|| adminName.toUpperCase() == 'lucia') && orderStatus1!=2){
+
+
+
 		        	$('.order-id').each(function(){
 		        		 var orderId = $(this).val();
 		        		 var reg = new RegExp("[a-zA-Z]","g");
@@ -137,9 +149,8 @@
 		        		 var isExtraInvoice = $(this).parents('tr').find('input[type="radio"]:checked').val();
 		        		 //判断是否存在该合同
 		        		 var isContract = false;
-		        		
 		        		 for(var i=0;i<li;i++){
-		        			var projectNo = $('#div_list').find('p').eq(i).find('a').text(); 
+		        			var projectNo = $('#div_list').find('p').eq(i).find('a').text();
 //		        			projectNo = projectNo.replace("SHS","");
 		        			if(projectNo.indexOf(orderId) != -1){
 		        				isContract = true;
@@ -149,31 +160,43 @@
 		        				isShipment = false;
 		        			}
 		        		 }
+
+		        		 // alert(isExtraInvoice);
 	        			 // if(isExtraInvoice == 1 ){ 20211220
-						if(isExtraInvoice == 1 || isExtraInvoice){
-		        			isContract = true;
-		        		 }
+						// if(isExtraInvoice == 1 || isExtraInvoice){
+		        		// 	isContract = true;
+						// 	isContractFlag= false;
+		        		//  }
+
+						if(isExtraInvoice == 0){
+							isContract = true;
+							isContractFlag= true;
+						}
 		        		 if(!isContract){
 
 		        			isShipingFlag = false;
 		        		 }		        		 		        		 
 		        	})
 		        	}
-		        	
-		        	if(!isShipingFlag){
-		        		showNotice('请录入每个合同准予电子出货单号',4000);
-		        		return false;
-		        	}	        	
+
+					if(tl==0 && isContractFlag){
+						showNotice('请录入每个合同准予电子出货单号',4000);
+						return false;
+					}
+
+		        	// if(!isShipingFlag){
+		        	// 	showNotice('请录入每个合同准予电子出货单号',4000);
+		        	// 	return false;
+		        	// }
 		        	if(!isShipment){
 		        		showNotice('请处理准予电子出货确认单',4000);
 		        		return false;
 		        	}
-    	 if(adminName.toUpperCase() == 'FUN' || adminName.toUpperCase() == 'CANDY'){ 		 
+    	 if(adminName.toUpperCase() == 'FUN' || adminName.toUpperCase() == 'CANDY'){
   	    	$('.true-price').each(function(){
  	    		if(!($(this).val() == null || $(this).val() == '' || $(this).val() == undefined || $(this).val() == 0)){
  	    			var truePrice = $(this).val();
  	    			var colInput = $(this).parents('tr').find('.export-cn1').val();
- 	    			
  	    			var currency = $('#select_currency').val();
     				var exchange = 0.0;
     				if(currency == 'USD'){
@@ -183,7 +206,7 @@
     					// }
     					exchange = Number(exchange/1.13).toFixed(2);
     					if(exchange > 7){
-    						showNotice('退税后汇率比大于7，请验算',2000);  
+    						showNotice('退税后汇率比大于7，请验算',2000);
     						exchangeFlag = false;
     						return false;
     					}			    					
@@ -223,16 +246,78 @@
     						exchangeFlag = false;
     						return false;
     					}			  
-    				}	    				
- 	    			
+    				}
+
+					sumColInput += Number(colInput);
+					sumTruePrice += Number(truePrice);
+					currencyFlag = currency;
  	    		}
  	    	})
- 	    	//验证汇率是否在范围中
- 	    	if(!exchangeFlag){
- 	    		return false;
- 	    	}
+
+
+    	 //2022整个单子的 换汇比 （要求<7） 换汇比=发票总额/报关金额总额  start
+			 if(sumTruePrice!=0){
+				 var exchange = 0.0;
+				 if(currencyFlag == 'USD'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 7){
+					 // 	alert('当前汇率比已大于7');
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 7){
+						 showNotice('退税后汇率比大于7，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+				 if(currencyFlag == 'GBP'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 9){
+					 // 	alert('当前汇率比已大于9',2000);
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 9){
+						 showNotice('退税后汇率比大于9，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+				 if(currencyFlag == 'EUR'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 8){
+					 // 	alert('当前汇率比已大于8');
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 8){
+						 showNotice('退税后汇率比大于8，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+				 if(currencyFlag == 'AUD'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 5.5){
+					 // 	alert('当前汇率比已大于5.5');
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 5.5){
+						 showNotice('退税后汇率比大于5.5，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+			 }
+			//2022整个单子的 换汇比 （要求<7） 换汇比=发票总额/报关金额总额  end
+
+			 //验证汇率是否在范围中
+			 if(!exchangeFlag){
+				 return false;
+			 }
     		  $('#order_form').submit();
+
     	 }else{
+
+
     		 //报关单需要客户公司名称
  	    	if(!$('#company_name').val()){
  	    		showNotice('请输入客户公司名称',2000); 
@@ -267,22 +352,26 @@
  	    	if(Number(totalExportPrice).toFixed(2) != Number(totalPurchasePrice).toFixed(2)){
  	    		showNotice('出口人民币和采购总价不一致！',2000); 
  	    		return false;
- 	    	}	 
- 	    	
- 	    	$('.true-price').each(function(){
+ 	    	}
+
+			 var userid=0;
+			 $('.true-price').each(function(){
  	    		if(!($(this).val() == null || $(this).val() == '' || $(this).val() == undefined || $(this).val() == 0)){
- 	    			var id=0;
+ 	    			// var id=0;
  	    			if(adminName.toUpperCase() == "施姐808"){
- 	    				id=1
+						userid=1
  	    			}
  	    			if(adminName.toUpperCase() == "MANDY"){
- 	    				id=1
+						userid=1
  	    			}
  	    			if(adminName.toUpperCase() == "BELLA"){
- 	    				id=1
+						userid=1
  	    			}
+                    if(adminName.toUpperCase() == "lucia"){
+                        userid=1
+                    }
  	    			
-	 	    		    if(id==1){
+	 	    		    if(userid==1){
 	 	    	   			    var truePrice = $(this).val();
 	 	 	    			    var colInput = $(this).parents('tr').find('.export-cn1').val();
 		 	    			    var currency = $('#select_currency').val();
@@ -291,14 +380,14 @@
 			    				if(currency == 'USD'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
 			    					//if(exchange > 7){
-			    					//	alert('当前汇率比已大于7'); 
+			    					//	alert('当前汇率比已大于7');
 			    					//}
 			    					exchange = Number(exchange/1.13).toFixed(2);
 			    					if(exchange > 7){
 			    						showNotice('退税后汇率比大于7，请验算',2000);
 			    						exchangeFlag = false;
 			    						return false;
-			    					}			    					
+			    					}
 			    				}
 			    				if(currency == 'GBP'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
@@ -310,7 +399,7 @@
 			    						showNotice('退税后汇率比大于9，请验算',2000);
 			    						exchangeFlag = false;
 			    						return false;
-			    					}			  
+			    					}
 			    				}
 			    				if(currency == 'EUR'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
@@ -322,7 +411,7 @@
 			    						showNotice('退税后汇率比大于8，请验算',2000);
 			    						exchangeFlag = false;
 			    						return false;
-			    					}			  
+			    					}
 			    				}
 			    				if(currency == 'AUD'){
 			    					exchange = Number(colInput)/Number(truePrice).toFixed(2);
@@ -334,8 +423,12 @@
 			    						showNotice('退税后汇率比大于5.5，请验算',2000);
 			    						exchangeFlag = false;
 			    						return false;
-			    					}			  
-			    				}	    				
+			    					}
+			    				}
+
+							sumColInput += Number(colInput);
+							sumTruePrice += Number(truePrice);
+							currencyFlag = currency;
 	 	    		   }else{
 	 	    			    var truePrice = $(this).val();
 	 	 	    			var colInput = $(this).parents('tr').find('.export-cn1').val();
@@ -347,6 +440,61 @@
 	 	    		   }
  	    		}
  	    	})
+
+			 //2022整个单子的 换汇比 （要求<7） 换汇比=发票总额/报关金额总额  start
+			 if(userid==1 && sumTruePrice!=0){
+				 var exchange = 0.0;
+				 if(currencyFlag == 'USD'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 7){
+					 // 	alert('当前汇率比已大于7');
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 7){
+						 showNotice('退税后汇率比大于7，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+				 if(currencyFlag == 'GBP'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 9){
+					 // 	alert('当前汇率比已大于9',2000);
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 9){
+						 showNotice('退税后汇率比大于9，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+				 if(currencyFlag == 'EUR'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 8){
+					 // 	alert('当前汇率比已大于8');
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 8){
+						 showNotice('退税后汇率比大于8，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+				 if(currencyFlag == 'AUD'){
+					 exchange = Number(sumColInput)/Number(sumTruePrice).toFixed(2);
+					 // if(exchange > 5.5){
+					 // 	alert('当前汇率比已大于5.5');
+					 // }
+					 exchange = Number(exchange/1.13).toFixed(2);
+					 if(exchange > 5.5){
+						 showNotice('退税后汇率比大于5.5，请验算',2000);
+						 exchangeFlag = false;
+						 return false;
+					 }
+				 }
+			 }
+			 //2022整个单子的 换汇比 （要求<7） 换汇比=发票总额/报关金额总额  end
+
 
      	//验算毛重是否大于净重
      	var totalGW = $('#totalGW').val();
@@ -374,10 +522,13 @@
 
  	    //验算清关总价是否等于数量*单价
  	    var flag = true;
+     	//各个品种清关金额总和
+     	var sumUnitpriceall=0;
  	    $('.unit-price-all').each(function(){	
  	    	  var priceAll = $(this).val(); 
  	    	  var quantity = $(this).parent().parent().find('input').eq(2).val();
  	    	  var unitPrice = $(this).parent().parent().find('input').eq(4).val();
+			  var unitpriceall = $(this).parent().parent().find('input').eq(5).val();
  	    	  var calPrice = priceAll / quantity;
  	    	  if(isNaN(calPrice) || calPrice == "" || calPrice == undefined){
  	    		  if(unitPrice != ''){
@@ -391,12 +542,51 @@
  			    		flag = false;
  			    		return false;
  			    	}	 	    
- 	    	  }    	  	  
+ 	    	  }
+
+ 	    	  // 20220720 add start
+			if(isNaN(unitpriceall) || unitpriceall == "" || unitpriceall == undefined){
+
+			}else{
+				sumUnitpriceall += Number(unitpriceall);
+			}
+			// 20220720 add end
  	      })
  	        if(!(flag)){
  	        	return false;	
  	        }
- 	    
+
+     		//20220720 add start
+			 var resultNum =0;
+				$.ajax({
+				 type : "post",
+				 async: false,
+				 datatype : "json",
+				 url : "CheckPairedServlet",
+				 data : {
+					 "proId" : id,
+					 "bsFlag" : 1
+				 },
+				 success : function(result) {
+					 var dataObj = eval("("+result+")");
+
+					     //总配对的银行到账
+						 var pdSumPaired = dataObj.isContains;
+						 var reNum = sumUnitpriceall-pdSumPaired;
+						 resultNum = Math.abs(reNum);
+
+				 },
+				 error : function() {
+
+				 }
+			 });
+			 //在提交的时候，如果 各个品种金额之和 与 总配对的银行到账差 100元，就提醒使用者 20220822
+			 // if (sumUnitpriceall>0 && resultNum > 100) {
+				//  showNotice('各个品种金额之和与总配对的银行到账差100元以上',2000);
+				//  return false;
+			 // }
+ 	        //20220720 add end 20220822
+
  		  //当输入起运和到港时间同步到CRM系统
  	    	var saildate = $('#saildate').val();
  	    	var arriveDate = $('#arriveDate').val();
@@ -541,15 +731,28 @@
 	 }
 
 	 // 判断输入金额是否大于剩余金额
-	 function checkAndShowUp(obj) {
+	 function checkAndShowUp(obj,obj1) {
 		 var tempVal = $(obj).val().replace(/[^\d\.]/g,'')
-		 var balance = $(obj).parent().find('span').text();
+		 // var balance = $(obj).parent().find('span').text();
+         var balance = $(obj).parent().find('span:eq(0)').text();
+         var tempH = $(obj).parent().find('span:eq(1)').text();
+
 		 if(balance && Number(balance) > 0){
-		 	if(Number(balance) < Number(tempVal)){
-		 		alert("输入的金额大于剩余金额：" + balance);
-				$(obj).val(0);
-		 		return false;
-			}
+		     if(!tempH){
+                 if(Number(balance) < Number(tempVal)){
+					 alert("输入的金额大于剩余金额：" + balance);
+                     $(obj).val(0);
+                     return false;
+                 }
+             }else{
+                 if(Number(balance) < Number(tempVal)-Number(obj1)){
+                     // alert("输入的金额大于剩余金额：" + balance);
+                     alert("大于剩余金额");
+                     $(obj).val(0);
+                     return false;
+                 }
+             }
+
 		 }else{
 			 $(obj).val(tempVal);
 		 }
@@ -588,7 +791,9 @@
 	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(0)').text(dataObj.times == 0 ? '还未出货' : '已出货'+dataObj.times+'次');
 	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(1)').text('合同总金额:'+dataObj.totalPrice);
 	   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(2)').text('已出货金额:'+dataObj.totalPay);
-					$(obj).parents('tr').find('td:eq(5)').find('span').text(dataObj.balancePrice);
+					// $(obj).parents('tr').find('td:eq(5)').find('span').text(dataObj.balancePrice);
+                    $(obj).parents('tr').find('td:eq(5)').find('span:eq(0)').text(dataObj.balancePrice);
+                    $(obj).parents('tr').find('td:eq(5)').find('span:eq(1)').text($(obj).parents('tr').find('td:eq(5)').find('input').val());
 
 
 	   				if(status == 1){
@@ -600,7 +805,7 @@
 // 	   					}
 // 	   					$(obj).parents('tr').find('td:eq(4)').find('input').val(dataObj.totaltimes == '0' ? 1 : dataObj.totaltimes);
 // 	   					$(obj).parents('tr').find('td:eq(5)').find('input').val(dataObj.balancePrice);
-	   					
+
 		   				$(obj).parents('tr').find('td:eq(6)').find('span:eq(3)').text('未出货金额:'+dataObj.balancePrice);
 		   				//如果已出货完成给予提醒
 		   				if(dataObj.balancePrice == 0){
@@ -621,7 +826,7 @@
 	    //合同输入table新增一行
 	       function addTr(){    	   
 	    	  $('#table1').append($('#table1').find('tr:last').clone());
-	    	  $('#table1').find('tr:last').find('td:eq(6)').find('span').text('');	    	  
+	    	  $('#table1').find('tr:last').find('td:eq(6)').find('span').text('');
 	    	  var index = $('#table1').find('tr').length-1;
 	    	  $('#table1').find('tr:last').find('input').each(function(){	    	 		 
 	    		   var name = $(this).attr('name');
@@ -881,9 +1086,13 @@
 		   	<br/>
 		   	</c:if>
 		   	<c:if test="${attrSource == 0}">
-		   	收货人地址(用&ltbr&gt换行)：<textarea name="address" cols="45" rows="5"><%=request.getAttribute("address")%></textarea>
+		   	收货人地址(用&ltbr&gt换行)：<textarea name="address" cols="45" rows="5"><%=request.getAttribute("address")%> </textarea>
 		   	<br/>
 		   	</c:if>
+
+<%--			  代理客户名：<input name="agentName" type="text" value="<%=request.getAttribute("agentName")%>"/>--%>
+<%--			  代理客户公司名称：<input style="width: 294px;" name="agentCpName" id="agentCpName" type="text" value="<%=request.getAttribute("agentCpName")%>"/>--%>
+
 		   	</td>
 	  </tr>
 	</table>
@@ -898,6 +1107,7 @@
 	   			<td>本次出口人民币金额(格式：100000.00)</td>
 	   			<td>参考数据</td>
 	   			<td>录入目的</td>
+				<td>是否有收到发票</td>
 <%--	   			<td>该工厂未开票金额</td>--%>
 	   		</tr>
 	   			
@@ -920,7 +1130,7 @@
 
 <%--						</td>--%>
 			   			<td><input type="text" name="totaltimes<%=i+1%>" value="<%=request.getAttribute("totaltimes"+(i+1))%>"/></td>
-			   			<td><input type="text" name="rmb<%=i+1%>" class="export-cn" value="<%=request.getAttribute("rmb"+(i+1))%>" onkeyup="checkAndShowUp(this)" onblur="checkAndShowUp(this)"/><span class="hd_notice" style="display: none"></span></td>
+			   			<td><input type="text" name="rmb<%=i+1%>" class="export-cn" value="<%=request.getAttribute("rmb"+(i+1))%>" onkeyup="checkAndShowUp(this,<%=request.getAttribute("rmb"+(i+1))%>)" onblur="checkAndShowUp(this,<%=request.getAttribute("rmb"+(i+1))%>)"/><span class="hd_notice" style="display: none"></span><span class="hd_notice" style="display: none"></span></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
 			   			<td><input type="radio" style="width: auto;" name="isExtraInvoice<%=i+1%>" value="0" 
 			   			    <%
@@ -940,6 +1150,8 @@
 			   			    />带票</td>  
 <%--			   			<td><a  target="_blank" href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=allDetailedAccounts&className=InvoiceServlet&factoryName=<%=request.getAttribute("factory"+(i+1))%>&num=0&saleName=">未开票</a>--%>
 							<input type="hidden" name="conid<%=i+1%>" value="<%=request.getAttribute("conid"+(i+1))%>"/><input type="hidden"/></td>
+
+						 <td><%=request.getAttribute("invoicepdf"+(i+1))%><input type="hidden"/></td>
 	   			     </tr>
 	   			    <% 	  
 	   			      }
@@ -952,10 +1164,11 @@
 			   			<td><input type="text" name="times1"/></td>
 <%--			   			<td></td>--%>
 			   			<td><input type="text" name="totaltimes1"/></td>
-			   			<td><input type="text" name="rmb1" class="export-cn"  onkeyup="checkAndShowUp(this)" onblur="checkAndShowUp(this)"/><span class="hd_notice" style="display: none"></span></td>
+			   			<td><input type="text" name="rmb1" class="export-cn"  onkeyup="checkAndShowUp(this,0)" onblur="checkAndShowUp(this,0)"/><span class="hd_notice" style="display: none"></span><span class="hd_notice" style="display: none"></span></td>
 			   			<td style="color:#1605f3"><span style="padding-right: 5px;"></span><span></span><br><span></span><span></span></td>
 			   			<td><input type="radio" style="width: auto;" name="isExtraInvoice1" value="0" />正常<input type="radio" name="isExtraInvoice1" value="1"/>带票</td>  
-			   			<td><input type="hidden" style="width: auto;" name="conid1"/><input type="hidden"/></td>  
+			   			<td><input type="hidden" style="width: auto;" name="conid1"/><input type="hidden"/></td>
+<%--						<td></td>--%>
 	   			     </tr>
    					<% 	
    					}
@@ -1017,6 +1230,16 @@
       <input type="radio" id="ladingReminder" name="ladingReminder" value="1">电放提单(或者SWB)
       <input type="radio" id="ladingReminder" name="ladingReminder" value="2">等通知电放 </strong>
       </div>
+
+	   <div >
+		   <strong><span>品牌:</span>
+			   <c:if test="${brandInfo==1 }">无品牌</c:if>
+			   <c:if test="${brandInfo==2 }">有品牌</c:if>
+			   <input type="radio" id="brandInfo"  name="brandInfo" value="1">无品牌
+			   <input type="radio" id="brandInfo" name="brandInfo" value="2">有品牌</strong>
+	   </div>
+
+
       <div class="line_01"></div>
 	   	<br/>
 	   	<table border="1" id="item_table" style="table-layout:fixed;">
@@ -1027,16 +1250,22 @@
 			    <td width="80px" >数量单位</td>
 			    <td width="50px"  style="word-wrap:break-word;" ><strong>采购价 总价(只填数字 单位:RMB)(格式：100000.00)</strong></td>
 			    <td width="40px"  style="word-wrap:break-word;" >Unit Price(对外销售单价)</td>
-			    <td width="50px"  style="word-wrap:break-word;" >(客户)清关总价(格式：100000.00)</td>
+			    <td width="50px"  style="word-wrap:break-word;" >(客户)实际产品总价(格式：100000.00)</br>
+					<a href='ShipmentPaymentNServlet?bsFlag=1&proId=<%=request.getAttribute("id")%>' target='showframe'>跟单配对</a>
+				</td>
 <%--			    <td width="50px"  style="word-wrap:break-word;" >客户订单的实际金额(项目级)</td>--%>
 <%--			    <td width="50px"  style="word-wrap:break-word;" >客户实际到账金额(项目级)</td>--%>
 			    <td width="50px">Shipping Mark</td>
 			    <td width="50px"><p>N.W.(请只填数字 单位:kg)</p></td>
 			    <td width="50px"  style="word-wrap:break-word;" >境内货源地</td>
-			    <td width="50px"  style="word-wrap:break-word;" >实际报关总价(会计填)(格式：100000.00)</td>
+			    <td width="50px"  style="word-wrap:break-word;" >报关总价(会计填)(格式：100000.00)</br>
+					<a href='ShipmentPaymentNServlet?bsFlag=2&proId=<%=request.getAttribute("id")%>' target='showframe'>财务配对</a>
+                </td>
 			    <td width="50px">HS Code (物流填)</td>
 			    <td width="50px">退税率 (物流填 *%)</td>
-				<td width="80px">建议报关额(<=6.5)</td>
+<%--				<td width="80px">建议最小报关额(<=6.5)</td>--%>
+<%--				<td width="80px">换汇比 （要求<7）</td>--%>
+
 <%--				<td width="50px">可以开该品名的工厂列表</td>--%>
 <%--				<td>合同</td>--%>
 
@@ -1066,7 +1295,8 @@
 				<td><input size="10" type="text" name="rate${sdex.index+1}" value="${item.rate}" class="crate"/>
 					<input size="10" type="hidden" name="itemid${sdex.index+1}" value="${item.itemid}" class="citemid"/>
 				</td>
-					<td><input size="20" type="text" name="tj${sdex.index+1}"  value="<fmt:formatNumber type='number' value='${item.purprice/(1.13*6.5) }' maxFractionDigits='0' /> "  /> </td>
+<%--					<td><input size="20" type="text" name="tj${sdex.index+1}"  value="<fmt:formatNumber type='number' value='${item.purprice/(1.13*6.5) }' maxFractionDigits='0' /> "  /> </td>--%>
+<%--					<td><input size="20" type="text" name="tj${sdex.index+1}"  value="<fmt:formatNumber type='number' value='${item.unitpriceall/trueprice }' maxFractionDigits='0' /> "  /> </td>--%>
 <%--					<td><a href="http://117.144.21.74:33169/ERP-NBEmail/helpServlet?action=factoryNameByInvoiceName&className=InvoiceServlet&invoiceName=${item.itemchn}" target="_blank">工厂列表</a></td>--%>
 <%--					<td><input type="button" onclick="addcontract(this)" value="关联合同"></td>--%>
 			<tr>
@@ -1092,7 +1322,7 @@
 				<td><input size="20" type="text" name="hscode${itemsSize+sdex.index}" value="" class="chscode"/></td>
 				<td><input size="10" type="text" name="rate${itemsSize+sdex.index}" value="" class="crate"/>
 					<input size="10" type="hidden" name="itemid${itemsSize+sdex.index}" value="" class="citemid"/>
-			<td><input size="20" type="text" name="tj${itemsSize+sdex.index}" value=""/></td>
+<%--			<td><input size="20" type="text" name="tj${itemsSize+sdex.index}" value=""/></td>--%>
 <%--				</td>--%>
 <%--			<td></td>--%>
 <%--			<td></td>--%>
@@ -1152,6 +1382,25 @@
 		                radioss[j].setAttribute('checked','checked');
 		            }
 		        }
+
+				var checkedssl='<%=request.getAttribute("ladingReminder")%>';
+				var radiossl = document.getElementsByName('ladingReminder');
+				var lensl = radiossl.length;
+				for(var k=0;k<lensl;k++){
+					if(checkedssl==radiossl[k].value){
+						radiossl[k].setAttribute('checked','checked');
+					}
+				}
+
+				var checkedssl='<%=request.getAttribute("brandInfo")%>';
+				var radiossl = document.getElementsByName('brandInfo');
+				var lensl = radiossl.length;
+				for(var k=0;k<lensl;k++){
+					if(checkedssl==radiossl[k].value){
+						radiossl[k].setAttribute('checked','checked');
+					}
+				}
+
 		        var checkedfs='<%=request.getAttribute("yunfeifs")%>';
 		        var radiofs = document.getElementsByName('yunfeifs');
 		        var lenfs = radiofs.length;

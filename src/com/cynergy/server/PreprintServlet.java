@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import com.cynergy.main.DBHelper;
 import com.cynergy.main.MainSql;
+import org.apache.commons.lang.StringUtils;
 
 public class PreprintServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -77,6 +78,31 @@ public class PreprintServlet extends HttpServlet {
 				request.setAttribute("companyName", res1.getString("company_name"));
 				request.setAttribute("exportPlace", res1.getString("export_place"));
 				request.setAttribute("ladingReminder", Integer.valueOf(res1.getInt("lading_reminder")));
+
+				//20220919 add start
+				//银行到账用的是“代理”的情况下，报关文件需要 有双抬头
+				//代理名
+				String agentName ="";
+				//代理公司名
+				String agentCpName ="";
+				String clientName = res1.getString("clientName");
+				if(StringUtils.isNotBlank(clientName)){
+					Statement createStatement1 = connection.createStatement();
+					String shSql2 ="select agent_name,agent_cp_name from shipment_object where customer_name='"+clientName+"' and agent_status=2";
+					ResultSet resSh2 = createStatement1.executeQuery(shSql2);
+					while (resSh2.next()) {
+						agentName = resSh2.getString("agent_name");
+						agentCpName = resSh2.getString("agent_cp_name");
+
+					}
+				}
+				if(StringUtils.isNotBlank(agentName)){
+					String companyNameS = res1.getString("company_name");
+					request.setAttribute("companyName", companyNameS+"/"+agentName);
+				}
+
+				// 20220919 代理处理 end
+
 			}
 			String sql2="select * from items where proId ="+id;
 			ResultSet res2 = createStatement.executeQuery(sql2);

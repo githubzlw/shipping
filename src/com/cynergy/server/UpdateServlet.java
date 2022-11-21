@@ -216,15 +216,18 @@ public class UpdateServlet extends HttpServlet {
 			String ladingReminder = request.getParameter("ladingReminder");
 			if (ladingReminder != null && !"".equalsIgnoreCase(ladingReminder))
 				ladingReminder1 = Integer.valueOf(Integer.parseInt(ladingReminder));
-			List<ReadExcelVO> contents = null;
+            Integer brandInfo = Integer.valueOf(0);
+            if (StringUtils.isNotBlank(request.getParameter("brandInfo")))
+                brandInfo = Integer.valueOf(Integer.parseInt(request.getParameter("brandInfo")));
+            List<ReadExcelVO> contents = null;
 			String sql1 = "";
 			if (StringUtils.isNotBlank(excelPath)) {
-				sql1 = "update products set purchase=?,sale=?,clientName=?,hopeDate=?,estimateDate=?,totalGW=?,totalNW=?,detailed=?,frieght=?,nonum=?,date=?,address=?,transaction1=?,transaction2=?,volume=?,saildate=?,fromwhere=?,towhere=?,package=?,packagenum=?,currency=?,huodai=?,yunfei=?,yunfeifs=?,premium=?,waixiaotime=?,arrive_date=?,pallet_dimension=?,casket_size=?,casket_quantity=?,casket_type=?,freight_info=?,company_name=?,export_place=?,order_status=?,excel_path=?";
+				sql1 = "update products set purchase=?,sale=?,clientName=?,hopeDate=?,estimateDate=?,totalGW=?,totalNW=?,detailed=?,frieght=?,nonum=?,date=?,address=?,transaction1=?,transaction2=?,volume=?,saildate=?,fromwhere=?,towhere=?,package=?,packagenum=?,currency=?,huodai=?,yunfei=?,yunfeifs=?,premium=?,waixiaotime=?,arrive_date=?,pallet_dimension=?,casket_size=?,casket_quantity=?,casket_type=?,freight_info=?,company_name=?,export_place=?,order_status=?,brand_info=?,excel_path=?";
 				if (ladingReminder != null && !"".equalsIgnoreCase(ladingReminder))
 					sql1 = String.valueOf(sql1) + " ,lading_reminder=?";
 				sql1 = String.valueOf(sql1) + " where id=?";
 			} else {
-				sql1 = "update products set purchase=?,sale=?,clientName=?,hopeDate=?,estimateDate=?,totalGW=?,totalNW=?,detailed=?,frieght=?,nonum=?,date=?,address=?,transaction1=?,transaction2=?,volume=?,saildate=?,fromwhere=?,towhere=?,package=?,packagenum=?,currency=?,huodai=?,yunfei=?,yunfeifs=?,premium=?,waixiaotime=?,arrive_date=?,pallet_dimension=?,casket_size=?,casket_quantity=?,casket_type=?,freight_info=?,company_name=?,export_place=?,order_status=? ";
+				sql1 = "update products set purchase=?,sale=?,clientName=?,hopeDate=?,estimateDate=?,totalGW=?,totalNW=?,detailed=?,frieght=?,nonum=?,date=?,address=?,transaction1=?,transaction2=?,volume=?,saildate=?,fromwhere=?,towhere=?,package=?,packagenum=?,currency=?,huodai=?,yunfei=?,yunfeifs=?,premium=?,waixiaotime=?,arrive_date=?,pallet_dimension=?,casket_size=?,casket_quantity=?,casket_type=?,freight_info=?,company_name=?,export_place=?,order_status=?,brand_info=? ";
 				if (ladingReminder != null && !"".equalsIgnoreCase(ladingReminder))
 					sql1 = String.valueOf(sql1) + " ,lading_reminder=?";
 				sql1 = String.valueOf(sql1) + " where id=?";
@@ -265,19 +268,20 @@ public class UpdateServlet extends HttpServlet {
 			statement.setString(33, companyName);
 			statement.setString(34, exportPlace);
 			statement.setInt(35, orderStatus.intValue());
+			statement.setInt(36, brandInfo.intValue());
 			if (StringUtils.isNotBlank(excelPath)) {
-				statement.setString(36, excelPath);
+				statement.setString(37, excelPath);
 				if (ladingReminder != null && !"".equalsIgnoreCase(ladingReminder)) {
-					statement.setInt(37, ladingReminder1.intValue());
-					statement.setInt(38, id);
+					statement.setInt(38, ladingReminder1.intValue());
+					statement.setInt(39, id);
 				} else {
-					statement.setInt(37, id);
+					statement.setInt(38, id);
 				}
 			} else if (ladingReminder != null && !"".equalsIgnoreCase(ladingReminder)) {
-				statement.setInt(36, ladingReminder1.intValue());
-				statement.setInt(37, id);
+				statement.setInt(37, ladingReminder1.intValue());
+				statement.setInt(38, id);
 			} else {
-				statement.setInt(36, id);
+				statement.setInt(37, id);
 			}
 			System.out.println("修改语句："+sql1);
 					statement.executeUpdate();

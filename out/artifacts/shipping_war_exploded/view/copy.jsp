@@ -72,7 +72,12 @@ $(function(){
 	    	if(!$('input:radio[name="ladingReminder"]:checked').val()){
 	    		alert("请选择提单说明");
 				return false;
-	    	}	    	
+	    	}
+			//品牌
+			if(!$('input:radio[name="brandInfo"]:checked').val()){
+				alert("请选择品牌");
+				return false;
+			}
 	    	//验证是否已经上传合同	
 	        var haveBargain = true;
 	    	var purno = "";
@@ -583,11 +588,18 @@ $(function(){
 	   	<br/>
 			<div >
       <strong><span>提单说明:</span>
-      
+
       <input type="radio" id="ladingReminder"  name="ladingReminder" value="0">正本提单
       <input type="radio" id="ladingReminder" name="ladingReminder" value="1">电放提单(或者SWB)
       <input type="radio" id="ladingReminder" name="ladingReminder" value="2">等通知电放 </strong>
-      </div>
+			</div>
+
+		<div>
+				<strong><span>品牌:</span>
+					<input type="radio" id="brandInfo"  name="brandInfo" value="1" >无品牌
+					<input type="radio" id="brandInfo" name="brandInfo" value="2">有品牌</strong>
+        </div>
+
       <br/>
 	   	<table border="1">
 	   		<tr>

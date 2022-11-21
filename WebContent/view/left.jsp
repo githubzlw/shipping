@@ -50,11 +50,16 @@
 	  <br/>
 	  <a href="../CheckAll?view=drawbackSummary" target="showframe">退税汇总</a>
 	  <br/>
+<%--	  <a href="../CheckAll?view=shipmentpayment" target="showframe">配对数据</a>--%>
+<%--	  <br/>--%>
 <%--  <a href="../CheckAll?view=drawbackSummarynew" target="showframe">退税汇总2</a>--%>
 <%--	  <br/>--%>
 <%--  <br/>--%>
 <%--  <a href="../CheckProjectERPServlet" target="showframe">今年报关单</a>--%>
 <%--	  <br/>--%>
+	  <a href="../ShipmentCaseServlet" target="showframe">到账出运关联</a>
+	  <br/>
+
 	  <a href="../AdminList" target="showframe">管理用户</a>
 	  <br/>
   		<%
