@@ -54,7 +54,7 @@ public class ShipmentPaymentNServlet extends HttpServlet {
 					"from AccountEntryForm  a  "+
 					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id and b.ifmoney!=0  "+
 					"left join kingdee_info c on a.payersname=c.kingdee_name "+
-                    "INNER  join \t(select   left(replace(purno,'合','SHS'),len(replace(purno,'合','SHS'))-1) as caseno, max(is_extra_invoice) is_extra_invoice from reportform.[dbo].contract where proId=  "+proId +"  "+
+                    "INNER  join (select   left(replace(purno,'合','SHS'),len(replace(purno,'合','SHS'))-1) as caseno, max(is_extra_invoice) is_extra_invoice from reportform.[dbo].contract where proId=  "+proId +"  "+
                     "group by  left(replace(purno,'合','SHS'),len(replace(purno,'合','SHS'))-1)) con  on b.caseno=con.caseno "+
 //					" where b.caseno in ( select  left(replace(purno,'合','SHS'),len(replace(purno,'合','SHS'))-1) as caseno from reportform.[dbo].contract where proId= "+proId +" )   "+
 					"order by  caseno desc, TransactionDate desc ";

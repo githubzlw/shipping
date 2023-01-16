@@ -37,65 +37,65 @@ public class ShipmentCaseServlet extends HttpServlet {
 
 			Statement createStatementErp1 = connectionErp.createStatement();
 
-//			//1）有银行到账 但没关联报关金额的 过去两年
-//			String sqlErp1="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime from AccountEntryForm a " +
-//					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id  and b.ifmoney!=0 "+
+
+//			//1）有银行到账 但没关联报关金额的全部
+//			String sqlErp1A="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime from AccountEntryForm a " +
+//					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id and b.ifmoney!=0  "+
 //					"left join  (select * from reportform.[dbo].contract) cnt   on b.caseno =left(replace(cnt.purno,'合','SHS'),len(replace(cnt.purno,'合','SHS'))-1)    "+
 //					"left join reportform.[dbo].items itm on  cnt.proId=itm.proId  "+
-//					"where a.createTime>'2020-09-01 00:00:00' "+
 //					"group by a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,b.ifmoney,b.financialConfirmationTime  "+
-//					"having max(isnull(itm.trueprice,'0'))='0' and b.caseno is not null  order by a.PayersName ";
-//			ResultSet resErp1 = createStatementErp1.executeQuery(sqlErp1);
-//			List<BankArrival> bankATwoList = new ArrayList<BankArrival>();
+//					"having max(isnull(itm.trueprice,'0'))='0' and b.caseno is not null  ";
+//			ResultSet resErp1A = createStatementErp1.executeQuery(sqlErp1A);
+//			List<BankArrival> bankATwoAList = new ArrayList<BankArrival>();
 //
-//			while (resErp1.next()) {
+//			while (resErp1A.next()) {
 //
 //				BankArrival bankA = new BankArrival();
 //				//银行序号
-//				bankA.setTransactionReferenceNumber(resErp1.getString("TransactionReferenceNumber"));
+//				bankA.setTransactionReferenceNumber(resErp1A.getString("TransactionReferenceNumber"));
 //				//到账总金额
-//				bankA.setTradeAmount(resErp1.getInt("TradeAmount"));
+//				bankA.setTradeAmount(resErp1A.getInt("TradeAmount"));
 //				//项目号
-//				bankA.setCaseNo(resErp1.getString("caseno"));
+//				bankA.setCaseNo(resErp1A.getString("caseno"));
 //				//出运单号
-//				bankA.setProId(resErp1.getInt("proId"));
+//				bankA.setProId(resErp1A.getInt("proId"));
 //				//报关金额
-//				bankA.setDeclarationAmountF(resErp1.getInt("trueprice"));
+//				bankA.setDeclarationAmountF(resErp1A.getInt("trueprice"));
 //				// 认领金额
-//				bankA.setIfmoney(resErp1.getInt("ifmoney"));
+//				bankA.setIfmoney(resErp1A.getInt("ifmoney"));
 //				// 认领日期
-//				bankA.setFinancialConfirmationTime(resErp1.getString("financialConfirmationTime"));
+//				bankA.setFinancialConfirmationTime(resErp1A.getString("financialConfirmationTime"));
 //				//回款人
-//				bankA.setPayersName(resErp1.getString("PayersName"));
+//				bankA.setPayersName(resErp1A.getString("PayersName"));
 //
-//				bankATwoList.add(bankA);
+//				bankATwoAList.add(bankA);
 //
 //			}
-//			request.setAttribute("bankATwoList", bankATwoList);
+//			request.setAttribute("bankATwoAList", bankATwoAList);
 //
-//			//2）有报关金额但没关联银行到账的  过去两年
-//			String sqlErp2="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime   " +
+//			//2）有报关金额但没关联银行到账的  全部
+//			String sqlErp2A="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime   " +
 //					"from   (select * from reportform.[dbo].contract) cnt    "+
 //					"left join PreparatorEntryForm b on b.caseno =left(replace(cnt.purno,'合','SHS'),len(replace(cnt.purno,'合','SHS'))-1)     "+
-//					"left join  AccountEntryForm a  on b.AmountClaimFormId=a.id and b.ifmoney!=0  "+
+//					"left join  AccountEntryForm a  on b.AmountClaimFormId=a.id  and b.ifmoney!=0   "+
 //					"left join reportform.[dbo].items itm on  cnt.proId=itm.proId "+
 //					"group by a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,b.ifmoney,b.financialConfirmationTime "+
-//					"having max(isnull(itm.trueprice,'0'))<>'0' and a.id is null  order by a.PayersName ";
-//			ResultSet resErp2 = createStatementErp1.executeQuery(sqlErp2);
-//			List<BankArrival> bankBTwoList = new ArrayList<BankArrival>();
+//					"having max(isnull(itm.trueprice,'0'))<>'0' and a.id is null  ";
+//			ResultSet resErp2A = createStatementErp1.executeQuery(sqlErp2A);
+//			List<BankArrival> bankBTwoAList = new ArrayList<BankArrival>();
 //
-//			while (resErp2.next()) {
+//			while (resErp2A.next()) {
 //
 //				BankArrival bankA = new BankArrival();
 //				//银行序号
-//				bankA.setTransactionReferenceNumber(resErp2.getString("TransactionReferenceNumber"));
+//				bankA.setTransactionReferenceNumber(resErp2A.getString("TransactionReferenceNumber"));
 //				//到账总金额
-//				bankA.setTradeAmount(resErp2.getInt("TradeAmount"));
+//				bankA.setTradeAmount(resErp2A.getInt("TradeAmount"));
 //				//项目号
-//				bankA.setCaseNo(resErp2.getString("caseno"));
+//				bankA.setCaseNo(resErp2A.getString("caseno"));
 //				//出运单号
-//				bankA.setProId(resErp2.getInt("proId"));
-//				String truepriceStr = resErp2.getString("trueprice");
+//				bankA.setProId(resErp2A.getInt("proId"));
+//				String truepriceStr = resErp2A.getString("trueprice");
 //				if(truepriceStr.indexOf(".")>-1){
 //					truepriceStr = truepriceStr.substring(0,truepriceStr.indexOf("."));
 //				}
@@ -105,159 +105,32 @@ public class ShipmentCaseServlet extends HttpServlet {
 //				//报关金额
 //				bankA.setDeclarationAmountF(Integer.valueOf(truepriceStr));
 //				// 认领金额
-//				bankA.setIfmoney(resErp2.getInt("ifmoney"));
+//				bankA.setIfmoney(resErp2A.getInt("ifmoney"));
 //				// 认领日期
-//				bankA.setFinancialConfirmationTime(resErp2.getString("financialConfirmationTime"));
+//				bankA.setFinancialConfirmationTime(resErp2A.getString("financialConfirmationTime"));
 //				//回款人
-//				bankA.setPayersName(resErp2.getString("PayersName"));
-//				bankBTwoList.add(bankA);
+//				bankA.setPayersName(resErp2A.getString("PayersName"));
+//				bankBTwoAList.add(bankA);
 //
 //			}
-//			request.setAttribute("bankBTwoList", bankBTwoList);
-//
-//			//3）两者关联的  过去两年
-//			String sqlErp3="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime from AccountEntryForm a   " +
-//					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id  and b.ifmoney!=0    "+
-//					"left join  (select * from reportform.[dbo].contract) cnt   on b.caseno =left(replace(cnt.purno,'合','SHS'),len(replace(cnt.purno,'合','SHS'))-1)    "+
-//					"left join reportform.[dbo].items itm on  cnt.proId=itm.proId "+
-//					"where a.createTime>'2020-09-01 00:00:00' "+
-//					"group by a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,b.ifmoney,b.financialConfirmationTime "+
-//					"having max(isnull(itm.trueprice,'0'))<>'0' and b.caseno is not null   order by a.PayersName ";
-//			ResultSet resErp3 = createStatementErp1.executeQuery(sqlErp3);
-//			List<BankArrival> bankWTwoList = new ArrayList<BankArrival>();
-//
-//			while (resErp3.next()) {
-//
-//				BankArrival bankA = new BankArrival();
-//				//银行序号
-//				bankA.setTransactionReferenceNumber(resErp3.getString("TransactionReferenceNumber"));
-//				//到账总金额
-//				bankA.setTradeAmount(resErp3.getInt("TradeAmount"));
-//				//项目号
-//				bankA.setCaseNo(resErp3.getString("caseno"));
-//				//出运单号
-//				bankA.setProId(resErp3.getInt("proId"));
-//				String truepriceStr = resErp3.getString("trueprice");
-//				if(truepriceStr.indexOf(".")>-1){
-//					truepriceStr = truepriceStr.substring(0,truepriceStr.indexOf("."));
-//				}
-//				if(StringUtils.isEmpty(truepriceStr)){
-//					truepriceStr = "0";
-//				}
-//				//报关金额
-//				bankA.setDeclarationAmountF(Integer.valueOf(truepriceStr));
-//				// 认领金额
-//				bankA.setIfmoney(resErp3.getInt("ifmoney"));
-//				// 认领日期
-//				bankA.setFinancialConfirmationTime(resErp3.getString("financialConfirmationTime"));
-//				//回款人
-//				bankA.setPayersName(resErp3.getString("PayersName"));
-//				bankWTwoList.add(bankA);
-//
-//			}
-//			request.setAttribute("bankWTwoList", bankWTwoList);
-
-
-
-			//1）有银行到账 但没关联报关金额的全部
-			String sqlErp1A="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime from AccountEntryForm a " +
-					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id and b.ifmoney!=0  "+
-					"left join  (select * from reportform.[dbo].contract) cnt   on b.caseno =left(replace(cnt.purno,'合','SHS'),len(replace(cnt.purno,'合','SHS'))-1)    "+
-					"left join reportform.[dbo].items itm on  cnt.proId=itm.proId  "+
-					"group by a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,b.ifmoney,b.financialConfirmationTime  "+
-					"having max(isnull(itm.trueprice,'0'))='0' and b.caseno is not null  ";
-			ResultSet resErp1A = createStatementErp1.executeQuery(sqlErp1A);
-			List<BankArrival> bankATwoAList = new ArrayList<BankArrival>();
-
-			while (resErp1A.next()) {
-
-				BankArrival bankA = new BankArrival();
-				//银行序号
-				bankA.setTransactionReferenceNumber(resErp1A.getString("TransactionReferenceNumber"));
-				//到账总金额
-				bankA.setTradeAmount(resErp1A.getInt("TradeAmount"));
-				//项目号
-				bankA.setCaseNo(resErp1A.getString("caseno"));
-				//出运单号
-				bankA.setProId(resErp1A.getInt("proId"));
-				//报关金额
-				bankA.setDeclarationAmountF(resErp1A.getInt("trueprice"));
-				// 认领金额
-				bankA.setIfmoney(resErp1A.getInt("ifmoney"));
-				// 认领日期
-				bankA.setFinancialConfirmationTime(resErp1A.getString("financialConfirmationTime"));
-				//回款人
-				bankA.setPayersName(resErp1A.getString("PayersName"));
-
-				bankATwoAList.add(bankA);
-
-			}
-			request.setAttribute("bankATwoAList", bankATwoAList);
-
-			//2）有报关金额但没关联银行到账的  全部
-			String sqlErp2A="select a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime   " +
-					"from   (select * from reportform.[dbo].contract) cnt    "+
-					"left join PreparatorEntryForm b on b.caseno =left(replace(cnt.purno,'合','SHS'),len(replace(cnt.purno,'合','SHS'))-1)     "+
-					"left join  AccountEntryForm a  on b.AmountClaimFormId=a.id  and b.ifmoney!=0   "+
-					"left join reportform.[dbo].items itm on  cnt.proId=itm.proId "+
-					"group by a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,b.ifmoney,b.financialConfirmationTime "+
-					"having max(isnull(itm.trueprice,'0'))<>'0' and a.id is null  ";
-			ResultSet resErp2A = createStatementErp1.executeQuery(sqlErp2A);
-			List<BankArrival> bankBTwoAList = new ArrayList<BankArrival>();
-
-			while (resErp2A.next()) {
-
-				BankArrival bankA = new BankArrival();
-				//银行序号
-				bankA.setTransactionReferenceNumber(resErp2A.getString("TransactionReferenceNumber"));
-				//到账总金额
-				bankA.setTradeAmount(resErp2A.getInt("TradeAmount"));
-				//项目号
-				bankA.setCaseNo(resErp2A.getString("caseno"));
-				//出运单号
-				bankA.setProId(resErp2A.getInt("proId"));
-				String truepriceStr = resErp2A.getString("trueprice");
-				if(truepriceStr.indexOf(".")>-1){
-					truepriceStr = truepriceStr.substring(0,truepriceStr.indexOf("."));
-				}
-				if(StringUtils.isEmpty(truepriceStr)){
-					truepriceStr = "0";
-				}
-				//报关金额
-				bankA.setDeclarationAmountF(Integer.valueOf(truepriceStr));
-				// 认领金额
-				bankA.setIfmoney(resErp2A.getInt("ifmoney"));
-				// 认领日期
-				bankA.setFinancialConfirmationTime(resErp2A.getString("financialConfirmationTime"));
-				//回款人
-				bankA.setPayersName(resErp2A.getString("PayersName"));
-				bankBTwoAList.add(bankA);
-
-			}
-			request.setAttribute("bankBTwoAList", bankBTwoAList);
+//			request.setAttribute("bankBTwoAList", bankBTwoAList);
 
 			//3）两者关联的  全部
-//			String sqlErp3A="select a.NBEmailId,a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,   " +
-//					" b.caseno,max(isnull(cnt.proId,0)) proId,max(isnull(itm.trueprice,'0')) trueprice,b.ifmoney,b.financialConfirmationTime,b.paired_amount "+
-//					"from AccountEntryForm a    "+
-//					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id   and b.ifmoney!=0   "+
-//					"left join reportform.[dbo].contract cnt   on b.caseno =left(replace(cnt.purno,'合','SHS'),len(replace(cnt.purno,'合','SHS'))-1)      "+
-//					"left join reportform.[dbo].items itm on  cnt.proId=itm.proId     "+
-//					"where  shipping_id!=0 "+
-//					"group by a.TransactionReferenceNumber,a.id,a.TradeAmount,a.BeneficiaryAccountBank,a.PayersName,b.caseno,b.ifmoney,b.financialConfirmationTime,a.NBEmailId,b.paired_amount "+
-//					"having max(isnull(itm.trueprice,'0'))<>'0' and b.caseno is not null  order by a.NBEmailId  ";
+//			String sqlErp3A="select b.shipping_id as proId,sum(b.paired_amount) as paired_amount,sum(b.ifmoney) as ifmoney,max(b.caseno) as caseno,max(b.financialConfirmationTime) as financialConfirmationTime,   " +
+//					" (select sum(cast( (case when itm.trueprice='' then '0'  else itm.trueprice end) as decimal ))  from  reportform.[dbo].items itm where   b.shipping_id=itm.proId ) as trueprice, "+
+//					"max(a.NBEmailId) as NBEmailId,max(a.TransactionReferenceNumber) as TransactionReferenceNumber,max(a.BeneficiaryAccountBank) as BeneficiaryAccountBank,max(a.PayersName) as PayersName ,sum(a.TradeAmount) as TradeAmount,    "+
+//                    "(select sum(ar.uncollected_amount)  from reportform.[dbo].accounts_receivable ar where ar.pro_id=b.shipping_id) as uncollectedAmount "+
+//					"from AccountEntryForm a     "+
+//					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id   and b.ifmoney!=0       "+
+//					"where b.ifmoney!=0   and b.shipping_id!=0 and b.paired_amount !=0     "+
+//					"group by b.shipping_id ";
 
-
-			String sqlErp3A="select b.shipping_id as proId,sum(b.paired_amount) as paired_amount,sum(b.ifmoney) as ifmoney,max(b.caseno) as caseno,max(b.financialConfirmationTime) as financialConfirmationTime,   " +
-					" (select sum(cast( (case when itm.trueprice='' then '0'  else itm.trueprice end) as decimal ))  from  reportform.[dbo].items itm where   b.shipping_id=itm.proId ) as trueprice, "+
-					"max(a.NBEmailId) as NBEmailId,max(a.TransactionReferenceNumber) as TransactionReferenceNumber,max(a.BeneficiaryAccountBank) as BeneficiaryAccountBank,max(a.PayersName) as PayersName ,sum(a.TradeAmount) as TradeAmount,    "+
-//					"((select sum(cast( (case when itm.trueprice='' then '0'  else itm.trueprice end) as decimal ))  from  reportform.[dbo].items itm where   b.shipping_id=itm.proId ) -sum(b.paired_amount)) as chaE "+
-                    "(select sum(ar.uncollected_amount)  from reportform.[dbo].accounts_receivable ar where ar.pro_id=b.shipping_id) as uncollectedAmount "+
-					"from AccountEntryForm a     "+
-					"left join PreparatorEntryForm b on b.AmountClaimFormId=a.id   and b.ifmoney!=0       "+
-					"where b.ifmoney!=0   and b.shipping_id!=0 and b.paired_amount !=0     "+
+			String sqlErp3A="select b.shipping_id as proId,sum(b.paired_amount) as paired_amount,sum(b.ifmoney) as ifmoney,max(b.caseno) as caseno,max(b.update_time) as financialConfirmationTime, "+
+					"(select sum(cast( (case when itm.trueprice='' then '0'  else itm.trueprice end) as decimal ))  from  reportform.[dbo].items itm where   b.shipping_id=itm.proId ) as trueprice,"+
+					"(select sum(ar.uncollected_amount)  from reportform.[dbo].accounts_receivable ar where ar.pro_id=b.shipping_id) as uncollectedAmount  "+
+					"from PreparatorEntryForm b   "+
+					"where b.ifmoney!=0   and b.shipping_id!=0 and b.paired_amount !=0   "+
 					"group by b.shipping_id ";
-
 
 			ResultSet resErp3A = createStatementErp1.executeQuery(sqlErp3A);
 			List<BankArrival> bankWTwoAList = new ArrayList<BankArrival>();
@@ -266,11 +139,11 @@ public class ShipmentCaseServlet extends HttpServlet {
 
 				BankArrival bankA = new BankArrival();
 				//银行序号
-				bankA.setTransactionReferenceNumber(resErp3A.getString("TransactionReferenceNumber"));
+//				bankA.setTransactionReferenceNumber(resErp3A.getString("TransactionReferenceNumber"));
 				//到账总金额
-				bankA.setTradeAmount(resErp3A.getInt("TradeAmount"));
+//				bankA.setTradeAmount(resErp3A.getInt("TradeAmount"));
 				//项目号
-				bankA.setCaseNo(resErp3A.getString("caseno"));
+//				bankA.setCaseNo(resErp3A.getString("caseno"));
 				//出运单号
 				bankA.setProId(resErp3A.getInt("proId"));
 				String truepriceStr = resErp3A.getString("trueprice");
@@ -287,7 +160,7 @@ public class ShipmentCaseServlet extends HttpServlet {
 				// 认领日期
 				bankA.setFinancialConfirmationTime(resErp3A.getString("financialConfirmationTime"));
 				//回款人
-				bankA.setPayersName(resErp3A.getString("PayersName"));
+//				bankA.setPayersName(resErp3A.getString("PayersName"));
 				//已配对金额
 				bankA.setPairedAmount(resErp3A.getInt("paired_amount"));
 				//未收到但本次要出口的金额

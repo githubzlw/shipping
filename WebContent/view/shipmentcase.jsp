@@ -23,117 +23,20 @@
   <body>
 
 
-<%--    <table border="1" id="item_table" style="table-layout:fixed;">--%>
-<%--        <h3>1）有银行到账但没关联报关金额(过去两年)</h3>--%>
-<%--      <tr>--%>
-<%--          <td><Strong>汇款人</Strong></td>--%>
-<%--          <td><Strong>银行流水号</Strong></td>--%>
-<%--          <td><Strong>到账金额</Strong></td>--%>
-<%--          <td><Strong>项目号</Strong></td>--%>
-<%--          <td><Strong>出运单号</Strong></td>--%>
-<%--          <td><Strong>报关金额</Strong></td>--%>
-<%--          <td><Strong>认领金额</Strong></td>--%>
-<%--          <td><Strong>认领日期</Strong></td>--%>
+<table border="1" id="item_table2A" style="table-layout:fixed;">
 
-
-<%--      </tr>--%>
-<%--        <tbody id="t-produce-body">--%>
-<%--              <c:forEach items="${bankATwoList}" var="bankA" varStatus="sdex">--%>
-<%--                  <tr class="citem-tr-parent item-tr-parent${sdex.index}">--%>
-<%--                      <td>${bankA.payersName}</td>--%>
-<%--                      <td>${bankA.transactionReferenceNumber}</td>--%>
-<%--                      <td>${bankA.tradeAmount}</td>--%>
-<%--                      <td>${bankA.caseNo}</td>--%>
-<%--                      <td>${bankA.proId}</td>--%>
-<%--                      <td>${bankA.declarationAmountF}</td>--%>
-<%--                      <td>${bankA.ifmoney}</td>--%>
-<%--                      <td>${bankA.financialConfirmationTime}</td>--%>
-
-<%--                  </tr>--%>
-<%--              </c:forEach>--%>
-<%--        </tbody>--%>
-
-
-
-<%--    </table>--%>
-<%--   <table border="1" id="item_table1" style="table-layout:fixed;">--%>
-
-<%--      <h3>2）有报关金额但没关联银行到账的(过去两年)</h3>--%>
-<%--      <tr>--%>
-<%--          <td><Strong>汇款人</Strong></td>--%>
-<%--          <td><Strong>银行流水号</Strong></td>--%>
-<%--          <td><Strong>到账金额</Strong></td>--%>
-<%--          <td><Strong>项目号</Strong></td>--%>
-<%--          <td><Strong>出运单号</Strong></td>--%>
-<%--          <td><Strong>报关金额</Strong></td>--%>
-<%--          <td><Strong>认领金额</Strong></td>--%>
-<%--          <td><Strong>认领日期</Strong></td>--%>
-
-<%--      </tr>--%>
-<%--      <tbody id="t1-produce-body">--%>
-<%--      <c:forEach items="${bankBTwoList}" var="bankA" varStatus="sdex">--%>
-<%--          <tr class="citem-tr-parent item-tr-parent${sdex.index}">--%>
-<%--              <td>${bankA.payersName}</td>--%>
-<%--              <td>${bankA.transactionReferenceNumber}</td>--%>
-<%--              <td>${bankA.tradeAmount}</td>--%>
-<%--              <td>${bankA.caseNo}</td>--%>
-<%--              <td>${bankA.proId}</td>--%>
-<%--              <td>${bankA.declarationAmountF}</td>--%>
-<%--              <td>${bankA.ifmoney}</td>--%>
-<%--              <td>${bankA.financialConfirmationTime}</td>--%>
-
-<%--          </tr>--%>
-<%--      </c:forEach>--%>
-<%--      </tbody>--%>
-<%--   </table>--%>
-
-<%--<table border="1" id="item_table2" style="table-layout:fixed;">--%>
-
-<%--    <h3>3）两者关联的(过去两年)</h3>--%>
-<%--    <tr>--%>
+    <h3>银行到账与报关金额配对信息</h3>
+    <tr>
 <%--        <td><Strong>汇款人</Strong></td>--%>
 <%--        <td><Strong>银行流水号</Strong></td>--%>
 <%--        <td><Strong>到账金额</Strong></td>--%>
 <%--        <td><Strong>项目号</Strong></td>--%>
-<%--        <td><Strong>出运单号</Strong></td>--%>
-<%--        <td><Strong>报关金额</Strong></td>--%>
-<%--        <td><Strong>认领金额</Strong></td>--%>
-<%--        <td><Strong>认领日期</Strong></td>--%>
-
-
-<%--    </tr>--%>
-<%--    <tbody id="t2-produce-body">--%>
-<%--    <c:forEach items="${bankWTwoList}" var="bankA" varStatus="sdex">--%>
-<%--        <tr class="citem-tr-parent item-tr-parent${sdex.index}">--%>
-<%--            <td>${bankA.payersName}</td>--%>
-<%--            <td>${bankA.transactionReferenceNumber}</td>--%>
-<%--            <td>${bankA.tradeAmount}</td>--%>
-<%--            <td>${bankA.caseNo}</td>--%>
-<%--            <td>${bankA.proId}</td>--%>
-<%--            <td>${bankA.declarationAmountF}</td>--%>
-<%--            <td>${bankA.ifmoney}</td>--%>
-<%--            <td>${bankA.financialConfirmationTime}</td>--%>
-
-<%--        </tr>--%>
-<%--    </c:forEach>--%>
-<%--    </tbody>--%>
-<%--</table>--%>
-
-
-<table border="1" id="item_table2A" style="table-layout:fixed;">
-
-    <h3>3）两者关联的(全部)</h3>
-    <tr>
-        <td><Strong>汇款人</Strong></td>
-<%--        <td><Strong>银行流水号</Strong></td>--%>
-        <td><Strong>到账金额</Strong></td>
-<%--        <td><Strong>项目号</Strong></td>--%>
         <td><Strong>出运单号</Strong></td>
-        <td><Strong>认领金额</Strong></td>
+        <td><Strong>银行到账认领金额</Strong></td>
         <td><Strong>已配对金额</Strong></td>
         <td><Strong>报关金额</Strong></td>
 
-        <td><Strong>认领日期</Strong></td>
+        <td><Strong>配对日期</Strong></td>
         <td><Strong>未收到但本次要出口的金额</Strong></td>
 
 
@@ -141,9 +44,9 @@
     <tbody id="t2-produce-bodyA">
     <c:forEach items="${bankWTwoAList}" var="bankA" varStatus="sdex">
         <tr class="citem-tr-parent item-tr-parent${sdex.index}">
-            <td>${bankA.payersName}</td>
+<%--            <td>${bankA.payersName}</td>--%>
 <%--            <td>${bankA.transactionReferenceNumber}</td>--%>
-            <td>${bankA.tradeAmount}</td>
+<%--            <td>${bankA.tradeAmount}</td>--%>
             <td><a href="InfoServlet?id=${bankA.proId}"> ${bankA.proId}</a></td>
             <td>${bankA.ifmoney}</td>
             <td>${bankA.pairedAmount}</td>
@@ -158,68 +61,68 @@
     </tbody>
 </table>
 
-<table border="1" id="item_tableA" style="table-layout:fixed;">
-    <h3>1）有银行到账但没关联报关金额(全部)</h3>
-    <tr>
-        <td><Strong>汇款人</Strong></td>
-        <td><Strong>银行流水号</Strong></td>
-        <td><Strong>到账金额</Strong></td>
-        <td><Strong>项目号</Strong></td>
-        <td><Strong>出运单号</Strong></td>
-        <td><Strong>报关金额</Strong></td>
-        <td><Strong>认领金额</Strong></td>
-        <td><Strong>认领日期</Strong></td>
+<%--<table border="1" id="item_tableA" style="table-layout:fixed;">--%>
+<%--    <h3>1）有银行到账但没关联报关金额(全部)</h3>--%>
+<%--    <tr>--%>
+<%--        <td><Strong>汇款人</Strong></td>--%>
+<%--        <td><Strong>银行流水号</Strong></td>--%>
+<%--        <td><Strong>到账金额</Strong></td>--%>
+<%--        <td><Strong>项目号</Strong></td>--%>
+<%--        <td><Strong>出运单号</Strong></td>--%>
+<%--        <td><Strong>报关金额</Strong></td>--%>
+<%--        <td><Strong>认领金额</Strong></td>--%>
+<%--        <td><Strong>认领日期</Strong></td>--%>
 
-    </tr>
-    <tbody id="t-produce-bodyA">
-    <c:forEach items="${bankATwoAList}" var="bankA" varStatus="sdex">
-        <tr class="citem-tr-parent item-tr-parent${sdex.index}">
-            <td>${bankA.payersName}</td>
-            <td>${bankA.transactionReferenceNumber}</td>
-            <td>${bankA.tradeAmount}</td>
-            <td>${bankA.caseNo}</td>
-            <td>${bankA.proId}</td>
-            <td>${bankA.declarationAmountF}</td>
-            <td>${bankA.ifmoney}</td>
-            <td>${bankA.financialConfirmationTime}</td>
+<%--    </tr>--%>
+<%--    <tbody id="t-produce-bodyA">--%>
+<%--    <c:forEach items="${bankATwoAList}" var="bankA" varStatus="sdex">--%>
+<%--        <tr class="citem-tr-parent item-tr-parent${sdex.index}">--%>
+<%--            <td>${bankA.payersName}</td>--%>
+<%--            <td>${bankA.transactionReferenceNumber}</td>--%>
+<%--            <td>${bankA.tradeAmount}</td>--%>
+<%--            <td>${bankA.caseNo}</td>--%>
+<%--            <td>${bankA.proId}</td>--%>
+<%--            <td>${bankA.declarationAmountF}</td>--%>
+<%--            <td>${bankA.ifmoney}</td>--%>
+<%--            <td>${bankA.financialConfirmationTime}</td>--%>
 
-        </tr>
-    </c:forEach>
-    </tbody>
+<%--        </tr>--%>
+<%--    </c:forEach>--%>
+<%--    </tbody>--%>
 
 
 
-</table>
-<table border="1" id="item_table1A" style="table-layout:fixed;">
+<%--</table>--%>
+<%--<table border="1" id="item_table1A" style="table-layout:fixed;">--%>
 
-    <h3>2）有报关金额但没关联银行到账的(全部)</h3>
-    <tr>
-        <td><Strong>汇款人</Strong></td>
-        <td><Strong>银行流水号</Strong></td>
-        <td><Strong>到账金额</Strong></td>
-        <td><Strong>项目号</Strong></td>
-        <td><Strong>出运单号</Strong></td>
-        <td><Strong>报关金额</Strong></td>
-        <td><Strong>认领金额</Strong></td>
-        <td><Strong>认领日期</Strong></td>
+<%--    <h3>2）有报关金额但没关联银行到账的(全部)</h3>--%>
+<%--    <tr>--%>
+<%--        <td><Strong>汇款人</Strong></td>--%>
+<%--        <td><Strong>银行流水号</Strong></td>--%>
+<%--        <td><Strong>到账金额</Strong></td>--%>
+<%--        <td><Strong>项目号</Strong></td>--%>
+<%--        <td><Strong>出运单号</Strong></td>--%>
+<%--        <td><Strong>报关金额</Strong></td>--%>
+<%--        <td><Strong>认领金额</Strong></td>--%>
+<%--        <td><Strong>认领日期</Strong></td>--%>
 
-    </tr>
-    <tbody id="t1-produce-bodyA">
-    <c:forEach items="${bankBTwoAList}" var="bankA" varStatus="sdex">
-        <tr class="citem-tr-parent item-tr-parent${sdex.index}">
-            <td>${bankA.payersName}</td>
-            <td>${bankA.transactionReferenceNumber}</td>
-            <td>${bankA.tradeAmount}</td>
-            <td>${bankA.caseNo}</td>
-            <td>${bankA.proId}</td>
-            <td>${bankA.declarationAmountF}</td>
-            <td>${bankA.ifmoney}</td>
-            <td>${bankA.financialConfirmationTime}</td>
+<%--    </tr>--%>
+<%--    <tbody id="t1-produce-bodyA">--%>
+<%--    <c:forEach items="${bankBTwoAList}" var="bankA" varStatus="sdex">--%>
+<%--        <tr class="citem-tr-parent item-tr-parent${sdex.index}">--%>
+<%--            <td>${bankA.payersName}</td>--%>
+<%--            <td>${bankA.transactionReferenceNumber}</td>--%>
+<%--            <td>${bankA.tradeAmount}</td>--%>
+<%--            <td>${bankA.caseNo}</td>--%>
+<%--            <td>${bankA.proId}</td>--%>
+<%--            <td>${bankA.declarationAmountF}</td>--%>
+<%--            <td>${bankA.ifmoney}</td>--%>
+<%--            <td>${bankA.financialConfirmationTime}</td>--%>
 
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
+<%--        </tr>--%>
+<%--    </c:forEach>--%>
+<%--    </tbody>--%>
+<%--</table>--%>
 
 
 
