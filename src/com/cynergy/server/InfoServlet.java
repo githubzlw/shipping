@@ -121,6 +121,7 @@ public class InfoServlet extends HttpServlet {
 				String agentCpName ="";
 				String clientName = res1.getString("clientName");
 				if(StringUtils.isNotBlank(clientName)){
+					clientName = clientName.replaceAll("'","''");
 					Statement createStatement1 = connection.createStatement();
 					String shSql2 ="select agent_name,agent_cp_name from shipment_object where customer_name='"+clientName+"' and agent_status=2";
 					ResultSet resSh2 = createStatement1.executeQuery(shSql2);
